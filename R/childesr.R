@@ -16,7 +16,7 @@ get_table <- function(con, name) {
   dplyr::tbl(con, name)
 }
 
-get_collections <- function() {
+get_collections <- function(connection = NULL) {
   con <- connect_to_childes()
 
   collections <- dplyr::tbl(con, "collection") %>%
@@ -27,7 +27,7 @@ get_collections <- function() {
   return(collections)
 }
 
-get_corpora <- function() {
+get_corpora <- function(connection = NULL) {
   con <- connect_to_childes()
 
   corpora <- dplyr::tbl(con, "corpus") %>%
@@ -56,8 +56,10 @@ get_transcripts <- function(collection = NULL, corpus = NULL, child = NULL) {
     transcripts %<>% dplyr::filter(target_child_name %in% child)
   }
 
-  try(DBI::dbDisconnect(con), silent = TRUE)
+  transcripts %<>% collect()
+  DBI::dbDisconnect(con)
 
   return(transcripts)
 
 }
+
