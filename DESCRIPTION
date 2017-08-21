@@ -1,0 +1,20 @@
+Package: childesr
+Type: Package
+Title: Accessing the CHILDES Database
+Description: Tools for connecting to CHILDES, an open repository for
+    transcripts of parent-child interaction.
+Version: 0.1.0
+Authors@R: c(
+    person("Mika", "Braginsky", email = "mika.br@gmail.com", role = c("aut", "cre"))
+    )
+License: GPL-3
+URL: https://github.com/langcog/childesr
+BugReports: http://github.com/langcog/childesr/issues
+Encoding: UTF-8
+LazyData: true
+Imports:
+    DBI (>= 0.6),
+    dbplyr (>= 1.1.0),
+    dplyr (>= 0.7.2),
+    RMySQL (>= 0.10.11)
+RoxygenNote: 6.0.1
