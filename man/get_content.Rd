@@ -5,7 +5,7 @@
 \title{Get content}
 \usage{
 get_content(content_type, collection = NULL, corpus = NULL, role = NULL,
-  age = NULL, sex = NULL, child = NULL, connection)
+  age = NULL, sex = NULL, child = NULL, token = NULL, connection)
 }
 \arguments{
 \item{content_type}{One of "token" or "utterance"}
@@ -22,6 +22,10 @@ get_content(content_type, collection = NULL, corpus = NULL, role = NULL,
 \item{sex}{A character vector of values "male" and/or "female"}
 
 \item{child}{A character vector of one or more names of children}
+
+\item{token}{A character vector of one or more token patterns (`%` matches
+any number of wildcard characters, `_` matches exactly one wildcard
+character)}
 
 \item{connection}{A connection to the CHILDES database}
 }

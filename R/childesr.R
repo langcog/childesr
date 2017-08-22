@@ -207,6 +207,9 @@ get_participants <- function(collection = NULL, corpus = NULL, child = NULL,
 #' Get content
 #'
 #' @param content_type One of "token" or "utterance"
+#' @param token A character vector of one or more token patterns (`%` matches
+#'   any number of wildcard characters, `_` matches exactly one wildcard
+#'   character)
 #' @inheritParams get_participants
 get_content <- function(content_type, collection = NULL, corpus = NULL,
                         role = NULL, age = NULL, sex = NULL, child = NULL,
@@ -278,10 +281,7 @@ get_content <- function(content_type, collection = NULL, corpus = NULL,
 
 #' Get tokens
 #'
-#' @inheritParams get_participants
-#' @param token A character vector of one or more token patterns (`%` matches
-#'   any number of wildcard characters, `_` matches exactly one wildcard
-#'   character)
+#' @inheritParams get_content
 #'
 #' @return A `tbl` of Token data, filtered down by collection, corpus, child,
 #'   role, age, sex, and token supplied, if any.
