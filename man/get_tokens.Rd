@@ -5,8 +5,7 @@
 \title{Get tokens}
 \usage{
 get_tokens(collection = NULL, corpus = NULL, child = NULL, role = NULL,
-  age = NULL, sex = NULL, token = NULL, pattern = NULL,
-  connection = NULL)
+  age = NULL, sex = NULL, token, connection = NULL)
 }
 \arguments{
 \item{collection}{A character vector of one or more names of collections}
@@ -17,14 +16,13 @@ get_tokens(collection = NULL, corpus = NULL, child = NULL, role = NULL,
 
 \item{role}{A character vector of one or more roles}
 
-\item{age}{A numeric vector of an age or a min age and max age (in months)}
+\item{age}{A numeric vector of an age or a min age (inclusive) and max age
+(exclusive) in months}
 
 \item{sex}{A character vector of values "male" and/or "female"}
 
-\item{token}{A character vector of one or more tokens}
-
-\item{pattern}{A string with a pattern to use in simple pattern matching (`%`
-matches any number of wildcard characters, `_` matches exactly one wildcard
+\item{token}{A character vector of one or more token patterns (`%` matches
+any number of wildcard characters, `_` matches exactly one wildcard
 character)}
 
 \item{connection}{A connection to the CHILDES database}

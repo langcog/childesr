@@ -16,7 +16,8 @@ get_participants(collection = NULL, corpus = NULL, child = NULL,
 
 \item{role}{A character vector of one or more roles}
 
-\item{age}{A numeric vector of an age or a min age and max age (in months)}
+\item{age}{A numeric vector of an age or a min age (inclusive) and max age
+(exclusive) in months}
 
 \item{sex}{A character vector of values "male" and/or "female"}
 
