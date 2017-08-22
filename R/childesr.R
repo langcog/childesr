@@ -5,7 +5,7 @@ NULL
 utils::globalVariables(c("collection_id", "collection_name", "corpus_id",
                          "corpus_name", "gloss", "id", "max_age", "min_age",
                          "name", "speaker_role", "target_child_id",
-                         "target_child_name", "%like%"))
+                         "target_child_name", "target_child_age", "%like%"))
 
 #' Connect to CHILDES
 #'
@@ -134,7 +134,8 @@ get_transcripts <- function(collection = NULL, corpus = NULL, child = NULL,
 #'
 #' @inheritParams get_transcripts
 #' @param role A character vector of one or more roles
-#' @param age A numeric vector of an age or a min age and max age (in months)
+#' @param age A numeric vector of an age or a min age (inclusive) and max age
+#'   (exclusive) in months
 #' @param sex A character vector of values "male" and/or "female"
 #'
 #' @return A `tbl` of Participant data, filtered down by collection, corpus,
@@ -219,10 +220,24 @@ get_content <- function(content_type, collection = NULL, corpus = NULL,
     dplyr::distinct(target_child_id) %>%
     dplyr::pull(target_child_id)
 
+  num_children <- length(child_id)
+  num_corpora <- nrow(corpora)
+
+  message("Getting data from ", num_children,
+          ifelse(num_children == 1, " child", " children"), " in " ,
+          num_corpora, ifelse(num_corpora == 1, " corpus ", " corpora"), "...")
+
   content <- dplyr::tbl(connection, content_type)
 
-  if (!is.null(corpus)) {
-    content %<>% dplyr::filter(corpus_id %in% corpora$corpus_id)
+  if (!num_corpora) {
+    corpus_filter <- -1
+    child_id <- -1
+  } else {
+    corpus_filter <- corpora$corpus_id
+  }
+
+  if (!is.null(collection) | !is.null(corpus)) {
+    content %<>% dplyr::filter(corpus_id %in% corpus_filter)
   }
 
   if (!is.null(role)) {
@@ -230,14 +245,15 @@ get_content <- function(content_type, collection = NULL, corpus = NULL,
   }
 
   if (!is.null(age)) {
-    days <- age * 30.5
-    if (length(age) == 1) {
-      content %<>% dplyr::filter(max_age >= days & min_age <= days)
-    } else if (length(age) == 2) {
-      content %<>% dplyr::filter(max_age >= days[1] | min_age <= days[2])
-    } else {
+    if (!(length(age) %in% 1:2)) {
       stop("`age` argument must be of length 1 or 2")
     }
+
+    days <- age * 30.5
+    if (length(age) == 1) days <- c(days, days + 30.49)
+
+    content %<>% dplyr::filter(target_child_age >= days[1],
+                               target_child_age <= days[2])
   }
 
   if (!is.null(sex)) {
@@ -256,9 +272,8 @@ get_content <- function(content_type, collection = NULL, corpus = NULL,
 #' Get tokens
 #'
 #' @inheritParams get_participants
-#' @param token A character vector of one or more tokens
-#' @param pattern A string with a pattern to use in simple pattern matching (`%`
-#'   matches any number of wildcard characters, `_` matches exactly one wildcard
+#' @param token A character vector of one or more token patterns (`%` matches
+#'   any number of wildcard characters, `_` matches exactly one wildcard
 #'   character)
 #'
 #' @return A `tbl` of Token data, filtered down by collection, corpus, child,
@@ -270,8 +285,8 @@ get_content <- function(content_type, collection = NULL, corpus = NULL,
 #' get_tokens(token = "dog")
 #' }
 get_tokens <- function(collection = NULL, corpus = NULL, child = NULL,
-                       role = NULL, age = NULL, sex = NULL, token = NULL,
-                       pattern = NULL, connection = NULL) {
+                       role = NULL, age = NULL, sex = NULL, token,
+                       connection = NULL) {
   if (is.null(connection)) con <- connect_to_childes() else con <- connection
 
   tokens <- get_content(content_type = "token",
@@ -284,11 +299,9 @@ get_tokens <- function(collection = NULL, corpus = NULL, child = NULL,
                         connection = con)
 
   if (!is.null(token)) {
-    tokens %<>% dplyr::filter(gloss %in% token)
-  }
-
-  if (!is.null(pattern)) {
-    tokens %<>% dplyr::filter(gloss %like% pattern)
+    token_filter <- sprintf("gloss %%like%% '%s'", token) %>%
+      paste(collapse = " | ")
+    tokens %<>% dplyr::filter_(token_filter)
   }
 
   if (is.null(connection)) {
