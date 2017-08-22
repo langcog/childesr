@@ -220,10 +220,16 @@ get_content <- function(content_type, collection = NULL, corpus = NULL,
     dplyr::distinct(target_child_id) %>%
     dplyr::pull(target_child_id)
 
+  num_children <- length(child_id)
+  num_corpora <- nrow(corpora)
+
+  message("Getting data from ", num_children,
+          ifelse(num_children == 1, " child", " children"), " in " ,
+          num_corpora, ifelse(num_corpora == 1, " corpus ", " corpora"), "...")
+
   content <- dplyr::tbl(connection, content_type)
 
-  if (!nrow(corpora)) {
-    warning("No matching collection/corpus/child found")
+  if (!num_corpora) {
     corpus_filter <- -1
     child_id <- -1
   } else {
