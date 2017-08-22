@@ -212,15 +212,14 @@ get_content <- function(content_type, collection = NULL, corpus = NULL,
                         connection) {
 
   transcripts <- get_transcripts(collection, corpus, child, connection)
-  corpora <- transcripts %>% dplyr::distinct(collection_id, corpus_id)
-  child_id <- transcripts %>% dplyr::distinct(target_child_id) %>%
+  corpora <- transcripts %>%
+    dplyr::distinct(corpus_id) %>%
+    dplyr::collect()
+  child_id <- transcripts %>%
+    dplyr::distinct(target_child_id) %>%
     dplyr::pull(target_child_id)
 
   content <- dplyr::tbl(connection, content_type)
-
-  if (!is.null(collection)) {
-    content %<>% dplyr::filter(collection_id %in% corpora$collection_id)
-  }
 
   if (!is.null(corpus)) {
     content %<>% dplyr::filter(corpus_id %in% corpora$corpus_id)
