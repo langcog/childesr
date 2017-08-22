@@ -1,0 +1,134 @@
+---
+title: "Accessing the Childes-db database"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Accessing the Childes-db database}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## Overview
+
+The `childesr` package allows you to access data in the Childes-db database from R. This vignette shows some examples of how to use the data loading functions and what the resulting data look like.
+
+There are four different `get_` functions that you can use to pull out different types of data from the Childes-db: 
+
+  * `get_utterances()`
+  * `get_tokens()`
+  * `get_transcripts()`
+  * `get_participants()`
+  * `get_frequencies()`
+  
+Note that you do not have to explicitly connect to the Childes-db database since the `childesr` functions will manage these connections. But if you would like to establish your own connection, you can pass it as an argument to any of the `get_` functions.
+
+```{r, echo = F, warning=F, message=F}
+# load the library
+library(childesr)
+```
+
+## Get utterances
+
+The `get_utterances` function returns a table of tokens or utterances based on user-defined filtering criteria. For example, the following function will get you all of the utterances in the Clark Corpus for the child Shem. 
+
+```{r, eval = F}
+d_shem <- get_utterances(collection = NULL, 
+                           corpus = "Clark", 
+                           role = NULL,
+                           age = NULL, 
+                           sex = NULL, 
+                           child = "Shem")
+
+nrow(d_shem)
+```
+
+## Get transcripts
+
+The `get_transcripts` function returns information about the transcripts available, for a specific collection, corpus, or child. 
+
+  * collection (e.g., "Eng-NA")
+  * corpus (e.g., "Brown")
+  * child (e.g., "Shem")
+
+For example, we can run the function with all the arguments set to NULL and return all the transcripts in the database.
+
+```{r}
+d_transcripts <- get_transcripts(collection = NULL, 
+                                 corpus = NULL, 
+                                 child = NULL)
+
+head(d_transcripts)
+```
+
+If you only want to analyze a specific collection, then youc an specify this in the collection argument. 
+
+```{r}
+d_eng_na <- get_transcripts(collection = "Eng-NA", 
+                                 corpus = NULL, 
+                                 child = NULL)
+
+head(d_eng_na)
+```
+
+If you know the corpus that you want to analyze, then you can specify this in the corpus argument. The following will return all of the transcripts in the Brown corpus.
+
+```{r}
+# returns all transcripts in the brown corpus
+d_brown_transcripts <- get_transcripts(collection = NULL, 
+                                 corpus = "Brown", 
+                                 child = NULL)
+# print the number of rows
+nrow(d_brown_transcripts)
+```
+
+If you want more than one corpus, then you can pass a list of corpus names. 
+
+```{r}
+d_many_corpora <- get_transcripts(collection = NULL, 
+                                 corpus = c("Brown", "Clark"), 
+                                 child = NULL)
+# print the number of rows
+nrow(d_many_corpora)
+```
+
+If you want a specific child from a corpus, then you set this using the child argument. *Note* that this will not return any of the transcripts from the Brown corpus because the child Shem is not present in that corpus. 
+
+```{r}
+d_specific_child <- get_transcripts(collection = NULL, 
+                                 corpus = c("Brown", "Clark"), 
+                                 child = "Shem")
+
+nrow(d_specific_child)
+```
+
+## Get participants
+
+The `get_participants` function returns background information about the speakers (both children and adults) in the database. This includes information about:
+
+ * speaker role 
+ * language
+ * sex
+ * SES
+ * youngest age of transcript
+ * oldest age of transcript
+ 
+Again, if we run the function with all arguments set to NULL (the default), then we get all the background information for all speakers in the database.
+
+```{r}
+d_participants <- get_participants(collection = NULL, 
+                                   corpus = NULL, 
+                                   child = NULL,
+                                   role = NULL, 
+                                   age = NULL, 
+                                   sex = NULL)
+head(d_participants)
+```
+
+## Get frequencies
+
+The `get_frequencies` function returns [], for either a specific collection, corpus, or child.
+
+```{r}
+
+```
+
