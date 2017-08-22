@@ -5,7 +5,8 @@
 \title{Get tokens}
 \usage{
 get_tokens(collection = NULL, corpus = NULL, child = NULL, role = NULL,
-  age = NULL, sex = NULL, token = NULL, connection = NULL)
+  age = NULL, sex = NULL, token = NULL, pattern = NULL,
+  connection = NULL)
 }
 \arguments{
 \item{collection}{A character vector of one or more names of collections}
@@ -20,13 +21,17 @@ get_tokens(collection = NULL, corpus = NULL, child = NULL, role = NULL,
 
 \item{sex}{A character vector of values "male" and/or "female"}
 
-\item{token}{A character vector of tokens}
+\item{token}{A character vector of one or more tokens}
+
+\item{pattern}{A string with a pattern to use in simple pattern matching (`%`
+matches any number of wildcard characters, `_` matches exactly one wildcard
+character)}
 
 \item{connection}{A connection to the CHILDES database}
 }
 \value{
-A `tbl` of Token data, filtered down by collection, corpus,
-  child, role, age, sex, and token supplied, if any.
+A `tbl` of Token data, filtered down by collection, corpus, child,
+  role, age, sex, and token supplied, if any.
 }
 \description{
 Get tokens

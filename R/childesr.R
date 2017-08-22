@@ -5,7 +5,7 @@ NULL
 utils::globalVariables(c("collection_id", "collection_name", "corpus_id",
                          "corpus_name", "gloss", "id", "max_age", "min_age",
                          "name", "speaker_role", "target_child_id",
-                         "target_child_name"))
+                         "target_child_name", "%like%"))
 
 #' Connect to CHILDES
 #'
@@ -256,10 +256,13 @@ get_content <- function(content_type, collection = NULL, corpus = NULL,
 #' Get tokens
 #'
 #' @inheritParams get_participants
-#' @param token A character vector of tokens
+#' @param token A character vector of one or more tokens
+#' @param pattern A string with a pattern to use in simple pattern matching (`%`
+#'   matches any number of wildcard characters, `_` matches exactly one wildcard
+#'   character)
 #'
-#' @return A `tbl` of Token data, filtered down by collection, corpus,
-#'   child, role, age, sex, and token supplied, if any.
+#' @return A `tbl` of Token data, filtered down by collection, corpus, child,
+#'   role, age, sex, and token supplied, if any.
 #' @export
 #'
 #' @examples
@@ -268,7 +271,7 @@ get_content <- function(content_type, collection = NULL, corpus = NULL,
 #' }
 get_tokens <- function(collection = NULL, corpus = NULL, child = NULL,
                        role = NULL, age = NULL, sex = NULL, token = NULL,
-                       connection = NULL) {
+                       pattern = NULL, connection = NULL) {
   if (is.null(connection)) con <- connect_to_childes() else con <- connection
 
   tokens <- get_content(content_type = "token",
@@ -282,6 +285,10 @@ get_tokens <- function(collection = NULL, corpus = NULL, child = NULL,
 
   if (!is.null(token)) {
     tokens %<>% dplyr::filter(gloss %in% token)
+  }
+
+  if (!is.null(pattern)) {
+    tokens %<>% dplyr::filter(gloss %like% pattern)
   }
 
   if (is.null(connection)) {
