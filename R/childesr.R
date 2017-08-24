@@ -195,6 +195,12 @@ get_participants <- function(collection = NULL, corpus = NULL, child = NULL,
     }
   }
 
+  target_children <- get_transcripts(collection, corpus, child, con) %>%
+    dplyr::distinct(target_child_id, target_child_name)
+
+  participants %<>%
+    dplyr::left_join(target_children, by = "target_child_id")
+
   if (is.null(connection)) {
     participants %<>% dplyr::collect()
     DBI::dbDisconnect(con)
