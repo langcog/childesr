@@ -5,7 +5,8 @@
 \title{Get participants}
 \usage{
 get_participants(collection = NULL, corpus = NULL, child = NULL,
-  role = NULL, age = NULL, sex = NULL, connection = NULL)
+  role = NULL, role_exclude = NULL, age = NULL, sex = NULL,
+  connection = NULL)
 }
 \arguments{
 \item{collection}{A character vector of one or more names of collections}
@@ -14,7 +15,9 @@ get_participants(collection = NULL, corpus = NULL, child = NULL,
 
 \item{child}{A character vector of one or more names of children}
 
-\item{role}{A character vector of one or more roles}
+\item{role}{A character vector of one or more roles to include}
+
+\item{role_exclude}{A character vector of one or more roles to exclude}
 
 \item{age}{A numeric vector of an age or a min age (inclusive) and max age
 (exclusive) in months}
@@ -25,7 +28,7 @@ get_participants(collection = NULL, corpus = NULL, child = NULL,
 }
 \value{
 A `tbl` of Participant data, filtered down by collection, corpus,
-  child, role, age, and sex supplied, if any.
+  child, role, role_exclude, age, and sex supplied, if any.
 }
 \description{
 Get participants

@@ -5,7 +5,7 @@
 \title{Get tokens}
 \usage{
 get_tokens(collection = NULL, corpus = NULL, child = NULL, role = NULL,
-  age = NULL, sex = NULL, token, connection = NULL)
+  role_exclude = NULL, age = NULL, sex = NULL, token, connection = NULL)
 }
 \arguments{
 \item{collection}{A character vector of one or more names of collections}
@@ -14,7 +14,9 @@ get_tokens(collection = NULL, corpus = NULL, child = NULL, role = NULL,
 
 \item{child}{A character vector of one or more names of children}
 
-\item{role}{A character vector of one or more roles}
+\item{role}{A character vector of one or more roles to include}
+
+\item{role_exclude}{A character vector of one or more roles to exclude}
 
 \item{age}{A numeric vector of an age or a min age (inclusive) and max age
 (exclusive) in months}

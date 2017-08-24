@@ -133,13 +133,14 @@ get_transcripts <- function(collection = NULL, corpus = NULL, child = NULL,
 #' Get participants
 #'
 #' @inheritParams get_transcripts
-#' @param role A character vector of one or more roles
+#' @param role A character vector of one or more roles to include
+#' @param role_exclude A character vector of one or more roles to exclude
 #' @param age A numeric vector of an age or a min age (inclusive) and max age
 #'   (exclusive) in months
 #' @param sex A character vector of values "male" and/or "female"
 #'
 #' @return A `tbl` of Participant data, filtered down by collection, corpus,
-#'   child, role, age, and sex supplied, if any.
+#'   child, role, role_exclude, age, and sex supplied, if any.
 #' @export
 #'
 #' @examples
@@ -147,8 +148,8 @@ get_transcripts <- function(collection = NULL, corpus = NULL, child = NULL,
 #' get_participants()
 #' }
 get_participants <- function(collection = NULL, corpus = NULL, child = NULL,
-                             role = NULL, age = NULL, sex = NULL,
-                             connection = NULL) {
+                             role = NULL, role_exclude = NULL, age = NULL,
+                             sex = NULL, connection = NULL) {
   if (is.null(connection)) con <- connect_to_childes() else con <- connection
 
   participants <- get_table(con, "participant") %>%
@@ -160,11 +161,6 @@ get_participants <- function(collection = NULL, corpus = NULL, child = NULL,
 
   if (!is.null(corpus)) {
     participants %<>% dplyr::filter(corpus_name %in% corpus)
-  }
-
-  if (!is.null(role)) {
-    role_filter <- role
-    participants %<>% dplyr::filter(role %in% role_filter)
   }
 
   if (!is.null(age)) {
@@ -195,6 +191,15 @@ get_participants <- function(collection = NULL, corpus = NULL, child = NULL,
     }
   }
 
+  if (!is.null(role)) {
+    role_filter <- role
+    participants %<>% dplyr::filter(role %in% role_filter)
+  }
+
+  if (!is.null(role_exclude)) {
+    participants %<>% dplyr::filter(!(role %in% role_exclude))
+  }
+
   target_children <- get_transcripts(collection, corpus, child, con) %>%
     dplyr::distinct(target_child_id, target_child_name)
 
@@ -218,8 +223,8 @@ get_participants <- function(collection = NULL, corpus = NULL, child = NULL,
 #'   character)
 #' @inheritParams get_participants
 get_content <- function(content_type, collection = NULL, corpus = NULL,
-                        role = NULL, age = NULL, sex = NULL, child = NULL,
-                        token = NULL, connection) {
+                        role = NULL, role_exclude = NULL, age = NULL,
+                        sex = NULL, child = NULL, token = NULL, connection) {
 
   transcripts <- get_transcripts(collection, corpus, child, connection)
   corpora <- transcripts %>%
@@ -233,7 +238,7 @@ get_content <- function(content_type, collection = NULL, corpus = NULL,
   num_corpora <- nrow(corpora)
 
   message("Getting data from ", num_children,
-          ifelse(num_children == 1, " child", " children"), " in " ,
+          ifelse(num_children == 1, " child", " children"), " in ",
           num_corpora, ifelse(num_corpora == 1, " corpus ", " corpora"), "...")
 
   content <- dplyr::tbl(connection, content_type)
@@ -281,6 +286,10 @@ get_content <- function(content_type, collection = NULL, corpus = NULL,
     content %<>% dplyr::filter(speaker_role %in% role)
   }
 
+  if (!is.null(role_exclude)) {
+    content %<>% dplyr::filter(!(speaker_role %in% role_exclude))
+  }
+
   return(content)
 }
 
@@ -298,14 +307,15 @@ get_content <- function(content_type, collection = NULL, corpus = NULL,
 #' get_tokens(token = "dog")
 #' }
 get_tokens <- function(collection = NULL, corpus = NULL, child = NULL,
-                       role = NULL, age = NULL, sex = NULL, token,
-                       connection = NULL) {
+                       role = NULL, role_exclude = NULL, age = NULL, sex = NULL,
+                       token, connection = NULL) {
   if (is.null(connection)) con <- connect_to_childes() else con <- connection
 
   tokens <- get_content(content_type = "token",
                         collection = collection,
                         corpus = corpus,
                         role = role,
+                        role_exclude = role_exclude,
                         age = age,
                         sex = sex,
                         child = child,
@@ -332,14 +342,15 @@ get_tokens <- function(collection = NULL, corpus = NULL, child = NULL,
 #' get_utterances(child = "Shem")
 #' }
 get_utterances <- function(collection = NULL, corpus = NULL, role = NULL,
-                           age = NULL, sex = NULL, child = NULL,
-                           connection = NULL) {
+                           role_exclude = NULL, age = NULL, sex = NULL,
+                           child = NULL, connection = NULL) {
   if (is.null(connection)) con <- connect_to_childes() else con <- connection
 
   utterances <- get_content(content_type = "utterance",
                             collection = collection,
                             corpus = corpus,
                             role = role,
+                            role_exclude = role_exclude,
                             age = age,
                             sex = sex,
                             child = child,
