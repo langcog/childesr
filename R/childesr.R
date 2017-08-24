@@ -213,10 +213,13 @@ get_participants <- function(collection = NULL, corpus = NULL, child = NULL,
 #' Get content
 #'
 #' @param content_type One of "token" or "utterance"
+#' @param token A character vector of one or more token patterns (`%` matches
+#'   any number of wildcard characters, `_` matches exactly one wildcard
+#'   character)
 #' @inheritParams get_participants
 get_content <- function(content_type, collection = NULL, corpus = NULL,
                         role = NULL, age = NULL, sex = NULL, child = NULL,
-                        connection) {
+                        token = NULL, connection) {
 
   transcripts <- get_transcripts(collection, corpus, child, connection)
   corpora <- transcripts %>%
@@ -226,10 +229,22 @@ get_content <- function(content_type, collection = NULL, corpus = NULL,
     dplyr::distinct(target_child_id) %>%
     dplyr::pull(target_child_id)
 
+  num_children <- length(child_id)
+  num_corpora <- nrow(corpora)
+
+  message("Getting data from ", num_children,
+          ifelse(num_children == 1, " child", " children"), " in " ,
+          num_corpora, ifelse(num_corpora == 1, " corpus ", " corpora"), "...")
+
   content <- dplyr::tbl(connection, content_type)
 
-  if (!nrow(corpora)) {
-    warning("No matching collection/corpus/child found")
+  if (content_type == "token" & !is.null(token)) {
+    token_filter <- sprintf("gloss %%like%% '%s'", token) %>%
+      paste(collapse = " | ")
+    content %<>% dplyr::filter_(token_filter)
+  }
+
+  if (!num_corpora) {
     corpus_filter <- -1
     child_id <- -1
   } else {
@@ -240,8 +255,8 @@ get_content <- function(content_type, collection = NULL, corpus = NULL,
     content %<>% dplyr::filter(corpus_id %in% corpus_filter)
   }
 
-  if (!is.null(role)) {
-    content %<>% dplyr::filter(speaker_role %in% role)
+  if (!is.null(child)) {
+    content %<>% dplyr::filter(target_child_id %in% child_id)
   }
 
   if (!is.null(age)) {
@@ -261,8 +276,9 @@ get_content <- function(content_type, collection = NULL, corpus = NULL,
     content %<>% dplyr::filter(sex %in% sex_filter)
   }
 
-  if (!is.null(child)) {
-    content %<>% dplyr::filter(target_child_id %in% child_id)
+
+  if (!is.null(role)) {
+    content %<>% dplyr::filter(speaker_role %in% role)
   }
 
   return(content)
@@ -271,10 +287,7 @@ get_content <- function(content_type, collection = NULL, corpus = NULL,
 
 #' Get tokens
 #'
-#' @inheritParams get_participants
-#' @param token A character vector of one or more token patterns (`%` matches
-#'   any number of wildcard characters, `_` matches exactly one wildcard
-#'   character)
+#' @inheritParams get_content
 #'
 #' @return A `tbl` of Token data, filtered down by collection, corpus, child,
 #'   role, age, sex, and token supplied, if any.
@@ -296,13 +309,8 @@ get_tokens <- function(collection = NULL, corpus = NULL, child = NULL,
                         age = age,
                         sex = sex,
                         child = child,
+                        token = token,
                         connection = con)
-
-  if (!is.null(token)) {
-    token_filter <- sprintf("gloss %%like%% '%s'", token) %>%
-      paste(collapse = " | ")
-    tokens %<>% dplyr::filter_(token_filter)
-  }
 
   if (is.null(connection)) {
     tokens %<>% dplyr::collect()
