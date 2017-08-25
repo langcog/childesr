@@ -1,56 +1,40 @@
 ---
-title: "Accessing the Childes-db database"
+title: "Accessing Childes-db"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Accessing the Childes-db database}
+  %\VignetteIndexEntry{Accessing Childes-db}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
 ## Overview
 
-The `childesr` package allows you to access data in the Childes-db database from R. This vignette shows some examples of how to use the data loading functions and what the resulting data look like.
+The `childesr` package allows you to access data in the Childes-db from R. This vignette shows some examples of how to use the data loading functions and what the resulting data look like.
 
-There are four different `get_` functions that you can use to pull out different types of data from the Childes-db: 
+There are four different `get_` functions that you can use to extract different types of data from the Childes-db: 
 
-  * `get_utterances()`
-  * `get_tokens()`
-  * `get_transcripts()`
-  * `get_participants()`
-  * `get_frequencies()`
-  
-Note that you do not have to explicitly connect to the Childes-db database since the `childesr` functions will manage these connections. But if you would like to establish your own connection, you can pass it as an argument to any of the `get_` functions.
+* `get_utterances()`
+* `get_tokens()`
+* `get_transcripts()`
+* `get_participants()`
+
+*Technical note*: you do not have to explicitly establish a connection to the Childes-db since the `childesr` functions will manage these connections. But if you would like to establish your own connection, you can pass it as an argument to any of the `get_` functions.
+
+[TODO: Some viz of the structure of the database with information about the variables]
+
+[TODO: Some note/warning about the speed of different queries. e.g., not pulling the entire database into memory] 
 
 ```{r, echo = F, warning=F, message=F}
 # load the library
 library(childesr)
 ```
 
-## Get utterances
-
-The `get_utterances` function returns a table of tokens or utterances based on user-defined filtering criteria. For example, the following function will get you all of the utterances in the Clark Corpus for the child Shem. 
-
-```{r, eval = F}
-d_shem <- get_utterances(collection = NULL, 
-                           corpus = "Clark", 
-                           role = NULL,
-                           age = NULL, 
-                           sex = NULL, 
-                           child = "Shem")
-
-nrow(d_shem)
-```
-
 ## Get transcripts
 
-The `get_transcripts` function returns information about the transcripts available, for a specific collection, corpus, or child. 
+The `get_transcripts` function returns high-level information about the transcripts that are available in the database. You can filter your query to get the transcripts for a specific collection, corpus, or child. 
 
-  * collection (e.g., "Eng-NA")
-  * corpus (e.g., "Brown")
-  * child (e.g., "Shem")
-
-For example, we can run the function with all the arguments set to NULL and return all the transcripts in the database.
+For example, you can run `get_transcripts` with all the arguments set to NULL to return all of the transcripts in the database.
 
 ```{r}
 d_transcripts <- get_transcripts(collection = NULL, 
@@ -60,59 +44,59 @@ d_transcripts <- get_transcripts(collection = NULL,
 head(d_transcripts)
 ```
 
-If you only want to analyze a specific collection, then youc an specify this in the collection argument. 
+If you only want information about a specific collection, such as the English-American transcripts, then you can specify this in the collection argument. 
 
 ```{r}
 d_eng_na <- get_transcripts(collection = "Eng-NA", 
-                                 corpus = NULL, 
-                                 child = NULL)
+                            corpus = NULL, 
+                            child = NULL)
 
 head(d_eng_na)
 ```
 
-If you know the corpus that you want to analyze, then you can specify this in the corpus argument. The following will return all of the transcripts in the Brown corpus.
+If you know the corpus that you want to analyze, then you can specify this in the corpus argument. The following function call will return information about all of the transcripts in the Brown corpus.
 
 ```{r}
 # returns all transcripts in the brown corpus
 d_brown_transcripts <- get_transcripts(collection = NULL, 
-                                 corpus = "Brown", 
-                                 child = NULL)
+                                       corpus = "Brown", 
+                                       child = NULL)
 # print the number of rows
 nrow(d_brown_transcripts)
 ```
 
-If you want more than one corpus, then you can pass a list of corpus names. 
+If you want more than one corpus, then you can pass a multiple corpus names. You can also pass more than one name to the collections and child arguments.
 
 ```{r}
 d_many_corpora <- get_transcripts(collection = NULL, 
-                                 corpus = c("Brown", "Clark"), 
-                                 child = NULL)
+                                  corpus = c("Brown", "Clark"), 
+                                  child = NULL)
 # print the number of rows
 nrow(d_many_corpora)
 ```
 
-If you want a specific child from a corpus, then you set this using the child argument. *Note* that this will not return any of the transcripts from the Brown corpus because the child Shem is not present in that corpus. 
+If you want transcript information about a specific child from a corpus, then you pass their name to the child argument. *Note* that the following function call will not return any of the transcripts from the Brown corpus because the child Shem is not present in that corpus. 
 
 ```{r}
-d_specific_child <- get_transcripts(collection = NULL, 
-                                 corpus = c("Brown", "Clark"), 
-                                 child = "Shem")
+d_shem <- get_transcripts(collection = NULL, 
+                                    corpus = c("Brown", "Clark"), 
+                                    child = "Shem")
 
-nrow(d_specific_child)
+nrow(d_shem)
 ```
 
 ## Get participants
 
 The `get_participants` function returns background information about the speakers (both children and adults) in the database. This includes information about:
+  
+  * speaker's role in the conversation
+  * language
+  * sex
+  * SES
+  * youngest age of transcript
+  * oldest age of transcript
 
- * speaker role 
- * language
- * sex
- * SES
- * youngest age of transcript
- * oldest age of transcript
- 
-Again, if we run the function with all arguments set to NULL (the default), then we get all the background information for all speakers in the database.
+Again, if you run the function with all arguments set to NULL (the default), then you get all the background information for all speakers in the database.
 
 ```{r}
 d_participants <- get_participants(collection = NULL, 
@@ -124,11 +108,67 @@ d_participants <- get_participants(collection = NULL,
 head(d_participants)
 ```
 
-## Get frequencies
-
-The `get_frequencies` function returns [], for either a specific collection, corpus, or child.
+The participants function introduces three new arguments: role, age, and sex. The role argument allows you to get information about a specific kind of speaker, such as the "target_child." 
 
 ```{r}
-
+d_target_child <- get_participants(collection = NULL, 
+                                   corpus = NULL, 
+                                   child = NULL,
+                                   role = "target_child", 
+                                   age = NULL, 
+                                   sex = NULL)
+head(d_target_child)
 ```
 
+The age argument takes a number indicating the age(s) of children (in months) that you want to analyze. you can use this argument in two ways 
+
+  1. Pass a single number to information about all participants who have a transcript at that age. 
+  2. Pass a range of ages to get information about all participants who have transcript within a certain age range. 
+For example, you can get the participant information for all of the children who had transcripts between the ages of 24 and 36 months. 
+
+```{r}
+d_age_range <- get_participants(collection = NULL, 
+                                   corpus = NULL, 
+                                   child = NULL,
+                                   role = NULL, 
+                                   age = c(24, 36), 
+                                   sex = NULL)
+head(d_age_range)
+```
+  
+## Get tokens
+
+The `get_tokens` function returns a table with a row for each token based on set of filtering criteria. The token argument allows you to pass a vector of one or more tokens that you want to analyze.
+
+For example, if you wanted to get all of the production data for a specific token, the you could run the following call to get all instances of "dog" and "ball" for Adam in the Brown corpus. 
+
+```{r}
+d_shem_prod <- get_tokens(collection = NULL, 
+                         corpus = "Brown", 
+                         role = "target_child",
+                         age = NULL, 
+                         sex = NULL, 
+                         child = "Adam",
+                         token = c("dog", "ball"))
+
+# print the unique tokens
+unique(d_shem_prod$gloss)
+```  
+
+TODO: just get input vs. production data. 
+
+## Get utterances
+
+The `get_utterances` function returns a table utterances based on user-defined filtering criteria. For example, the following function will get you all of the utterances in the Brown Corpus for the child Adam. 
+
+```{r}
+d_adam_utts <- get_utterances(collection = NULL, 
+                         corpus = "Brown", 
+                         role = NULL,
+                         age = NULL, 
+                         sex = NULL, 
+                         child = "Adam")
+
+# print the first five utterances
+d_adam_utts$gloss[1:5]
+```
