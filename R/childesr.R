@@ -129,7 +129,6 @@ get_transcripts <- function(collection = NULL, corpus = NULL, child = NULL,
 
 }
 
-
 #' Get participants
 #'
 #' @inheritParams get_transcripts
@@ -214,6 +213,80 @@ get_participants <- function(collection = NULL, corpus = NULL, child = NULL,
   return(participants)
 
 }
+#' Get speaker statistics
+#'
+#' @inheritParams get_participants
+#' @return A `tbl` of Speaker statistics, filtered down by collection, corpus,
+#'   child, role, role_exclude, age, and sex supplied, if any.
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' get_speaker_statistics()
+#' }
+get_speaker_statistics <- function(collection = NULL, corpus = NULL, child = NULL,
+                                   role = NULL, role_exclude = NULL, age = NULL,
+                                   sex = NULL, connection = NULL) {
+
+  if (is.null(connection)) con <- connect_to_childes() else con <- connection
+
+  transcripts <- get_transcripts(collection, corpus, child, connection)
+
+  suppressWarnings(speaker_statistics <- get_table(con, "transcript_by_speaker"))
+
+  if (!is.null(collection)) {
+    collection_filter <- transcripts %>%
+      dplyr::distinct(collection_id, target_child_id) %>%
+      dplyr::pull(target_child_id)
+
+    speaker_statistics %<>% dplyr::filter(target_child_id %in% collection_filter)
+  }
+
+  if (!is.null(corpus)) {
+    corpus_filter <- transcripts %>%
+      dplyr::distinct(corpus_id, target_child_id) %>%
+      dplyr::pull(target_child_id)
+
+    speaker_statistics %<>% dplyr::filter(target_child_id %in% corpus_filter)
+  }
+
+  if (!is.null(age)) {
+    days <- age * 30.5
+    if (length(age) == 1) {
+      speaker_statistics %<>% dplyr::filter(max_age >= days & min_age <= days)
+    } else if (length(age) == 2) {
+      speaker_statistics %<>% dplyr::filter(max_age >= days[1] | min_age <= days[2])
+    } else {
+      stop("`age` argument must be of length 1 or 2")
+    }
+  }
+
+  if (!is.null(sex)) {
+    sex_filter <- sex
+    speaker_statistics %<>% dplyr::filter(sex %in% sex_filter)
+  }
+
+  if (!is.null(child)) {
+    child_filter <- child
+    speaker_statistics %<>% dplyr::filter(target_child_name %in% child)
+  }
+
+  if (!is.null(role)) {
+    role_filter <- role
+    speaker_statistics %<>% dplyr::filter(speaker_role %in% role_filter)
+  }
+
+  if (!is.null(role_exclude)) {
+    speaker_statistics %<>% dplyr::filter(!(speaker_role %in% role_exclude))
+  }
+
+  if (is.null(connection)) {
+    suppressWarnings(speaker_statistics %<>% dplyr::collect())
+    DBI::dbDisconnect(con)
+  }
+
+  return(speaker_statistics)
+}
 
 #' Get content
 #'
@@ -243,7 +316,7 @@ get_content <- function(content_type, collection = NULL, corpus = NULL,
 
   content <- dplyr::tbl(connection, content_type)
 
-  if (content_type == "token" & !is.null(token)) {
+  if (content_type %in% c("token", "token_frequency") & !is.null(token)) {
     token_filter <- sprintf("gloss %%like%% '%s'", token) %>%
       paste(collapse = " | ")
     content %<>% dplyr::filter_(token_filter)
@@ -327,6 +400,45 @@ get_tokens <- function(collection = NULL, corpus = NULL, child = NULL,
     DBI::dbDisconnect(con)
   }
   return(tokens)
+}
+
+
+#' Get types
+#'
+#' @inheritParams get_content
+#' @param type A character vector of one or more type patterns (`%` matches
+#'   any number of wildcard characters, `_` matches exactly one wildcard
+#'   character)
+#'
+#' @return A `tbl` of Type data, filtered down by collection, corpus, child,
+#'   role, age, sex, and token supplied, if any.
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' get_types()
+#' }
+get_types <- function(collection = NULL, corpus = NULL, child = NULL,
+                       role = NULL, role_exclude = NULL, age = NULL, sex = NULL,
+                       type = NULL, connection = NULL) {
+  if (is.null(connection)) con <- connect_to_childes() else con <- connection
+
+  types <- get_content(content_type = "token_frequency",
+                        collection = collection,
+                        corpus = corpus,
+                        role = role,
+                        role_exclude = role_exclude,
+                        age = age,
+                        sex = sex,
+                        child = child,
+                        token = type,
+                        connection = con)
+
+  if (is.null(connection)) {
+    types %<>% dplyr::collect()
+    DBI::dbDisconnect(con)
+  }
+  return(types)
 }
 
 #' Get utterances
