@@ -382,7 +382,13 @@ get_content <- function(content_type, collection = NULL, corpus = NULL,
 get_tokens <- function(collection = NULL, corpus = NULL, child = NULL,
                        role = NULL, role_exclude = NULL, age = NULL, sex = NULL,
                        token, connection = NULL) {
+
+  if(missing(token))
+    stop("Argument \"token\" is missing. To fetch all tokens, supply \"*\"
+         for argument \"token\". Caution: this may result in a long-running query.")
+
   if (is.null(connection)) con <- connect_to_childes() else con <- connection
+
 
   tokens <- get_content(content_type = "token",
                         collection = collection,
