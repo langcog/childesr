@@ -15,5 +15,5 @@ To get a hands on walk-through on how to use `childesr` to access `childes-db`, 
 
 ### Other relevant GitHub repositories
 
-Website frontend: http://github.com/langcog/childes-db-website 
-Interactive data visualizations: https://github.com/langcog/childes-db-shiny 
+- Website frontend: http://github.com/langcog/childes-db-website 
+- Interactive data visualizations: https://github.com/langcog/childes-db-shiny 

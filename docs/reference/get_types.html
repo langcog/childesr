@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function reference • childesr</title>
+<title>Get types — get_types • childesr</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -37,7 +37,7 @@
   </head>
 
   <body>
-    <div class="container template-reference-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -90,106 +90,84 @@
       </header>
 
       <div class="row">
-  <div class="col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>
-        Reference
-        <small>version&nbsp;0.1.0</small>
-      </h1>
+    <h1>Get types</h1>
     </div>
 
-    <div class="contents">
-      <table class="ref-index">
+    
+    <p>Get types</p>
+    
 
-      <colgroup>
-        <col class="alias" />
-        <col class="title" />
-      </colgroup>
+    <pre class="usage"><span class='fu'>get_types</span>(<span class='kw'>collection</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>corpus</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>child</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>role</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>role_exclude</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>age</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>sex</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>connection</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>collection</th>
+      <td><p>A character vector of one or more names of collections</p></td>
+    </tr>
+    <tr>
+      <th>corpus</th>
+      <td><p>A character vector of one or more names of corpora</p></td>
+    </tr>
+    <tr>
+      <th>child</th>
+      <td><p>A character vector of one or more names of children</p></td>
+    </tr>
+    <tr>
+      <th>role</th>
+      <td><p>A character vector of one or more roles to include</p></td>
+    </tr>
+    <tr>
+      <th>role_exclude</th>
+      <td><p>A character vector of one or more roles to exclude</p></td>
+    </tr>
+    <tr>
+      <th>age</th>
+      <td><p>A numeric vector of an age or a min age (inclusive) and max age
+(exclusive) in months</p></td>
+    </tr>
+    <tr>
+      <th>sex</th>
+      <td><p>A character vector of values "male" and/or "female"</p></td>
+    </tr>
+    <tr>
+      <th>type</th>
+      <td><p>A character vector of one or more type patterns (`<!-- %` matches -->
+any number of wildcard characters, `_` matches exactly one wildcard
+character)</p></td>
+    </tr>
+    <tr>
+      <th>connection</th>
+      <td><p>A connection to the CHILDES database</p></td>
+    </tr>
+    </table>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-      <tbody>
-        <tr>
-          <th colspan="2">
-            <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-            <p class="section-desc"></p>
-          </th>
-        </tr>
-        <tr>
-          <!--  -->
-          <td>
-            <p><code><a href="connect_to_childes.html">connect_to_childes</a></code> </p>
-          </td>
-          <td><p>Connect to CHILDES</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="get_collections.html">get_collections</a></code> </p>
-          </td>
-          <td><p>Get collections</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="get_content.html">get_content</a></code> </p>
-          </td>
-          <td><p>Get content</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="get_corpora.html">get_corpora</a></code> </p>
-          </td>
-          <td><p>Get corpora</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="get_participants.html">get_participants</a></code> </p>
-          </td>
-          <td><p>Get participants</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="get_speaker_statistics.html">get_speaker_statistics</a></code> </p>
-          </td>
-          <td><p>Get speaker statistics</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="get_table.html">get_table</a></code> </p>
-          </td>
-          <td><p>Get table</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="get_tokens.html">get_tokens</a></code> </p>
-          </td>
-          <td><p>Get tokens</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="get_transcripts.html">get_transcripts</a></code> </p>
-          </td>
-          <td><p>Get transcripts</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="get_types.html">get_types</a></code> </p>
-          </td>
-          <td><p>Get types</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="get_utterances.html">get_utterances</a></code> </p>
-          </td>
-          <td><p>Get utterances</p></td>
-        </tr>
-      </tbody>
-      </table>
-    </div>
+    <p>A `tbl` of Type data, filtered down by collection, corpus, child,
+  role, age, sex, and token supplied, if any.</p>
+    
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><span class='co'># NOT RUN {</span>
+<span class='fu'>get_types</span>()
+<span class='co'># }</span></pre>
   </div>
-
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#section-all-functions">All functions</a></li>
+      <li><a href="#arguments">Arguments</a></li>
+      
+      <li><a href="#value">Value</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
     </ul>
+
   </div>
 </div>
 
