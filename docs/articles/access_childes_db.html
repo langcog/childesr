@@ -71,7 +71,7 @@
     <div class="page-header toc-ignore">
       <h1>Accessing childes-db</h1>
             
-            <h4 class="date">2017-10-03</h4>
+            <h4 class="date">2017-10-11</h4>
           </div>
 
     
@@ -81,14 +81,16 @@
 <h2 class="hasAnchor">
 <a href="#overview" class="anchor"></a>Overview</h2>
 <p>The <code>childesr</code> package allows you to access data in the childes-db from R. This removes the need to write complex SQL queries in order to get the information you want from the database. This vignette shows some examples of how to use the data loading functions and what the resulting data look like.</p>
-<p>There are four different <code>get_</code> functions that you can use to extract different types of data from the Childes-db:</p>
+<p>There are several different <code>get_</code> functions that you can use to extract different types of data from the childes-db:</p>
 <ul>
 <li><code><a href="../reference/get_transcripts.html">get_transcripts()</a></code></li>
 <li><code><a href="../reference/get_participants.html">get_participants()</a></code></li>
-<li><code><a href="../reference/get_utterances.html">get_utterances()</a></code></li>
 <li><code><a href="../reference/get_tokens.html">get_tokens()</a></code></li>
+<li><code><a href="../reference/get_types.html">get_types()</a></code></li>
+<li><code><a href="../reference/get_utterances.html">get_utterances()</a></code></li>
+<li><code><a href="../reference/get_speaker_statistics.html">get_speaker_statistics()</a></code></li>
 </ul>
-<p><strong>Technical note 1</strong>: You do not have to explicitly establish a connection to the Childes-db since the <code>childesr</code> functions will manage these connections. But if you would like to establish your own connection, you can pass it as an argument to any of the <code>get_</code> functions.</p>
+<p><strong>Technical note 1</strong>: You do not have to explicitly establish a connection to the childes-db since the <code>childesr</code> functions will manage these connections. But if you would like to establish your own connection, you can pass it as an argument to any of the <code>get_</code> functions.</p>
 <p><strong>Technical note 2</strong>: We have tried to optimize the time it takes to get data from the database. But if you try to query and get all of the tokens, it will take a long time.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># load the library</span>
 <span class="kw">library</span>(childesr)</code></pre></div>
@@ -150,8 +152,8 @@ d_brown_transcripts &lt;-<span class="st"> </span><span class="kw"><a href="../r
 <pre><code>## [1] 261</code></pre>
 <p>If you want transcript information about a specific child from a corpus, then you pass their name to the child argument. <em>Note</em> that the following function call will not return any of the transcripts from the Brown corpus because the child Shem is not present in that corpus.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">d_shem &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_transcripts.html">get_transcripts</a></span>(<span class="dt">collection =</span> <span class="ot">NULL</span>, 
-                                    <span class="dt">corpus =</span> <span class="kw">c</span>(<span class="st">"Brown"</span>, <span class="st">"Clark"</span>), 
-                                    <span class="dt">child =</span> <span class="st">"Shem"</span>)
+                          <span class="dt">corpus =</span> <span class="kw">c</span>(<span class="st">"Brown"</span>, <span class="st">"Clark"</span>), 
+                          <span class="dt">child =</span> <span class="st">"Shem"</span>)
 <span class="co"># print the number of rows</span>
 <span class="kw">nrow</span>(d_shem)</code></pre></div>
 <pre><code>## [1] 47</code></pre>
@@ -216,11 +218,11 @@ d_brown_transcripts &lt;-<span class="st"> </span><span class="kw"><a href="../r
 </ol>
 <p>For example, you can get the participant information for all of the children who had transcripts between the ages of 24 and 36 months.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">d_age_range &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_participants.html">get_participants</a></span>(<span class="dt">collection =</span> <span class="ot">NULL</span>, 
-                                   <span class="dt">corpus =</span> <span class="ot">NULL</span>, 
-                                   <span class="dt">child =</span> <span class="ot">NULL</span>,
-                                   <span class="dt">role =</span> <span class="ot">NULL</span>, 
-                                   <span class="dt">age =</span> <span class="kw">c</span>(<span class="dv">24</span>, <span class="dv">36</span>), 
-                                   <span class="dt">sex =</span> <span class="ot">NULL</span>)
+                                <span class="dt">corpus =</span> <span class="ot">NULL</span>, 
+                                <span class="dt">child =</span> <span class="ot">NULL</span>,
+                                <span class="dt">role =</span> <span class="ot">NULL</span>, 
+                                <span class="dt">age =</span> <span class="kw">c</span>(<span class="dv">24</span>, <span class="dv">36</span>), 
+                                <span class="dt">sex =</span> <span class="ot">NULL</span>)
 <span class="kw">head</span>(d_age_range)</code></pre></div>
 <pre><code>## # A tibble: 6 x 18
 ##      id  code        name         role language   group    sex   ses
@@ -239,15 +241,15 @@ d_brown_transcripts &lt;-<span class="st"> </span><span class="kw"><a href="../r
 <div id="get-tokens" class="section level2">
 <h2 class="hasAnchor">
 <a href="#get-tokens" class="anchor"></a>Get tokens</h2>
-<p>The <code>get_tokens</code> function returns a table with a row for each token based on set of filtering criteria. The token argument allows you to pass a vector of one or more tokens that you want to analyze.</p>
+<p>The <code>get_tokens</code> function returns a table with a row for each token based on a set of filtering criteria. The token argument allows you to pass a vector of one or more tokens that you want to analyze.</p>
 <p>For example, if you wanted to get all of the production data for a specific token(s), then you could run the following call to get all instances of “dog” and “ball” for Adam in the Brown corpus.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">d_adam_prod &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_tokens.html">get_tokens</a></span>(<span class="dt">collection =</span> <span class="ot">NULL</span>, 
-                         <span class="dt">corpus =</span> <span class="st">"Brown"</span>, 
-                         <span class="dt">role =</span> <span class="st">"target_child"</span>,
-                         <span class="dt">age =</span> <span class="ot">NULL</span>, 
-                         <span class="dt">sex =</span> <span class="ot">NULL</span>, 
-                         <span class="dt">child =</span> <span class="st">"Adam"</span>,
-                         <span class="dt">token =</span> <span class="kw">c</span>(<span class="st">"dog"</span>, <span class="st">"ball"</span>))</code></pre></div>
+                          <span class="dt">corpus =</span> <span class="st">"Brown"</span>, 
+                          <span class="dt">role =</span> <span class="st">"target_child"</span>,
+                          <span class="dt">age =</span> <span class="ot">NULL</span>, 
+                          <span class="dt">sex =</span> <span class="ot">NULL</span>, 
+                          <span class="dt">child =</span> <span class="st">"Adam"</span>,
+                          <span class="dt">token =</span> <span class="kw">c</span>(<span class="st">"dog"</span>, <span class="st">"ball"</span>))</code></pre></div>
 <pre><code>## Getting data from 1 child in 1 corpus ...</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># view the structure of the data</span>
 <span class="kw">str</span>(d_adam_prod)</code></pre></div>
@@ -276,16 +278,34 @@ d_brown_transcripts &lt;-<span class="st"> </span><span class="kw"><a href="../r
 <span class="kw">unique</span>(d_adam_prod<span class="op">$</span>gloss)</code></pre></div>
 <pre><code>## [1] "ball" "dog"</code></pre>
 </div>
+<div id="get-types" class="section level2">
+<h2 class="hasAnchor">
+<a href="#get-types" class="anchor"></a>Get types</h2>
+<p>The <code><a href="../reference/get_types.html">get_types()</a></code> function works like the <code><a href="../reference/get_tokens.html">get_tokens()</a></code> function, returning a table with a row for each type based on set of filtering criteria. The type argument allows you to pass a vector of one or more types that you want to analyze. The main difference is that you now have a single row for each type (i.e., a concept) and a variable <code>count</code> that tracks the number of times that type appeared in a particular transcript.</p>
+<p>For example, if you wanted to get all of the production data for a specific type(s), then you could run the following call to get counts of “dog” and “ball” for all of Adam’s transcripts in the Brown corpus.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">d_adam_types &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_types.html">get_types</a></span>(<span class="dt">collection =</span> <span class="ot">NULL</span>, 
+                          <span class="dt">corpus =</span> <span class="st">"Brown"</span>, 
+                          <span class="dt">child =</span> <span class="st">"Adam"</span>, 
+                          <span class="dt">role =</span> <span class="st">"target_child"</span>,
+                          <span class="dt">role_exclude =</span> <span class="ot">NULL</span>, 
+                          <span class="dt">age =</span> <span class="ot">NULL</span>, 
+                          <span class="dt">sex =</span> <span class="ot">NULL</span>, 
+                          <span class="dt">type =</span> <span class="kw">c</span>(<span class="st">"dog"</span>, <span class="st">"ball"</span>))</code></pre></div>
+<pre><code>## Getting data from 1 child in 1 corpus ...</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># print the number of times ball appears in the first transcript</span>
+<span class="kw">c</span>(d_adam_types<span class="op">$</span>gloss[<span class="dv">1</span>], d_adam_types<span class="op">$</span>count[<span class="dv">1</span>])</code></pre></div>
+<pre><code>## [1] "ball" "3"</code></pre>
+</div>
 <div id="get-utterances" class="section level2">
 <h2 class="hasAnchor">
 <a href="#get-utterances" class="anchor"></a>Get utterances</h2>
 <p>The <code>get_utterances</code> function returns a table with a row for each utterance based on user-defined filtering criteria. For example, the following function will get you all of the utterances in the Brown Corpus for the child Adam.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">d_adam_utts &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_utterances.html">get_utterances</a></span>(<span class="dt">collection =</span> <span class="ot">NULL</span>, 
-                         <span class="dt">corpus =</span> <span class="st">"Brown"</span>, 
-                         <span class="dt">role =</span> <span class="ot">NULL</span>,
-                         <span class="dt">age =</span> <span class="ot">NULL</span>, 
-                         <span class="dt">sex =</span> <span class="ot">NULL</span>, 
-                         <span class="dt">child =</span> <span class="st">"Adam"</span>)</code></pre></div>
+                              <span class="dt">corpus =</span> <span class="st">"Brown"</span>, 
+                              <span class="dt">role =</span> <span class="ot">NULL</span>,
+                              <span class="dt">age =</span> <span class="ot">NULL</span>, 
+                              <span class="dt">sex =</span> <span class="ot">NULL</span>, 
+                              <span class="dt">child =</span> <span class="st">"Adam"</span>)</code></pre></div>
 <pre><code>## Getting data from 1 child in 1 corpus ...</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># view the structure of the data</span>
 <span class="kw">str</span>(d_adam_utts)</code></pre></div>
@@ -315,6 +335,29 @@ d_adam_utts<span class="op">$</span>gloss[<span class="dv">1</span><span class="
 ## [3] "book"                          "bitten me dog nineteen twelve"
 ## [5] "read book"</code></pre>
 </div>
+<div id="get-speaker-statistics" class="section level2">
+<h2 class="hasAnchor">
+<a href="#get-speaker-statistics" class="anchor"></a>Get speaker statistics</h2>
+<p>The <code><a href="../reference/get_speaker_statistics.html">get_speaker_statistics()</a></code> function returns a table with a row for each transcript and columns that contain a set of summary statistics for that transcript. The summary statistics include:</p>
+<ul>
+<li>number of utterances (<code>num_utterances</code>)</li>
+<li>mean length of utterances (<code>mlu</code>)</li>
+<li>number of types (<code>num_types</code>)</li>
+<li>number of tokens (<code>num_tokens</code>)</li>
+</ul>
+<p>For example, if we wanted to get the summary statistics for Adam’s production data, we could run the following call.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">d_adam_stats &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_speaker_statistics.html">get_speaker_statistics</a></span>(<span class="dt">collection =</span> <span class="ot">NULL</span>, 
+                                       <span class="dt">corpus =</span> <span class="st">"Brown"</span>, 
+                                       <span class="dt">child =</span> <span class="st">"Adam"</span>, 
+                                       <span class="dt">role =</span> <span class="st">"target_child"</span>,
+                                       <span class="dt">role_exclude =</span> <span class="ot">NULL</span>, 
+                                       <span class="dt">age =</span> <span class="ot">NULL</span>, 
+                                       <span class="dt">sex =</span> <span class="ot">NULL</span>)
+
+<span class="co"># get the average mlu across all Adam's transcripts</span>
+<span class="kw">mean</span>(d_adam_stats<span class="op">$</span>mlu)</code></pre></div>
+<pre><code>## [1] 3.591833</code></pre>
+</div>
 </div>
   </div>
 
@@ -327,7 +370,9 @@ d_adam_utts<span class="op">$</span>gloss[<span class="dv">1</span><span class="
       <li><a href="#get-transcripts">Get transcripts</a></li>
       <li><a href="#get-participants">Get participants</a></li>
       <li><a href="#get-tokens">Get tokens</a></li>
+      <li><a href="#get-types">Get types</a></li>
       <li><a href="#get-utterances">Get utterances</a></li>
+      <li><a href="#get-speaker-statistics">Get speaker statistics</a></li>
       </ul>
 </div>
       </div>
