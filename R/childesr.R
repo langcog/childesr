@@ -316,7 +316,8 @@ get_content <- function(content_type, collection = NULL, corpus = NULL,
 
   content <- dplyr::tbl(connection, content_type)
 
-  if (content_type %in% c("token", "token_frequency") & !is.null(token)) {
+  if (content_type %in% c("token", "token_frequency") & !is.null(token) & 
+      !identical("*", token)) {
     token_filter <- sprintf("gloss %%like%% '%s'", token) %>%
       paste(collapse = " | ")
     content %<>% dplyr::filter_(token_filter)
