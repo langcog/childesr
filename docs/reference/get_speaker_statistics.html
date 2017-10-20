@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Articles • childesr</title>
+<title>Get speaker statistics — get_speaker_statistics • childesr</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -37,7 +37,7 @@
   </head>
 
   <body>
-    <div class="container template-vignette-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -89,20 +89,79 @@
       
       </header>
 
-      <div class="page-header">
-  <h1>Articles <small>version&nbsp;0.1.0</small></h1>
-</div>
-
-<div class="row">
-  <div class="col-md-9">
-    <div class="section ">
-      <h3>All vignettes</h3>
-      <p class="section-desc"></p>
-
-      <ul>
-        <li><a href="access_childes_db.html">Accessing childes-db</a></li>
-      </ul>
+      <div class="row">
+  <div class="col-md-9 contents">
+    <div class="page-header">
+    <h1>Get speaker statistics</h1>
     </div>
+
+    
+    <p>Get speaker statistics</p>
+    
+
+    <pre class="usage"><span class='fu'>get_speaker_statistics</span>(<span class='kw'>collection</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>corpus</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>child</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>role</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>role_exclude</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>age</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>sex</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>connection</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>collection</th>
+      <td><p>A character vector of one or more names of collections</p></td>
+    </tr>
+    <tr>
+      <th>corpus</th>
+      <td><p>A character vector of one or more names of corpora</p></td>
+    </tr>
+    <tr>
+      <th>child</th>
+      <td><p>A character vector of one or more names of children</p></td>
+    </tr>
+    <tr>
+      <th>role</th>
+      <td><p>A character vector of one or more roles to include</p></td>
+    </tr>
+    <tr>
+      <th>role_exclude</th>
+      <td><p>A character vector of one or more roles to exclude</p></td>
+    </tr>
+    <tr>
+      <th>age</th>
+      <td><p>A numeric vector of an age or a min age (inclusive) and max age
+(exclusive) in months</p></td>
+    </tr>
+    <tr>
+      <th>sex</th>
+      <td><p>A character vector of values "male" and/or "female"</p></td>
+    </tr>
+    <tr>
+      <th>connection</th>
+      <td><p>A connection to the CHILDES database</p></td>
+    </tr>
+    </table>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A `tbl` of Speaker statistics, filtered down by collection, corpus,
+  child, role, role_exclude, age, and sex supplied, if any.</p>
+    
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><span class='co'># NOT RUN {</span>
+<span class='fu'>get_speaker_statistics</span>()
+<span class='co'># }</span></pre>
+  </div>
+  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+    <h2>Contents</h2>
+    <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
+      
+      <li><a href="#value">Value</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
+
   </div>
 </div>
 
