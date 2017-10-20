@@ -23,7 +23,7 @@ get_tokens(collection = NULL, corpus = NULL, child = NULL, role = NULL,
 
 \item{sex}{A character vector of values "male" and/or "female"}
 
-\item{token}{A character vector of one or more token patterns (`%` matches
+\item{token}{A character vector of one or more token patterns (`\%` matches
 any number of wildcard characters, `_` matches exactly one wildcard
 character)}
 

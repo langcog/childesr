@@ -218,7 +218,7 @@ get_participants <- function(collection = NULL, corpus = NULL, child = NULL,
 #' Get content
 #'
 #' @param content_type One of "token" or "utterance"
-#' @param token A character vector of one or more token patterns (`%` matches
+#' @param token A character vector of one or more token patterns (`\%` matches
 #'   any number of wildcard characters, `_` matches exactly one wildcard
 #'   character)
 #' @inheritParams get_participants

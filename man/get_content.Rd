@@ -26,7 +26,7 @@ get_content(content_type, collection = NULL, corpus = NULL, role = NULL,
 
 \item{child}{A character vector of one or more names of children}
 
-\item{token}{A character vector of one or more token patterns (`%` matches
+\item{token}{A character vector of one or more token patterns (`\%` matches
 any number of wildcard characters, `_` matches exactly one wildcard
 character)}
 
