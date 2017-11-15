@@ -295,7 +295,7 @@ get_speaker_statistics <- function(collection = NULL, corpus = NULL, child = NUL
 #'   any number of wildcard characters, `_` matches exactly one wildcard
 #'   character)
 #' @inheritParams get_participants
-get_content <- function(content_type, collection = NULL, corpus = NULL,
+get_content <- function(content_type, collection = NULL, language = NULL, corpus = NULL,
                         role = NULL, role_exclude = NULL, age = NULL,
                         sex = NULL, child = NULL, token = NULL, connection) {
 
@@ -316,7 +316,7 @@ get_content <- function(content_type, collection = NULL, corpus = NULL,
 
   content <- dplyr::tbl(connection, content_type)
 
-  if (content_type %in% c("token", "token_frequency") & !is.null(token) & 
+  if (content_type %in% c("token", "token_frequency") & !is.null(token) &
       !identical("*", token)) {
     token_filter <- sprintf("gloss %%like%% '%s'", token) %>%
       paste(collapse = " | ")
@@ -364,6 +364,11 @@ get_content <- function(content_type, collection = NULL, corpus = NULL,
     content %<>% dplyr::filter(!(speaker_role %in% role_exclude))
   }
 
+  if (!is.null(language)) {
+    language_filter <- language
+    content %<>% dplyr::filter(language %in% language_filter)
+  }
+
   return(content)
 }
 
@@ -380,7 +385,7 @@ get_content <- function(content_type, collection = NULL, corpus = NULL,
 #' \dontrun{
 #' get_tokens(token = "dog")
 #' }
-get_tokens <- function(collection = NULL, corpus = NULL, child = NULL,
+get_tokens <- function(collection = NULL, language = NULL, corpus = NULL, child = NULL,
                        role = NULL, role_exclude = NULL, age = NULL, sex = NULL,
                        token, connection = NULL) {
 
@@ -393,6 +398,7 @@ get_tokens <- function(collection = NULL, corpus = NULL, child = NULL,
 
   tokens <- get_content(content_type = "token",
                         collection = collection,
+                        language = language,
                         corpus = corpus,
                         role = role,
                         role_exclude = role_exclude,
@@ -425,13 +431,14 @@ get_tokens <- function(collection = NULL, corpus = NULL, child = NULL,
 #' \dontrun{
 #' get_types()
 #' }
-get_types <- function(collection = NULL, corpus = NULL, child = NULL,
+get_types <- function(collection = NULL, language = NULL, corpus = NULL, child = NULL,
                        role = NULL, role_exclude = NULL, age = NULL, sex = NULL,
                        type = NULL, connection = NULL) {
   if (is.null(connection)) con <- connect_to_childes() else con <- connection
 
   types <- get_content(content_type = "token_frequency",
                         collection = collection,
+                        language = language,
                         corpus = corpus,
                         role = role,
                         role_exclude = role_exclude,
@@ -460,13 +467,14 @@ get_types <- function(collection = NULL, corpus = NULL, child = NULL,
 #' \dontrun{
 #' get_utterances(child = "Shem")
 #' }
-get_utterances <- function(collection = NULL, corpus = NULL, role = NULL,
+get_utterances <- function(collection = NULL, language = NULL, corpus = NULL, role = NULL,
                            role_exclude = NULL, age = NULL, sex = NULL,
                            child = NULL, connection = NULL) {
   if (is.null(connection)) con <- connect_to_childes() else con <- connection
 
   utterances <- get_content(content_type = "utterance",
                             collection = collection,
+                            language = language,
                             corpus = corpus,
                             role = role,
                             role_exclude = role_exclude,
@@ -480,4 +488,25 @@ get_utterances <- function(collection = NULL, corpus = NULL, role = NULL,
     DBI::dbDisconnect(con)
   }
   return(utterances)
+}
+
+#' Get database version
+#'
+#' @return The database version as a string.
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' get_database_version()
+#' }
+get_database_version <- function(connection = NULL) {
+  if (is.null(connection)) con <- connect_to_childes() else con <- connection
+
+  admin <- dplyr::tbl(con, "admin")
+
+  if (is.null(connection)) {
+    admin %<>% dplyr::collect()
+    DBI::dbDisconnect(con)
+  }
+  return(admin$version[1])
 }
