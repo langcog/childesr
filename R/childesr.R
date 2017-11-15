@@ -78,8 +78,7 @@ get_corpora <- function(connection = NULL) {
 
   corpora <- dplyr::tbl(con, "corpus") %>%
     dplyr::rename(corpus_id = id) %>%
-    dplyr::rename(corpus_name = name) %>%
-    dplyr::left_join(get_collections(con), by = "collection_id")
+    dplyr::rename(corpus_name = name)
 
   if (is.null(connection)) {
     corpora %<>% dplyr::collect()
@@ -109,6 +108,7 @@ get_transcripts <- function(collection = NULL, corpus = NULL, child = NULL,
 
   transcripts <- get_table(con, "transcript") %>%
     dplyr::rename(transcript_id = id) %>%
+    dplyr::select(-collection_name, -collection_id) %>% # tmp, avoid redundant columns
     dplyr::left_join(get_corpora(con), by = "corpus_id")
 
   if (!is.null(collection)) {
@@ -152,6 +152,7 @@ get_participants <- function(collection = NULL, corpus = NULL, child = NULL,
   if (is.null(connection)) con <- connect_to_childes() else con <- connection
 
   participants <- get_table(con, "participant") %>%
+    dplyr::select(-collection_name, -collection_id) %>% # tmp, avoid redundant columns
     dplyr::left_join(get_corpora(con), by = "corpus_id")
 
   if (!is.null(collection)) {
