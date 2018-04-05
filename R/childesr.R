@@ -494,7 +494,8 @@ get_utterances <- function(collection = NULL, language = NULL, corpus = NULL, ro
 
 #' Get database version
 #'
-#' @return The database version as a string.
+#' @param connection A connection to the CHILDES database
+#' @return The database version as a string
 #' @export
 #'
 #' @examples

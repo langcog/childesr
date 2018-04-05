@@ -6,8 +6,11 @@
 \usage{
 get_database_version(connection = NULL)
 }
+\arguments{
+\item{connection}{A connection to the CHILDES database}
+}
 \value{
-The database version as a string.
+The database version as a string
 }
 \description{
 Get database version
