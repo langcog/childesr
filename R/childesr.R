@@ -107,9 +107,7 @@ get_transcripts <- function(collection = NULL, corpus = NULL, child = NULL,
   if (is.null(connection)) con <- connect_to_childes() else con <- connection
 
   transcripts <- get_table(con, "transcript") %>%
-    dplyr::rename(transcript_id = id) %>%
-    dplyr::select(-collection_name, -collection_id) %>% # tmp, avoid redundant columns
-    dplyr::left_join(get_corpora(con), by = "corpus_id")
+    dplyr::rename(transcript_id = id)
 
   if (!is.null(collection)) {
     transcripts %<>% dplyr::filter(collection_name %in% collection)
@@ -151,9 +149,7 @@ get_participants <- function(collection = NULL, corpus = NULL, child = NULL,
                              sex = NULL, connection = NULL) {
   if (is.null(connection)) con <- connect_to_childes() else con <- connection
 
-  participants <- get_table(con, "participant") %>%
-    dplyr::select(-collection_name, -collection_id) %>% # tmp, avoid redundant columns
-    dplyr::left_join(get_corpora(con), by = "corpus_id")
+  participants <- get_table(con, "participant")
 
   if (!is.null(collection)) {
     participants %<>% dplyr::filter(collection_name %in% collection)
@@ -201,8 +197,10 @@ get_participants <- function(collection = NULL, corpus = NULL, child = NULL,
   }
 
   target_children <- get_transcripts(collection, corpus, child, con) %>%
-    dplyr::distinct(target_child_id, target_child_name)
+    dplyr::distinct(target_child_id, target_child_name) %>%
+    dplyr::select(target_child_id, target_child_name)
 
+  # TODO remove after https://github.com/langcog/childes-db/issues/30 is resolved
   participants %<>%
     dplyr::left_join(target_children, by = "target_child_id")
 
