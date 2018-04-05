@@ -4,12 +4,14 @@
 \alias{get_types}
 \title{Get types}
 \usage{
-get_types(collection = NULL, corpus = NULL, child = NULL, role = NULL,
-  role_exclude = NULL, age = NULL, sex = NULL, type = NULL,
-  connection = NULL)
+get_types(collection = NULL, language = NULL, corpus = NULL,
+  child = NULL, role = NULL, role_exclude = NULL, age = NULL,
+  sex = NULL, type = NULL, connection = NULL)
 }
 \arguments{
 \item{collection}{A character vector of one or more names of collections}
+
+\item{language}{A character vector of one or more languages}
 
 \item{corpus}{A character vector of one or more names of corpora}
 

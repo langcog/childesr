@@ -114,9 +114,9 @@
     <p>Get content</p>
     
 
-    <pre class="usage"><span class='fu'>get_content</span>(<span class='no'>content_type</span>, <span class='kw'>collection</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>corpus</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>role</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>role_exclude</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>age</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>sex</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>child</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>token</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>connection</span>)</pre>
+    <pre class="usage"><span class='fu'>get_content</span>(<span class='no'>content_type</span>, <span class='kw'>collection</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>language</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>corpus</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>role</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>role_exclude</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>age</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>sex</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>child</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>token</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>connection</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -128,6 +128,10 @@
     <tr>
       <th>collection</th>
       <td><p>A character vector of one or more names of collections</p></td>
+    </tr>
+    <tr>
+      <th>language</th>
+      <td><p>A character vector of one or more languages</p></td>
     </tr>
     <tr>
       <th>corpus</th>

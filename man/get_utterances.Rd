@@ -4,12 +4,14 @@
 \alias{get_utterances}
 \title{Get utterances}
 \usage{
-get_utterances(collection = NULL, corpus = NULL, role = NULL,
-  role_exclude = NULL, age = NULL, sex = NULL, child = NULL,
-  connection = NULL)
+get_utterances(collection = NULL, language = NULL, corpus = NULL,
+  role = NULL, role_exclude = NULL, age = NULL, sex = NULL,
+  child = NULL, connection = NULL)
 }
 \arguments{
 \item{collection}{A character vector of one or more names of collections}
+
+\item{language}{A character vector of one or more languages}
 
 \item{corpus}{A character vector of one or more names of corpora}
 
