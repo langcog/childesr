@@ -4,11 +4,14 @@
 \alias{get_tokens}
 \title{Get tokens}
 \usage{
-get_tokens(collection = NULL, corpus = NULL, child = NULL, role = NULL,
-  role_exclude = NULL, age = NULL, sex = NULL, token, connection = NULL)
+get_tokens(collection = NULL, language = NULL, corpus = NULL,
+  child = NULL, role = NULL, role_exclude = NULL, age = NULL,
+  sex = NULL, token, connection = NULL)
 }
 \arguments{
 \item{collection}{A character vector of one or more names of collections}
+
+\item{language}{A character vector of one or more languages}
 
 \item{corpus}{A character vector of one or more names of corpora}
 

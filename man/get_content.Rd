@@ -4,14 +4,16 @@
 \alias{get_content}
 \title{Get content}
 \usage{
-get_content(content_type, collection = NULL, corpus = NULL, role = NULL,
-  role_exclude = NULL, age = NULL, sex = NULL, child = NULL,
-  token = NULL, connection)
+get_content(content_type, collection = NULL, language = NULL,
+  corpus = NULL, role = NULL, role_exclude = NULL, age = NULL,
+  sex = NULL, child = NULL, token = NULL, connection)
 }
 \arguments{
 \item{content_type}{One of "token" or "utterance"}
 
 \item{collection}{A character vector of one or more names of collections}
+
+\item{language}{A character vector of one or more languages}
 
 \item{corpus}{A character vector of one or more names of corpora}
 
