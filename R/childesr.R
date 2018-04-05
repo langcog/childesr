@@ -200,6 +200,7 @@ get_participants <- function(collection = NULL, corpus = NULL, child = NULL,
     dplyr::distinct(target_child_id, target_child_name) %>%
     dplyr::select(target_child_id, target_child_name)
 
+  # TODO remove after https://github.com/langcog/childes-db/issues/30 is resolved
   participants %<>%
     dplyr::left_join(target_children, by = "target_child_id")
 
