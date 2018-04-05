@@ -294,6 +294,7 @@ get_speaker_statistics <- function(collection = NULL, corpus = NULL, child = NUL
 #' @param token A character vector of one or more token patterns (`\%` matches
 #'   any number of wildcard characters, `_` matches exactly one wildcard
 #'   character)
+#' @param language A character vector of one or more languages
 #' @inheritParams get_participants
 get_content <- function(content_type, collection = NULL, language = NULL, corpus = NULL,
                         role = NULL, role_exclude = NULL, age = NULL,
@@ -457,6 +458,7 @@ get_types <- function(collection = NULL, language = NULL, corpus = NULL, child =
 
 #' Get utterances
 #'
+#' @param language A character vector of one or more languages
 #' @inheritParams get_participants
 #'
 #' @return A `tbl` of Utterance data, filtered down by collection, corpus,
