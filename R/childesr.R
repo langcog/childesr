@@ -51,7 +51,7 @@ translateVersion <- function(version, connectionDetails, db_info){
 #' DBI::dbDisconnect(con)
 #' }
 connect_to_childes <- function(version="current", connectionDetails=NULL) {
-  db_info = fromJSON("/Users/stephanmeylan/Downloads/childes-db.json")
+  db_info = fromJSON("https://childes-db.stanford.edu/childes-db.json")
   
   if (is.null(connectionDetails)){
     connectionDetails = db_info
