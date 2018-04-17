@@ -1,5 +1,6 @@
 #' @importFrom magrittr "%>%"
 #' @importFrom magrittr "%<>%"
+#' @importFrom RJSONIO "fromJSON"
 NULL
 
 utils::globalVariables(c("collection_id", "collection_name", "corpus_id",
