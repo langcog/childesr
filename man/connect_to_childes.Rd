@@ -4,7 +4,12 @@
 \alias{connect_to_childes}
 \title{Connect to CHILDES}
 \usage{
-connect_to_childes()
+connect_to_childes(version = "current", connectionDetails = NULL)
+}
+\arguments{
+\item{version}{String name of the version to use}
+
+\item{version}{connectionDetails NULL or list with host, user, and password defined}
 }
 \value{
 A DBIConnection object for the CHILDES database
@@ -14,7 +19,7 @@ Connect to CHILDES
 }
 \examples{
 \dontrun{
-con <- connect_to_childes()
+con <- connect_to_childes(version="current", connectionDetails=NULL)
 DBI::dbDisconnect(con)
 }
 }

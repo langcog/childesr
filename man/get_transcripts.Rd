@@ -5,7 +5,7 @@
 \title{Get transcripts}
 \usage{
 get_transcripts(collection = NULL, corpus = NULL, child = NULL,
-  connection = NULL)
+  connection = NULL, version = "current", connectionDetails = NULL)
 }
 \arguments{
 \item{collection}{A character vector of one or more names of collections}
@@ -15,6 +15,10 @@ get_transcripts(collection = NULL, corpus = NULL, child = NULL,
 \item{child}{A character vector of one or more names of children}
 
 \item{connection}{A connection to the CHILDES database}
+
+\item{version}{String with the version name (used as the database name)}
+
+\item{connectionDetails}{List with with host, user, and password}
 }
 \value{
 A `tbl` of Transcript data, filtered down by collection, corpus, and

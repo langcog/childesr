@@ -4,7 +4,8 @@
 \alias{get_database_version}
 \title{Get database version}
 \usage{
-get_database_version(connection = NULL)
+get_database_version(connection = NULL, version = "current",
+  connectionDetails = NULL)
 }
 \arguments{
 \item{connection}{A connection to the CHILDES database}

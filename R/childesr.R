@@ -7,50 +7,50 @@ utils::globalVariables(c("collection_id", "collection_name", "corpus_id",
                          "name", "speaker_role", "target_child_id",
                          "target_child_name", "target_child_age", "%like%"))
 
-
-translateVersion <- function(version, connectionDetails, db_info){
-  if (connectionDetails$host == db_info$host){
-    # using the childes-db hosted server 
-    if (version == 'current'){
-
-      # CURRENT VERSION
-      db_to_use = db_info[['current']]
-      print(paste0('Using current version, ',db_to_use))
-      return(db_to_use)
-    } else if (version %in% db_info[['supported']]){
-      
-      # SUPPORTED VERSION
-      db_to_use = version
-      print(paste0('Using supported version, ',db_to_use))
-      return(db_to_use)
-    } else if ((version %in% db_info[['historical']])  ){
-
-      # HISTORICAL VERSION
-      stop(paste0(version, ' is no longer hosted by childes-db.stanford.edu; either specify a more recent version or install MySQL Server locally and update connectionDetails'))
-    } else {
-
-      # NOT RECOGNIZED
-      stop(paste0(version, ' not found. Specify one of: current, ', paste(db_info$supported, collapse=', ')))
-    }
-  } else {
-    # using a different server than the childes-db hosted one
-    print(paste0('Not using hosted version; no checks will be applied to version specification'))
-  }   
-}
-
 #' Connect to CHILDES
 #'
-#' @param version
-#'
+#' @param version String name of the version to use
+#' @param version connectionDetails NULL or list with host, user, and password defined
 #' @return A DBIConnection object for the CHILDES database
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' con <- connect_to_childes(version="current", connectionDetails=db_info, db_info)
+#' con <- connect_to_childes(version="current", connectionDetails=NULL)
 #' DBI::dbDisconnect(con)
 #' }
 connect_to_childes <- function(version="current", connectionDetails=NULL) {
+
+  translateVersion <- function(version, connectionDetails, db_info){
+    if (connectionDetails$host == db_info$host){
+      # using the childes-db hosted server 
+      if (version == 'current'){
+
+        # CURRENT VERSION
+        db_to_use = db_info[['current']]
+        print(paste0('Using current version, ',db_to_use))
+        return(db_to_use)
+      } else if (version %in% db_info[['supported']]){
+        
+        # SUPPORTED VERSION
+        db_to_use = version
+        print(paste0('Using supported version, ',db_to_use))
+        return(db_to_use)
+      } else if ((version %in% db_info[['historical']])  ){
+
+        # HISTORICAL VERSION
+        stop(paste0(version, ' is no longer hosted by childes-db.stanford.edu; either specify a more recent version or install MySQL Server locally and update connectionDetails'))
+      } else {
+
+        # NOT RECOGNIZED
+        stop(paste0(version, ' not found. Specify one of: current, ', paste(db_info$supported, collapse=', ')))
+      }
+    } else {
+      # using a different server than the childes-db hosted one
+      print(paste0('Not using hosted version; no checks will be applied to version specification'))
+    }   
+  }
+
   db_info = fromJSON("https://childes-db.stanford.edu/childes-db.json")
   
   if (is.null(connectionDetails)){

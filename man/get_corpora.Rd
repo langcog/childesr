@@ -4,10 +4,15 @@
 \alias{get_corpora}
 \title{Get corpora}
 \usage{
-get_corpora(connection = NULL)
+get_corpora(connection = NULL, version = "current",
+  connectionDetails = NULL)
 }
 \arguments{
 \item{connection}{A connection to the CHILDES database}
+
+\item{version}{String with the version name (used as the database name)}
+
+\item{connectionDetails}{List with with host, user, and password}
 }
 \value{
 A `tbl` of Corpus data. If `connection` is supplied, the result is

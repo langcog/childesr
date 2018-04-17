@@ -6,7 +6,8 @@
 \usage{
 get_tokens(collection = NULL, language = NULL, corpus = NULL,
   child = NULL, role = NULL, role_exclude = NULL, age = NULL,
-  sex = NULL, token, connection = NULL)
+  sex = NULL, token, connection = NULL, version = "current",
+  connectionDetails = NULL)
 }
 \arguments{
 \item{collection}{A character vector of one or more names of collections}
@@ -31,6 +32,10 @@ any number of wildcard characters, `_` matches exactly one wildcard
 character)}
 
 \item{connection}{A connection to the CHILDES database}
+
+\item{version}{String with the version name (used as the database name)}
+
+\item{connectionDetails}{List with with host, user, and password}
 }
 \value{
 A `tbl` of Token data, filtered down by collection, corpus, child,
