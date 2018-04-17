@@ -7,6 +7,47 @@ utils::globalVariables(c("collection_id", "collection_name", "corpus_id",
                          "name", "speaker_role", "target_child_id",
                          "target_child_name", "target_child_age", "%like%"))
 
+translateVersion <- function(version, connectionDetails, db_info){
+  if (connectionDetails$host == db_info$host){
+    # using the childes-db hosted server 
+    if (version == 'current'){
+
+      # CURRENT VERSION
+      db_to_use = db_info[['current']]
+      print(paste0('Using current version, ',db_to_use))
+      return(db_to_use)
+    } else if (version %in% db_info[['supported']]){
+      
+      # SUPPORTED VERSION
+      db_to_use = version
+      print(paste0('Using supported version, ',db_to_use))
+      return(db_to_use)
+    } else if ((version %in% db_info[['historical']])  ){
+
+      # HISTORICAL VERSION
+      stop(paste0(version, ' is no longer hosted by childes-db.stanford.edu; either specify a more recent version or install MySQL Server locally and update connectionDetails'))
+    } else {
+
+      # NOT RECOGNIZED
+      stop(paste0(version, ' not found. Specify one of: current, ', paste(db_info$supported, collapse=', ')))
+    }
+  } else {
+    # using a different server than the childes-db hosted one
+    print(paste0('Not using hosted version; no checks will be applied to version specification'))
+  }   
+}
+
+getExistingOrMakeNewConnection <- function(connection, version, connectionDetails){
+  if (is.null(connection)){
+    con <- connect_to_childes(version, connectionDetails)
+  }  else {
+    # print version even when we aren't connecting to a new database
+    con <- connection
+    print(paste0('Using version: ', version))
+  } 
+  return(con)
+}  
+
 #' Connect to CHILDES
 #'
 #' @param version String name of the version to use
@@ -19,37 +60,7 @@ utils::globalVariables(c("collection_id", "collection_name", "corpus_id",
 #' con <- connect_to_childes(version="current", connectionDetails=NULL)
 #' DBI::dbDisconnect(con)
 #' }
-connect_to_childes <- function(version="current", connectionDetails=NULL) {
-
-  translateVersion <- function(version, connectionDetails, db_info){
-    if (connectionDetails$host == db_info$host){
-      # using the childes-db hosted server 
-      if (version == 'current'){
-
-        # CURRENT VERSION
-        db_to_use = db_info[['current']]
-        print(paste0('Using current version, ',db_to_use))
-        return(db_to_use)
-      } else if (version %in% db_info[['supported']]){
-        
-        # SUPPORTED VERSION
-        db_to_use = version
-        print(paste0('Using supported version, ',db_to_use))
-        return(db_to_use)
-      } else if ((version %in% db_info[['historical']])  ){
-
-        # HISTORICAL VERSION
-        stop(paste0(version, ' is no longer hosted by childes-db.stanford.edu; either specify a more recent version or install MySQL Server locally and update connectionDetails'))
-      } else {
-
-        # NOT RECOGNIZED
-        stop(paste0(version, ' not found. Specify one of: current, ', paste(db_info$supported, collapse=', ')))
-      }
-    } else {
-      # using a different server than the childes-db hosted one
-      print(paste0('Not using hosted version; no checks will be applied to version specification'))
-    }   
-  }
+connect_to_childes <- function(version="current", connectionDetails=NULL) {  
 
   db_info = fromJSON("https://childes-db.stanford.edu/childes-db.json")
   
@@ -89,8 +100,7 @@ get_table <- function(connection, name) {
 #' get_collections()
 #' }
 get_collections <- function(connection = NULL, version='current', connectionDetails=NULL) {
-  if (is.null(connection)) con <- connect_to_childes(version, connectionDetails) else con <- connection
-
+  con = getExistingOrMakeNewConnection(connection, version, connectionDetails)
   collections <- dplyr::tbl(con, "collection") %>%
     dplyr::rename(collection_id = id) %>%
     dplyr::rename(collection_name = name)
@@ -115,8 +125,7 @@ get_collections <- function(connection = NULL, version='current', connectionDeta
 #' get_corpora()
 #' }
 get_corpora <- function(connection = NULL, version='current', connectionDetails=NULL ) {
-  if (is.null(connection)) con <- connect_to_childes(version, connectionDetails) else con <- connection
-
+  con = getExistingOrMakeNewConnection(connection, version, connectionDetails)
   corpora <- dplyr::tbl(con, "corpus") %>%
     dplyr::rename(corpus_id = id) %>%
     dplyr::rename(corpus_name = name)
@@ -145,7 +154,7 @@ get_corpora <- function(connection = NULL, version='current', connectionDetails=
 #' }
 get_transcripts <- function(collection = NULL, corpus = NULL, child = NULL,
                             connection = NULL, version='current' , connectionDetails=NULL) {
-  if (is.null(connection)) con <- connect_to_childes(version, connectionDetails) else con <- connection
+  con = getExistingOrMakeNewConnection(connection, version, connectionDetails)
 
   transcripts <- get_table(con, "transcript") %>%
     dplyr::rename(transcript_id = id)
@@ -188,8 +197,7 @@ get_transcripts <- function(collection = NULL, corpus = NULL, child = NULL,
 get_participants <- function(collection = NULL, corpus = NULL, child = NULL,
                              role = NULL, role_exclude = NULL, age = NULL,
                              sex = NULL, connection = NULL, version='current', connectionDetails=NULL) {
-  if (is.null(connection)) con <- connect_to_childes(version, connectionDetails) else con <- connection
-
+  con = getExistingOrMakeNewConnection(connection, version, connectionDetails)
   participants <- get_table(con, "participant")
 
   if (!is.null(collection)) {
@@ -268,8 +276,7 @@ get_speaker_statistics <- function(collection = NULL, corpus = NULL, child = NUL
                                    role = NULL, role_exclude = NULL, age = NULL,
                                    sex = NULL, connection = NULL, version='current', connectionDetails = NULL) {
 
-  if (is.null(connection)) con <- connect_to_childes(version, connectionDetails) else con <- connection
-
+  con = getExistingOrMakeNewConnection(connection, version, connectionDetails)
   transcripts <- get_transcripts(collection, corpus, child, connection)
 
   suppressWarnings(speaker_statistics <- get_table(con, "transcript_by_speaker"))
@@ -339,8 +346,7 @@ get_speaker_statistics <- function(collection = NULL, corpus = NULL, child = NUL
 get_content <- function(content_type, collection = NULL, language = NULL, corpus = NULL,
                         role = NULL, role_exclude = NULL, age = NULL,
                         sex = NULL, child = NULL, token = NULL, connection =NULL, version='current', connectionDetails=NULL) {
-
-  if (is.null(connection)) con <- connect_to_childes(version, connectionDetails) else con <- connection
+  con = getExistingOrMakeNewConnection(connection, version, connectionDetails)
   transcripts <- get_transcripts(collection, corpus, child, connection)
   corpora <- transcripts %>%
     dplyr::distinct(corpus_id) %>%
@@ -435,9 +441,7 @@ get_tokens <- function(collection = NULL, language = NULL, corpus = NULL, child 
     stop("Argument \"token\" is missing. To fetch all tokens, supply \"*\"
          for argument \"token\". Caution: this may result in a long-running query.")
 
-  if (is.null(connection)) con <- connect_to_childes(version, connectionDetails) else con <- connection
-
-
+  con = getExistingOrMakeNewConnection(connection, version, connectionDetails)
   tokens <- get_content(content_type = "token",
                         collection = collection,
                         language = language,
@@ -476,8 +480,7 @@ get_tokens <- function(collection = NULL, language = NULL, corpus = NULL, child 
 get_types <- function(collection = NULL, language = NULL, corpus = NULL, child = NULL,
                        role = NULL, role_exclude = NULL, age = NULL, sex = NULL,
                        type = NULL, connection = NULL, version='current', connectionDetails=NULL) {
-  if (is.null(connection)) con <- connect_to_childes(version, connectionDetails) else con <- connection
-
+  con = getExistingOrMakeNewConnection(connection, version, connectionDetails)
   types <- get_content(content_type = "token_frequency",
                         collection = collection,
                         language = language,
@@ -513,8 +516,7 @@ get_types <- function(collection = NULL, language = NULL, corpus = NULL, child =
 get_utterances <- function(collection = NULL, language = NULL, corpus = NULL, role = NULL,
                            role_exclude = NULL, age = NULL, sex = NULL,
                            child = NULL, connection = NULL, version='current', connectionDetails=NULL) {
-  if (is.null(connection)) con <- connect_to_childes(version, connectionDetails) else con <- connection
-
+  con = getExistingOrMakeNewConnection(connection, version, connectionDetails)
   utterances <- get_content(content_type = "utterance",
                             collection = collection,
                             language = language,
@@ -544,8 +546,7 @@ get_utterances <- function(collection = NULL, language = NULL, corpus = NULL, ro
 #' get_database_version()
 #' }
 get_database_version <- function(connection = NULL, version='current', connectionDetails=NULL) {
-  if (is.null(connection)) con <- connect_to_childes(version, connectionDetails) else con <- connection
-
+  con = getExistingOrMakeNewConnection(connection, version, connectionDetails)
   admin <- dplyr::tbl(con, "admin")
 
   if (is.null(connection)) {
