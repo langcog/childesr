@@ -9,6 +9,10 @@ get_database_version(connection = NULL, version = "current",
 }
 \arguments{
 \item{connection}{A connection to the CHILDES database}
+
+\item{version}{String name of the version to use}
+
+\item{connectionDetails}{NULL or list with host, user, and password defined}
 }
 \value{
 The database version as a string

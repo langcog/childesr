@@ -9,10 +9,10 @@ connect_to_childes(version = "current", connectionDetails = NULL)
 \arguments{
 \item{version}{String name of the version to use}
 
-\item{version}{connectionDetails NULL or list with host, user, and password defined}
+\item{connectionDetails}{NULL or list with host, user, and password defined}
 }
 \value{
-A DBIConnection object for the CHILDES database
+con A DBIConnection object for the CHILDES database
 }
 \description{
 Connect to CHILDES
