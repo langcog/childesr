@@ -15,13 +15,13 @@ translateVersion <- function(version, connectionDetails, db_info){
 
       # CURRENT VERSION
       db_to_use = db_info[['current']]
-      #print(paste0('Using current version, ',db_to_use))
+      print(paste0('Using current version, ',db_to_use))
       return(db_to_use)
     } else if (version %in% db_info[['supported']]){
       
       # SUPPORTED VERSION
       db_to_use = version
-      #print(paste0('Using supported version, ',db_to_use))
+      print(paste0('Using supported version, ',db_to_use))
       return(db_to_use)
     } else if ((version %in% db_info[['historical']])  ){
 
@@ -99,7 +99,6 @@ get_table <- function(connection, name) {
 #' get_collections()
 #' }
 get_collections <- function(connection = NULL, version='current', connectionDetails=NULL) {
-  print(paste0('Using version: ', version))
   con = getExistingOrMakeNewConnection(connection, version, connectionDetails)
   collections <- dplyr::tbl(con, "collection") %>%
     dplyr::rename(collection_id = id) %>%
@@ -125,7 +124,6 @@ get_collections <- function(connection = NULL, version='current', connectionDeta
 #' get_corpora()
 #' }
 get_corpora <- function(connection = NULL, version='current', connectionDetails=NULL ) {
-  print(paste0('Using version: ', version))
   con = getExistingOrMakeNewConnection(connection, version, connectionDetails)
   corpora <- dplyr::tbl(con, "corpus") %>%
     dplyr::rename(corpus_id = id) %>%
@@ -155,7 +153,6 @@ get_corpora <- function(connection = NULL, version='current', connectionDetails=
 #' }
 get_transcripts <- function(collection = NULL, corpus = NULL, child = NULL,
                             connection = NULL, version='current' , connectionDetails=NULL) {
-  print(paste0('Using version: ', version))
   con = getExistingOrMakeNewConnection(connection, version, connectionDetails)
 
   transcripts <- get_table(con, "transcript") %>%
@@ -199,7 +196,6 @@ get_transcripts <- function(collection = NULL, corpus = NULL, child = NULL,
 get_participants <- function(collection = NULL, corpus = NULL, child = NULL,
                              role = NULL, role_exclude = NULL, age = NULL,
                              sex = NULL, connection = NULL, version='current', connectionDetails=NULL) {
-  print(paste0('Using version: ', version))  
   con = getExistingOrMakeNewConnection(connection, version, connectionDetails)
   participants <- get_table(con, "participant")
 
@@ -279,7 +275,6 @@ get_speaker_statistics <- function(collection = NULL, corpus = NULL, child = NUL
                                    role = NULL, role_exclude = NULL, age = NULL,
                                    sex = NULL, connection = NULL, version='current', connectionDetails = NULL) {
   
-  print(paste0('Using version: ', version))
   con = getExistingOrMakeNewConnection(connection, version, connectionDetails)
   transcripts <- get_transcripts(collection, corpus, child, connection)
 
@@ -445,7 +440,6 @@ get_tokens <- function(collection = NULL, language = NULL, corpus = NULL, child 
     stop("Argument \"token\" is missing. To fetch all tokens, supply \"*\"
          for argument \"token\". Caution: this may result in a long-running query.")
 
-  print(paste0('Using version: ', version))
   con = getExistingOrMakeNewConnection(connection, version, connectionDetails)
   tokens <- get_content(content_type = "token",
                         collection = collection,
@@ -485,7 +479,6 @@ get_tokens <- function(collection = NULL, language = NULL, corpus = NULL, child 
 get_types <- function(collection = NULL, language = NULL, corpus = NULL, child = NULL,
                        role = NULL, role_exclude = NULL, age = NULL, sex = NULL,
                        type = NULL, connection = NULL, version='current', connectionDetails=NULL) {
-  print(paste0('Using version: ', version))
   con = getExistingOrMakeNewConnection(connection, version, connectionDetails)
   types <- get_content(content_type = "token_frequency",
                         collection = collection,
@@ -522,7 +515,6 @@ get_types <- function(collection = NULL, language = NULL, corpus = NULL, child =
 get_utterances <- function(collection = NULL, language = NULL, corpus = NULL, role = NULL,
                            role_exclude = NULL, age = NULL, sex = NULL,
                            child = NULL, connection = NULL, version='current', connectionDetails=NULL) {
-  print(paste0('Using version: ', version))
   con = getExistingOrMakeNewConnection(connection, version, connectionDetails)
   utterances <- get_content(content_type = "utterance",
                             collection = collection,
@@ -553,7 +545,6 @@ get_utterances <- function(collection = NULL, language = NULL, corpus = NULL, ro
 #' get_database_version()
 #' }
 get_database_version <- function(connection = NULL, version='current', connectionDetails=NULL) {
-  print(paste0('Using version: ', version))
   con = getExistingOrMakeNewConnection(connection, version, connectionDetails)
   admin <- dplyr::tbl(con, "admin")
 
