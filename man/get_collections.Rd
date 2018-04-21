@@ -4,10 +4,15 @@
 \alias{get_collections}
 \title{Get collections}
 \usage{
-get_collections(connection = NULL)
+get_collections(connection = NULL, version = "current",
+  connectionDetails = NULL)
 }
 \arguments{
 \item{connection}{A connection to the CHILDES database}
+
+\item{version}{String with the version name (used as the database name)}
+
+\item{connectionDetails}{List with with host, user, and password}
 }
 \value{
 A `tbl` of Collection data. If `connection` is supplied, the result

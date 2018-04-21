@@ -114,22 +114,36 @@
     <p>Connect to CHILDES</p>
     
 
-    <pre class="usage"><span class='fu'>connect_to_childes</span>()</pre>
-        
+    <pre class="usage"><span class='fu'>connect_to_childes</span>(<span class='kw'>version</span> <span class='kw'>=</span> <span class='st'>"current"</span>, <span class='kw'>connectionDetails</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>version</th>
+      <td><p>String name of the version to use</p></td>
+    </tr>
+    <tr>
+      <th>connectionDetails</th>
+      <td><p>NULL or list with host, user, and password defined</p></td>
+    </tr>
+    </table>
+    
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A DBIConnection object for the CHILDES database</p>
+    <p>con A DBIConnection object for the CHILDES database</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='no'>con</span> <span class='kw'>&lt;-</span> <span class='fu'>connect_to_childes</span>()
+<span class='no'>con</span> <span class='kw'>&lt;-</span> <span class='fu'>connect_to_childes</span>(<span class='kw'>version</span><span class='kw'>=</span><span class='st'>"current"</span>, <span class='kw'>connectionDetails</span><span class='kw'>=</span><span class='kw'>NULL</span>)
 <span class='kw pkg'>DBI</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/DBI/topics/dbDisconnect'>dbDisconnect</a></span>(<span class='no'>con</span>)
 <span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
       

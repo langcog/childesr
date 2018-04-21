@@ -6,7 +6,8 @@
 \usage{
 get_types(collection = NULL, language = NULL, corpus = NULL,
   child = NULL, role = NULL, role_exclude = NULL, age = NULL,
-  sex = NULL, type = NULL, connection = NULL)
+  sex = NULL, type = NULL, connection = NULL, version = "current",
+  connectionDetails = NULL)
 }
 \arguments{
 \item{collection}{A character vector of one or more names of collections}
@@ -31,6 +32,10 @@ any number of wildcard characters, `_` matches exactly one wildcard
 character)}
 
 \item{connection}{A connection to the CHILDES database}
+
+\item{version}{String with the version name (used as the database name)}
+
+\item{connectionDetails}{List with with host, user, and password}
 }
 \value{
 A `tbl` of Type data, filtered down by collection, corpus, child,

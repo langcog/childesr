@@ -6,7 +6,8 @@
 \usage{
 get_content(content_type, collection = NULL, language = NULL,
   corpus = NULL, role = NULL, role_exclude = NULL, age = NULL,
-  sex = NULL, child = NULL, token = NULL, connection)
+  sex = NULL, child = NULL, token = NULL, connection = NULL,
+  version = "current", connectionDetails = NULL)
 }
 \arguments{
 \item{content_type}{One of "token" or "utterance"}
@@ -33,6 +34,10 @@ any number of wildcard characters, `_` matches exactly one wildcard
 character)}
 
 \item{connection}{A connection to the CHILDES database}
+
+\item{version}{String with the version name (used as the database name)}
+
+\item{connectionDetails}{List with with host, user, and password}
 }
 \description{
 Get content

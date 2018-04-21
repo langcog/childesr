@@ -6,7 +6,8 @@
 \usage{
 get_utterances(collection = NULL, language = NULL, corpus = NULL,
   role = NULL, role_exclude = NULL, age = NULL, sex = NULL,
-  child = NULL, connection = NULL)
+  child = NULL, connection = NULL, version = "current",
+  connectionDetails = NULL)
 }
 \arguments{
 \item{collection}{A character vector of one or more names of collections}
@@ -27,6 +28,10 @@ get_utterances(collection = NULL, language = NULL, corpus = NULL,
 \item{child}{A character vector of one or more names of children}
 
 \item{connection}{A connection to the CHILDES database}
+
+\item{version}{String with the version name (used as the database name)}
+
+\item{connectionDetails}{List with with host, user, and password}
 }
 \value{
 A `tbl` of Utterance data, filtered down by collection, corpus,

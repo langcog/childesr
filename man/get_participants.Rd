@@ -6,7 +6,7 @@
 \usage{
 get_participants(collection = NULL, corpus = NULL, child = NULL,
   role = NULL, role_exclude = NULL, age = NULL, sex = NULL,
-  connection = NULL)
+  connection = NULL, version = "current", connectionDetails = NULL)
 }
 \arguments{
 \item{collection}{A character vector of one or more names of collections}
@@ -25,6 +25,10 @@ get_participants(collection = NULL, corpus = NULL, child = NULL,
 \item{sex}{A character vector of values "male" and/or "female"}
 
 \item{connection}{A connection to the CHILDES database}
+
+\item{version}{String with the version name (used as the database name)}
+
+\item{connectionDetails}{List with with host, user, and password}
 }
 \value{
 A `tbl` of Participant data, filtered down by collection, corpus,
