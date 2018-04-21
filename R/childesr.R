@@ -10,19 +10,21 @@ utils::globalVariables(c("collection_id", "collection_name", "corpus_id",
 
 translateVersion <- function(version, connectionDetails, db_info){
   if (connectionDetails$host == db_info$host){
-    # using the childes-db hosted server 
+    # using the childes-db hosted server
     if (version == 'current'){
 
       # CURRENT VERSION
       db_to_use = db_info[['current']]
-      print(paste0('Using current version, ',db_to_use))
-      return(db_to_use)
+      print(paste0('Using current database version: ',db_to_use))
+      # TODO: concatenate childesdb and version number
+      return("childesdb")
     } else if (version %in% db_info[['supported']]){
-      
+
       # SUPPORTED VERSION
       db_to_use = version
-      print(paste0('Using supported version, ',db_to_use))
-      return(db_to_use)
+      print(paste0('Using supported database version: ',db_to_use))
+      # TODO: concatenate childesdb and version number
+      return("childesdb")
     } else if ((version %in% db_info[['historical']])  ){
 
       # HISTORICAL VERSION
@@ -34,18 +36,18 @@ translateVersion <- function(version, connectionDetails, db_info){
     }
   } else {
     # using a different server than the childes-db hosted one
-    print(paste0('Not using hosted version; no checks will be applied to version specification'))
-  }   
+    print(paste0('Not using hosted database version; no checks will be applied to version specification'))
+  }
 }
 
 getExistingOrMakeNewConnection <- function(connection, version, connectionDetails){
   if (is.null(connection)){
     con <- connect_to_childes(version, connectionDetails)
-  }  else {    
-    con <- connection    
-  } 
+  }  else {
+    con <- connection
+  }
   return(con)
-}  
+}
 
 #' Connect to CHILDES
 #'
@@ -59,13 +61,13 @@ getExistingOrMakeNewConnection <- function(connection, version, connectionDetail
 #' con <- connect_to_childes(version="current", connectionDetails=NULL)
 #' DBI::dbDisconnect(con)
 #' }
-connect_to_childes <- function(version="current", connectionDetails=NULL) {  
+connect_to_childes <- function(version="current", connectionDetails=NULL) {
 
   db_info = fromJSON("https://childes-db.stanford.edu/childes-db.json")
-  
+
   if (is.null(connectionDetails)){
     connectionDetails = db_info
-  } 
+  }
 
   DBI::dbConnect(RMySQL::MySQL(),
                  host = connectionDetails$host,
@@ -274,7 +276,7 @@ get_participants <- function(collection = NULL, corpus = NULL, child = NULL,
 get_speaker_statistics <- function(collection = NULL, corpus = NULL, child = NULL,
                                    role = NULL, role_exclude = NULL, age = NULL,
                                    sex = NULL, connection = NULL, version='current', connectionDetails = NULL) {
-  
+
   con = getExistingOrMakeNewConnection(connection, version, connectionDetails)
   transcripts <- get_transcripts(collection, corpus, child, connection)
 
@@ -344,7 +346,7 @@ get_speaker_statistics <- function(collection = NULL, corpus = NULL, child = NUL
 #' @inheritParams get_participants
 get_content <- function(content_type, collection = NULL, language = NULL, corpus = NULL,
                         role = NULL, role_exclude = NULL, age = NULL,
-                        sex = NULL, child = NULL, token = NULL, connection =NULL, version='current', connectionDetails=NULL) {  
+                        sex = NULL, child = NULL, token = NULL, connection =NULL, version='current', connectionDetails=NULL) {
   con = getExistingOrMakeNewConnection(connection, version, connectionDetails)
   transcripts <- get_transcripts(collection, corpus, child, connection)
   corpora <- transcripts %>%
