@@ -4,15 +4,15 @@
 \alias{get_database_version}
 \title{Get database version}
 \usage{
-get_database_version(connection = NULL, version = "current",
-  connectionDetails = NULL)
+get_database_version(connection = NULL, db_version = "current",
+  db_args = NULL)
 }
 \arguments{
 \item{connection}{A connection to the CHILDES database}
 
-\item{version}{String name of the version to use}
+\item{db_version}{String of the name of database version to use}
 
-\item{connectionDetails}{NULL or list with host, user, and password defined}
+\item{db_args}{(optional) List with host, user, and password defined}
 }
 \value{
 The database version as a string

@@ -1,79 +1,78 @@
 #' @importFrom magrittr "%>%"
 #' @importFrom magrittr "%<>%"
-#' @importFrom RJSONIO "fromJSON"
 NULL
 
 utils::globalVariables(c("collection_id", "collection_name", "corpus_id",
                          "corpus_name", "gloss", "id", "max_age", "min_age",
                          "name", "speaker_role", "target_child_id",
-                         "target_child_name", "target_child_age", "%like%"))
+                         "target_child_name", "target_child_age"))
 
-translateVersion <- function(version, connectionDetails, db_info){
-  if (connectionDetails$host == db_info$host){
-    # using the childes-db hosted server
-    if (version == 'current'){
+translate_version <- function(db_version, db_args, db_info) {
 
-      # CURRENT VERSION
-      db_to_use = db_info[['current']]
-      print(paste0('Using current database version: ',db_to_use))
-      # TODO: concatenate childesdb and version number
+  # using the childes-db hosted server
+  if (db_args$host == db_info$host) {
+
+    # current version
+    if (db_version == "current") {
+      db_to_use <- db_info[["current"]]
+      message("Using current database version: '", db_to_use, "'.")
       return("childesdb")
-    } else if (version %in% db_info[['supported']]){
 
-      # SUPPORTED VERSION
-      db_to_use = version
-      print(paste0('Using supported database version: ',db_to_use))
-      # TODO: concatenate childesdb and version number
+    # supported version
+    } else if (db_version %in% db_info[["supported"]]) {
+      db_to_use <- db_version
+      message("Using supported database version: '", db_to_use, "'.")
       return("childesdb")
-    } else if ((version %in% db_info[['historical']])  ){
 
-      # HISTORICAL VERSION
-      stop(paste0(version, ' is no longer hosted by childes-db.stanford.edu; either specify a more recent version or install MySQL Server locally and update connectionDetails'))
+    # historical version
+    } else if (db_version %in% db_info[["historical"]]) {
+      stop("Version '", db_version, "' is no longer hosted by ",
+           "childes-db.stanford.edu; either specify a more recent version or ",
+           "install MySQL Server locally and update db_args.")
+
+    # version not recognized
     } else {
-
-      # NOT RECOGNIZED
-      stop(paste0(version, ' not found. Specify one of: current, ', paste(db_info$supported, collapse=', ')))
+      stop("Version '", db_version, "' not found. Specify one of: 'current', ",
+           paste(sprintf("'%s'", db_info$supported), collapse = ", "), ".")
     }
+
+  # using a different server than the childes-db hosted one
   } else {
-    # using a different server than the childes-db hosted one
-    print(paste0('Not using hosted database version; no checks will be applied to version specification'))
+    message("Not using hosted database version; no checks will be applied to ",
+            "version specification.")
   }
 }
 
-getExistingOrMakeNewConnection <- function(connection, version, connectionDetails){
-  if (is.null(connection)){
-    con <- connect_to_childes(version, connectionDetails)
-  }  else {
-    con <- connection
-  }
-  return(con)
+resolve_connection <- function(connection, db_version = NULL, db_args = NULL) {
+  if (is.null(connection)) connect_to_childes(db_version, db_args)
+  else connection
 }
 
 #' Connect to CHILDES
 #'
-#' @param version String name of the version to use
-#' @param connectionDetails NULL or list with host, user, and password defined
+#' @param db_version String of the name of database version to use
+#' @param db_args (optional) List with host, user, and password defined
 #' @return con A DBIConnection object for the CHILDES database
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' con <- connect_to_childes(version="current", connectionDetails=NULL)
+#' con <- connect_to_childes(db_version = "current", db_args = NULL)
 #' DBI::dbDisconnect(con)
 #' }
-connect_to_childes <- function(version="current", connectionDetails=NULL) {
+connect_to_childes <- function(db_version = "current", db_args = NULL) {
 
-  db_info = fromJSON("https://childes-db.stanford.edu/childes-db.json")
+  db_info <- jsonlite::fromJSON(
+    "https://childes-db.stanford.edu/childes-db.json"
+  )
 
-  if (is.null(connectionDetails)){
-    connectionDetails = db_info
-  }
+  if (is.null(db_args)) db_args <- db_info
 
   DBI::dbConnect(RMySQL::MySQL(),
-                 host = connectionDetails$host,
-                 dbname = translateVersion(version, connectionDetails, db_info),
-                 user = connectionDetails$user,
-                 password = connectionDetails$password)
+                 host = db_args$host,
+                 dbname = translate_version(db_version, db_args, db_info),
+                 user = db_args$user,
+                 password = db_args$password)
 }
 
 #' Get table
@@ -88,9 +87,8 @@ get_table <- function(connection, name) {
 
 #' Get collections
 #'
+#' @inheritParams connect_to_childes
 #' @param connection A connection to the CHILDES database
-#' @param version String with the version name (used as the database name)
-#' @param connectionDetails List with with host, user, and password
 #'
 #' @return A `tbl` of Collection data. If `connection` is supplied, the result
 #'   is collected locally, otherwise it remains remote.
@@ -100,8 +98,10 @@ get_table <- function(connection, name) {
 #' \dontrun{
 #' get_collections()
 #' }
-get_collections <- function(connection = NULL, version='current', connectionDetails=NULL) {
-  con = getExistingOrMakeNewConnection(connection, version, connectionDetails)
+get_collections <- function(connection = NULL, db_version = "current",
+                            db_args = NULL) {
+
+  con <- resolve_connection(connection, db_version, db_args)
   collections <- dplyr::tbl(con, "collection") %>%
     dplyr::rename(collection_id = id) %>%
     dplyr::rename(collection_name = name)
@@ -110,6 +110,7 @@ get_collections <- function(connection = NULL, version='current', connectionDeta
     collections %<>% dplyr::collect()
     DBI::dbDisconnect(con)
   }
+
   return(collections)
 }
 
@@ -125,8 +126,10 @@ get_collections <- function(connection = NULL, version='current', connectionDeta
 #' \dontrun{
 #' get_corpora()
 #' }
-get_corpora <- function(connection = NULL, version='current', connectionDetails=NULL ) {
-  con = getExistingOrMakeNewConnection(connection, version, connectionDetails)
+get_corpora <- function(connection = NULL, db_version = "current",
+                        db_args = NULL) {
+
+  con <- resolve_connection(connection, db_version, db_args)
   corpora <- dplyr::tbl(con, "corpus") %>%
     dplyr::rename(corpus_id = id) %>%
     dplyr::rename(corpus_name = name)
@@ -135,6 +138,7 @@ get_corpora <- function(connection = NULL, version='current', connectionDetails=
     corpora %<>% dplyr::collect()
     DBI::dbDisconnect(con)
   }
+
   return(corpora)
 }
 
@@ -154,8 +158,10 @@ get_corpora <- function(connection = NULL, version='current', connectionDetails=
 #' get_transcripts()
 #' }
 get_transcripts <- function(collection = NULL, corpus = NULL, child = NULL,
-                            connection = NULL, version='current' , connectionDetails=NULL) {
-  con = getExistingOrMakeNewConnection(connection, version, connectionDetails)
+                            connection = NULL, db_version = "current",
+                            db_args = NULL) {
+
+  con <- resolve_connection(connection, db_version, db_args)
 
   transcripts <- get_table(con, "transcript") %>%
     dplyr::rename(transcript_id = id)
@@ -197,8 +203,10 @@ get_transcripts <- function(collection = NULL, corpus = NULL, child = NULL,
 #' }
 get_participants <- function(collection = NULL, corpus = NULL, child = NULL,
                              role = NULL, role_exclude = NULL, age = NULL,
-                             sex = NULL, connection = NULL, version='current', connectionDetails=NULL) {
-  con = getExistingOrMakeNewConnection(connection, version, connectionDetails)
+                             sex = NULL, connection = NULL,
+                             db_version = "current", db_args = NULL) {
+
+  con <- resolve_connection(connection, db_version, db_args)
   participants <- get_table(con, "participant")
 
   if (!is.null(collection)) {
@@ -250,7 +258,7 @@ get_participants <- function(collection = NULL, corpus = NULL, child = NULL,
     dplyr::distinct(target_child_id, target_child_name) %>%
     dplyr::select(target_child_id, target_child_name)
 
-  # TODO remove after https://github.com/langcog/childes-db/issues/30 is resolved
+  # TODO remove after https://github.com/langcog/childes-db/issues/30 resolved
   participants %<>%
     dplyr::left_join(target_children, by = "target_child_id")
 
@@ -273,21 +281,23 @@ get_participants <- function(collection = NULL, corpus = NULL, child = NULL,
 #' \dontrun{
 #' get_speaker_statistics()
 #' }
-get_speaker_statistics <- function(collection = NULL, corpus = NULL, child = NULL,
-                                   role = NULL, role_exclude = NULL, age = NULL,
-                                   sex = NULL, connection = NULL, version='current', connectionDetails = NULL) {
+get_speaker_statistics <- function(collection = NULL, corpus = NULL,
+                                   child = NULL, role = NULL,
+                                   role_exclude = NULL, age = NULL, sex = NULL,
+                                   connection = NULL, db_version = "current",
+                                   db_args = NULL) {
 
-  con = getExistingOrMakeNewConnection(connection, version, connectionDetails)
-  transcripts <- get_transcripts(collection, corpus, child, connection)
-
-  suppressWarnings(speaker_statistics <- get_table(con, "transcript_by_speaker"))
+  con <- resolve_connection(connection, db_version, db_args)
+  transcripts <- get_transcripts(collection, corpus, child, con)
+  speaker_statistics <- get_table(con, "transcript_by_speaker")
 
   if (!is.null(collection)) {
     collection_filter <- transcripts %>%
       dplyr::distinct(collection_id, target_child_id) %>%
       dplyr::pull(target_child_id)
 
-    speaker_statistics %<>% dplyr::filter(target_child_id %in% collection_filter)
+    speaker_statistics %<>%
+      dplyr::filter(target_child_id %in% collection_filter)
   }
 
   if (!is.null(corpus)) {
@@ -301,9 +311,11 @@ get_speaker_statistics <- function(collection = NULL, corpus = NULL, child = NUL
   if (!is.null(age)) {
     days <- age * 30.5
     if (length(age) == 1) {
-      speaker_statistics %<>% dplyr::filter(max_age >= days & min_age <= days)
+      speaker_statistics %<>%
+        dplyr::filter(max_age >= days & min_age <= days)
     } else if (length(age) == 2) {
-      speaker_statistics %<>% dplyr::filter(max_age >= days[1] | min_age <= days[2])
+      speaker_statistics %<>%
+        dplyr::filter(max_age >= days[1] | min_age <= days[2])
     } else {
       stop("`age` argument must be of length 1 or 2")
     }
@@ -315,7 +327,6 @@ get_speaker_statistics <- function(collection = NULL, corpus = NULL, child = NUL
   }
 
   if (!is.null(child)) {
-    child_filter <- child
     speaker_statistics %<>% dplyr::filter(target_child_name %in% child)
   }
 
@@ -338,17 +349,19 @@ get_speaker_statistics <- function(collection = NULL, corpus = NULL, child = NUL
 
 #' Get content
 #'
+#' @inheritParams get_participants
 #' @param content_type One of "token" or "utterance"
 #' @param token A character vector of one or more token patterns (`\%` matches
 #'   any number of wildcard characters, `_` matches exactly one wildcard
 #'   character)
 #' @param language A character vector of one or more languages
-#' @inheritParams get_participants
-get_content <- function(content_type, collection = NULL, language = NULL, corpus = NULL,
-                        role = NULL, role_exclude = NULL, age = NULL,
-                        sex = NULL, child = NULL, token = NULL, connection =NULL, version='current', connectionDetails=NULL) {
-  con = getExistingOrMakeNewConnection(connection, version, connectionDetails)
+get_content <- function(content_type, collection = NULL, language = NULL,
+                        corpus = NULL, role = NULL, role_exclude = NULL,
+                        age = NULL, sex = NULL, child = NULL, token = NULL,
+                        connection) {
+
   transcripts <- get_transcripts(collection, corpus, child, connection)
+
   corpora <- transcripts %>%
     dplyr::distinct(corpus_id) %>%
     dplyr::collect()
@@ -404,7 +417,6 @@ get_content <- function(content_type, collection = NULL, language = NULL, corpus
     content %<>% dplyr::filter(sex %in% sex_filter)
   }
 
-
   if (!is.null(role)) {
     content %<>% dplyr::filter(speaker_role %in% role)
   }
@@ -424,6 +436,7 @@ get_content <- function(content_type, collection = NULL, language = NULL, corpus
 
 #' Get tokens
 #'
+#' @inheritParams connect_to_childes
 #' @inheritParams get_content
 #'
 #' @return A `tbl` of Token data, filtered down by collection, corpus, child,
@@ -434,15 +447,16 @@ get_content <- function(content_type, collection = NULL, language = NULL, corpus
 #' \dontrun{
 #' get_tokens(token = "dog")
 #' }
-get_tokens <- function(collection = NULL, language = NULL, corpus = NULL, child = NULL,
-                       role = NULL, role_exclude = NULL, age = NULL, sex = NULL,
-                       token, connection = NULL, version='current', connectionDetails=NULL) {
+get_tokens <- function(collection = NULL, language = NULL, corpus = NULL,
+                       child = NULL, role = NULL, role_exclude = NULL,
+                       age = NULL, sex = NULL, token, connection = NULL,
+                       db_version = "current", db_args = NULL) {
 
-  if(missing(token))
-    stop("Argument \"token\" is missing. To fetch all tokens, supply \"*\"
-         for argument \"token\". Caution: this may result in a long-running query.")
+  if (missing(token))
+    stop("Argument \"token\" is missing. To fetch all tokens, supply \"*\" for
+         argument \"token\". Caution: this may result in a long-running query.")
 
-  con = getExistingOrMakeNewConnection(connection, version, connectionDetails)
+  con <- resolve_connection(connection, db_version, db_args)
   tokens <- get_content(content_type = "token",
                         collection = collection,
                         language = language,
@@ -465,10 +479,10 @@ get_tokens <- function(collection = NULL, language = NULL, corpus = NULL, child 
 
 #' Get types
 #'
+#' @inheritParams connect_to_childes
 #' @inheritParams get_content
-#' @param type A character vector of one or more type patterns (`%` matches
-#'   any number of wildcard characters, `_` matches exactly one wildcard
-#'   character)
+#' @param type A character vector of one or more type patterns (`%` matches any
+#'   number of wildcard characters, `_` matches exactly one wildcard character)
 #'
 #' @return A `tbl` of Type data, filtered down by collection, corpus, child,
 #'   role, age, sex, and token supplied, if any.
@@ -478,21 +492,23 @@ get_tokens <- function(collection = NULL, language = NULL, corpus = NULL, child 
 #' \dontrun{
 #' get_types()
 #' }
-get_types <- function(collection = NULL, language = NULL, corpus = NULL, child = NULL,
-                       role = NULL, role_exclude = NULL, age = NULL, sex = NULL,
-                       type = NULL, connection = NULL, version='current', connectionDetails=NULL) {
-  con = getExistingOrMakeNewConnection(connection, version, connectionDetails)
+get_types <- function(collection = NULL, language = NULL, corpus = NULL,
+                      child = NULL, role = NULL, role_exclude = NULL,
+                      age = NULL, sex = NULL, type = NULL, connection = NULL,
+                      db_version = "current", db_args = NULL) {
+
+  con <- resolve_connection(connection, db_version, db_args)
   types <- get_content(content_type = "token_frequency",
-                        collection = collection,
-                        language = language,
-                        corpus = corpus,
-                        role = role,
-                        role_exclude = role_exclude,
-                        age = age,
-                        sex = sex,
-                        child = child,
-                        token = type,
-                        connection = con)
+                       collection = collection,
+                       language = language,
+                       corpus = corpus,
+                       role = role,
+                       role_exclude = role_exclude,
+                       age = age,
+                       sex = sex,
+                       child = child,
+                       token = type,
+                       connection = con)
 
   if (is.null(connection)) {
     types %<>% dplyr::collect()
@@ -503,8 +519,8 @@ get_types <- function(collection = NULL, language = NULL, corpus = NULL, child =
 
 #' Get utterances
 #'
-#' @param language A character vector of one or more languages
 #' @inheritParams get_participants
+#' @param language A character vector of one or more languages
 #'
 #' @return A `tbl` of Utterance data, filtered down by collection, corpus,
 #'   child, role, age, and sex supplied, if any.
@@ -514,10 +530,12 @@ get_types <- function(collection = NULL, language = NULL, corpus = NULL, child =
 #' \dontrun{
 #' get_utterances(child = "Shem")
 #' }
-get_utterances <- function(collection = NULL, language = NULL, corpus = NULL, role = NULL,
-                           role_exclude = NULL, age = NULL, sex = NULL,
-                           child = NULL, connection = NULL, version='current', connectionDetails=NULL) {
-  con = getExistingOrMakeNewConnection(connection, version, connectionDetails)
+get_utterances <- function(collection = NULL, language = NULL, corpus = NULL,
+                           role = NULL, role_exclude = NULL, age = NULL,
+                           sex = NULL, child = NULL, connection = NULL,
+                           db_version = "current", db_args = NULL) {
+
+  con <- resolve_connection(connection, db_version, db_args)
   utterances <- get_content(content_type = "utterance",
                             collection = collection,
                             language = language,
@@ -537,8 +555,10 @@ get_utterances <- function(collection = NULL, language = NULL, corpus = NULL, ro
 }
 
 #' Get database version
+#'
 #' @inheritParams connect_to_childes
-#' @param connection A connection to the CHILDES database
+#' @inheritParams get_table
+#'
 #' @return The database version as a string
 #' @export
 #'
@@ -546,13 +566,15 @@ get_utterances <- function(collection = NULL, language = NULL, corpus = NULL, ro
 #' \dontrun{
 #' get_database_version()
 #' }
-get_database_version <- function(connection = NULL, version='current', connectionDetails=NULL) {
-  con = getExistingOrMakeNewConnection(connection, version, connectionDetails)
-  admin <- dplyr::tbl(con, "admin")
+get_database_version <- function(connection = NULL, db_version = "current",
+                                 db_args = NULL) {
+
+  con <- resolve_connection(connection, db_version, db_args)
+  admin <- dplyr::tbl(con, "admin") %>% dplyr::collect()
 
   if (is.null(connection)) {
-    admin %<>% dplyr::collect()
     DBI::dbDisconnect(con)
   }
+
   return(admin$version[1])
 }
