@@ -1,5 +1,6 @@
 language: r
 cache: packages
+r_github_packages: r-lib/pkgdown
 after_success:
   - chmod +x ./build_docs.sh
   - ./build_docs.sh
