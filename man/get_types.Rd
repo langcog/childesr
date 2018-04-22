@@ -5,7 +5,7 @@
 \title{Get types}
 \usage{
 get_types(collection = NULL, language = NULL, corpus = NULL,
-  child = NULL, role = NULL, role_exclude = NULL, age = NULL,
+  target_child = NULL, role = NULL, role_exclude = NULL, age = NULL,
   sex = NULL, type = NULL, connection = NULL, db_version = "current",
   db_args = NULL)
 }
@@ -16,7 +16,7 @@ get_types(collection = NULL, language = NULL, corpus = NULL,
 
 \item{corpus}{A character vector of one or more names of corpora}
 
-\item{child}{A character vector of one or more names of children}
+\item{target_child}{A character vector of one or more names of children}
 
 \item{role}{A character vector of one or more roles to include}
 
@@ -37,8 +37,8 @@ number of wildcard characters, `_` matches exactly one wildcard character)}
 \item{db_args}{(optional) List with host, user, and password defined}
 }
 \value{
-A `tbl` of Type data, filtered down by collection, corpus, child,
-  role, age, sex, and token supplied, if any.
+A `tbl` of Type data, filtered down by collection, corpus, target
+  child, role, age, sex, and token supplied, if any.
 }
 \description{
 Get types

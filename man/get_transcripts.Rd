@@ -4,7 +4,7 @@
 \alias{get_transcripts}
 \title{Get transcripts}
 \usage{
-get_transcripts(collection = NULL, corpus = NULL, child = NULL,
+get_transcripts(collection = NULL, corpus = NULL, target_child = NULL,
   connection = NULL, db_version = "current", db_args = NULL)
 }
 \arguments{
@@ -12,7 +12,7 @@ get_transcripts(collection = NULL, corpus = NULL, child = NULL,
 
 \item{corpus}{A character vector of one or more names of corpora}
 
-\item{child}{A character vector of one or more names of children}
+\item{target_child}{A character vector of one or more names of children}
 
 \item{connection}{A connection to the CHILDES database}
 
@@ -22,7 +22,7 @@ get_transcripts(collection = NULL, corpus = NULL, child = NULL,
 }
 \value{
 A `tbl` of Transcript data, filtered down by collection, corpus, and
-  child supplied, if any.
+  target child supplied, if any.
 }
 \description{
 Get transcripts

@@ -6,7 +6,7 @@
 \usage{
 get_utterances(collection = NULL, language = NULL, corpus = NULL,
   role = NULL, role_exclude = NULL, age = NULL, sex = NULL,
-  child = NULL, connection = NULL, db_version = "current",
+  target_child = NULL, connection = NULL, db_version = "current",
   db_args = NULL)
 }
 \arguments{
@@ -25,7 +25,7 @@ get_utterances(collection = NULL, language = NULL, corpus = NULL,
 
 \item{sex}{A character vector of values "male" and/or "female"}
 
-\item{child}{A character vector of one or more names of children}
+\item{target_child}{A character vector of one or more names of children}
 
 \item{connection}{A connection to the CHILDES database}
 
@@ -35,13 +35,13 @@ get_utterances(collection = NULL, language = NULL, corpus = NULL,
 }
 \value{
 A `tbl` of Utterance data, filtered down by collection, corpus,
-  child, role, age, and sex supplied, if any.
+  target child, role, age, and sex supplied, if any.
 }
 \description{
 Get utterances
 }
 \examples{
 \dontrun{
-get_utterances(child = "Shem")
+get_utterances(target_child = "Shem")
 }
 }

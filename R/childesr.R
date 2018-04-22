@@ -40,6 +40,7 @@ translate_version <- function(db_version, db_args, db_info) {
   } else {
     message("Not using hosted database version; no checks will be applied to ",
             "version specification.")
+    return(db_args$db_name)
   }
 }
 
@@ -146,20 +147,20 @@ get_corpora <- function(connection = NULL, db_version = "current",
 #'
 #' @param collection A character vector of one or more names of collections
 #' @param corpus A character vector of one or more names of corpora
-#' @param child A character vector of one or more names of children
+#' @param target_child A character vector of one or more names of children
 #' @inheritParams get_collections
 #'
 #' @return A `tbl` of Transcript data, filtered down by collection, corpus, and
-#'   child supplied, if any.
+#'   target child supplied, if any.
 #' @export
 #'
 #' @examples
 #' \dontrun{
 #' get_transcripts()
 #' }
-get_transcripts <- function(collection = NULL, corpus = NULL, child = NULL,
-                            connection = NULL, db_version = "current",
-                            db_args = NULL) {
+get_transcripts <- function(collection = NULL, corpus = NULL,
+                            target_child = NULL, connection = NULL,
+                            db_version = "current", db_args = NULL) {
 
   con <- resolve_connection(connection, db_version, db_args)
 
@@ -172,8 +173,8 @@ get_transcripts <- function(collection = NULL, corpus = NULL, child = NULL,
   if (!is.null(corpus)) {
     transcripts %<>% dplyr::filter(corpus_name %in% corpus)
   }
-  if (!is.null(child)) {
-    transcripts %<>% dplyr::filter(target_child_name %in% child)
+  if (!is.null(target_child)) {
+    transcripts %<>% dplyr::filter(target_child_name %in% target_child)
   }
 
   if (is.null(connection)) {
@@ -194,17 +195,18 @@ get_transcripts <- function(collection = NULL, corpus = NULL, child = NULL,
 #' @param sex A character vector of values "male" and/or "female"
 #'
 #' @return A `tbl` of Participant data, filtered down by collection, corpus,
-#'   child, role, role_exclude, age, and sex supplied, if any.
+#'   target_child, role, role_exclude, age, and sex supplied, if any.
 #' @export
 #'
 #' @examples
 #' \dontrun{
 #' get_participants()
 #' }
-get_participants <- function(collection = NULL, corpus = NULL, child = NULL,
-                             role = NULL, role_exclude = NULL, age = NULL,
-                             sex = NULL, connection = NULL,
-                             db_version = "current", db_args = NULL) {
+get_participants <- function(collection = NULL, corpus = NULL,
+                             target_child = NULL, role = NULL,
+                             role_exclude = NULL, age = NULL, sex = NULL,
+                             connection = NULL, db_version = "current",
+                             db_args = NULL) {
 
   con <- resolve_connection(connection, db_version, db_args)
   participants <- get_table(con, "participant")
@@ -233,9 +235,9 @@ get_participants <- function(collection = NULL, corpus = NULL, child = NULL,
     participants %<>% dplyr::filter(sex %in% sex_filter)
   }
 
-  if (!is.null(child)) {
+  if (!is.null(target_child)) {
     child_id <- participants %>%
-      dplyr::filter(name == child) %>%
+      dplyr::filter(name == target_child) %>%
       dplyr::pull(target_child_id) %>%
       unique()
     if (length(child_id) != 1) {
@@ -254,7 +256,7 @@ get_participants <- function(collection = NULL, corpus = NULL, child = NULL,
     participants %<>% dplyr::filter(!(role %in% role_exclude))
   }
 
-  target_children <- get_transcripts(collection, corpus, child, con) %>%
+  target_children <- get_transcripts(collection, corpus, target_child, con) %>%
     dplyr::distinct(target_child_id, target_child_name) %>%
     dplyr::select(target_child_id, target_child_name)
 
@@ -274,7 +276,7 @@ get_participants <- function(collection = NULL, corpus = NULL, child = NULL,
 #'
 #' @inheritParams get_participants
 #' @return A `tbl` of Speaker statistics, filtered down by collection, corpus,
-#'   child, role, role_exclude, age, and sex supplied, if any.
+#'   target child, role, role_exclude, age, and sex supplied, if any.
 #' @export
 #'
 #' @examples
@@ -282,13 +284,13 @@ get_participants <- function(collection = NULL, corpus = NULL, child = NULL,
 #' get_speaker_statistics()
 #' }
 get_speaker_statistics <- function(collection = NULL, corpus = NULL,
-                                   child = NULL, role = NULL,
+                                   target_child = NULL, role = NULL,
                                    role_exclude = NULL, age = NULL, sex = NULL,
                                    connection = NULL, db_version = "current",
                                    db_args = NULL) {
 
   con <- resolve_connection(connection, db_version, db_args)
-  transcripts <- get_transcripts(collection, corpus, child, con)
+  transcripts <- get_transcripts(collection, corpus, target_child, con)
   speaker_statistics <- get_table(con, "transcript_by_speaker")
 
   if (!is.null(collection)) {
@@ -326,8 +328,8 @@ get_speaker_statistics <- function(collection = NULL, corpus = NULL,
     speaker_statistics %<>% dplyr::filter(sex %in% sex_filter)
   }
 
-  if (!is.null(child)) {
-    speaker_statistics %<>% dplyr::filter(target_child_name %in% child)
+  if (!is.null(target_child)) {
+    speaker_statistics %<>% dplyr::filter(target_child_name %in% target_child)
   }
 
   if (!is.null(role)) {
@@ -357,10 +359,10 @@ get_speaker_statistics <- function(collection = NULL, corpus = NULL,
 #' @param language A character vector of one or more languages
 get_content <- function(content_type, collection = NULL, language = NULL,
                         corpus = NULL, role = NULL, role_exclude = NULL,
-                        age = NULL, sex = NULL, child = NULL, token = NULL,
-                        connection) {
+                        age = NULL, sex = NULL, target_child = NULL,
+                        token = NULL, connection) {
 
-  transcripts <- get_transcripts(collection, corpus, child, connection)
+  transcripts <- get_transcripts(collection, corpus, target_child, connection)
 
   corpora <- transcripts %>%
     dplyr::distinct(corpus_id) %>%
@@ -396,7 +398,7 @@ get_content <- function(content_type, collection = NULL, language = NULL,
     content %<>% dplyr::filter(corpus_id %in% corpus_filter)
   }
 
-  if (!is.null(child)) {
+  if (!is.null(target_child)) {
     content %<>% dplyr::filter(target_child_id %in% child_id)
   }
 
@@ -439,8 +441,8 @@ get_content <- function(content_type, collection = NULL, language = NULL,
 #' @inheritParams connect_to_childes
 #' @inheritParams get_content
 #'
-#' @return A `tbl` of Token data, filtered down by collection, corpus, child,
-#'   role, age, sex, and token supplied, if any.
+#' @return A `tbl` of Token data, filtered down by collection, corpus, target
+#'   child, role, age, sex, and token supplied, if any.
 #' @export
 #'
 #' @examples
@@ -448,7 +450,7 @@ get_content <- function(content_type, collection = NULL, language = NULL,
 #' get_tokens(token = "dog")
 #' }
 get_tokens <- function(collection = NULL, language = NULL, corpus = NULL,
-                       child = NULL, role = NULL, role_exclude = NULL,
+                       target_child = NULL, role = NULL, role_exclude = NULL,
                        age = NULL, sex = NULL, token, connection = NULL,
                        db_version = "current", db_args = NULL) {
 
@@ -465,7 +467,7 @@ get_tokens <- function(collection = NULL, language = NULL, corpus = NULL,
                         role_exclude = role_exclude,
                         age = age,
                         sex = sex,
-                        child = child,
+                        target_child = target_child,
                         token = token,
                         connection = con)
 
@@ -484,8 +486,8 @@ get_tokens <- function(collection = NULL, language = NULL, corpus = NULL,
 #' @param type A character vector of one or more type patterns (`%` matches any
 #'   number of wildcard characters, `_` matches exactly one wildcard character)
 #'
-#' @return A `tbl` of Type data, filtered down by collection, corpus, child,
-#'   role, age, sex, and token supplied, if any.
+#' @return A `tbl` of Type data, filtered down by collection, corpus, target
+#'   child, role, age, sex, and token supplied, if any.
 #' @export
 #'
 #' @examples
@@ -493,7 +495,7 @@ get_tokens <- function(collection = NULL, language = NULL, corpus = NULL,
 #' get_types()
 #' }
 get_types <- function(collection = NULL, language = NULL, corpus = NULL,
-                      child = NULL, role = NULL, role_exclude = NULL,
+                      target_child = NULL, role = NULL, role_exclude = NULL,
                       age = NULL, sex = NULL, type = NULL, connection = NULL,
                       db_version = "current", db_args = NULL) {
 
@@ -506,7 +508,7 @@ get_types <- function(collection = NULL, language = NULL, corpus = NULL,
                        role_exclude = role_exclude,
                        age = age,
                        sex = sex,
-                       child = child,
+                       target_child = target_child,
                        token = type,
                        connection = con)
 
@@ -523,17 +525,18 @@ get_types <- function(collection = NULL, language = NULL, corpus = NULL,
 #' @param language A character vector of one or more languages
 #'
 #' @return A `tbl` of Utterance data, filtered down by collection, corpus,
-#'   child, role, age, and sex supplied, if any.
+#'   target child, role, age, and sex supplied, if any.
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' get_utterances(child = "Shem")
+#' get_utterances(target_child = "Shem")
 #' }
 get_utterances <- function(collection = NULL, language = NULL, corpus = NULL,
                            role = NULL, role_exclude = NULL, age = NULL,
-                           sex = NULL, child = NULL, connection = NULL,
-                           db_version = "current", db_args = NULL) {
+                           sex = NULL, target_child = NULL,
+                           connection = NULL, db_version = "current",
+                           db_args = NULL) {
 
   con <- resolve_connection(connection, db_version, db_args)
   utterances <- get_content(content_type = "utterance",
@@ -544,7 +547,7 @@ get_utterances <- function(collection = NULL, language = NULL, corpus = NULL,
                             role_exclude = role_exclude,
                             age = age,
                             sex = sex,
-                            child = child,
+                            target_child = target_child,
                             connection = con)
 
   if (is.null(connection)) {

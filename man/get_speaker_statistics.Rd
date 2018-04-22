@@ -4,16 +4,16 @@
 \alias{get_speaker_statistics}
 \title{Get speaker statistics}
 \usage{
-get_speaker_statistics(collection = NULL, corpus = NULL, child = NULL,
-  role = NULL, role_exclude = NULL, age = NULL, sex = NULL,
-  connection = NULL, db_version = "current", db_args = NULL)
+get_speaker_statistics(collection = NULL, corpus = NULL,
+  target_child = NULL, role = NULL, role_exclude = NULL, age = NULL,
+  sex = NULL, connection = NULL, db_version = "current", db_args = NULL)
 }
 \arguments{
 \item{collection}{A character vector of one or more names of collections}
 
 \item{corpus}{A character vector of one or more names of corpora}
 
-\item{child}{A character vector of one or more names of children}
+\item{target_child}{A character vector of one or more names of children}
 
 \item{role}{A character vector of one or more roles to include}
 
@@ -32,7 +32,7 @@ get_speaker_statistics(collection = NULL, corpus = NULL, child = NULL,
 }
 \value{
 A `tbl` of Speaker statistics, filtered down by collection, corpus,
-  child, role, role_exclude, age, and sex supplied, if any.
+  target child, role, role_exclude, age, and sex supplied, if any.
 }
 \description{
 Get speaker statistics

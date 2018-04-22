@@ -1,7 +1,9 @@
 ---
-title: "Accessing childes-db"
+title: "Accessing `childes-db`"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
+output:
+  rmarkdown::html_vignette:
+    toc: true
 vignette: >
   %\VignetteIndexEntry{Accessing Childes-db}
   %\VignetteEngine{knitr::rmarkdown}
@@ -25,7 +27,7 @@ There are several different `get_` functions that you can use to extract differe
   
 **Technical note 2**: We have tried to optimize the time it takes to get data from the database. But if you try to query and get all of the tokens, it will take a long time.
   
-```{r, warning=F, message=F}
+```{r, warning=FALSE, message=FALSE}
 # load the library
 library(childesr)
 ```
@@ -34,23 +36,17 @@ library(childesr)
 
 The `get_transcripts` function returns high-level information about the transcripts that are available in the database. You can filter your query to get the transcripts for a specific collection, corpus, or child. 
 
-For example, you can run `get_transcripts` with all the arguments set to NULL to return all of the transcripts in the database.
+For example, you can run `get_transcripts` without any arguments to return all of the transcripts in the database.
 
 ```{r}
-d_transcripts <- get_transcripts(collection = NULL, 
-                                 corpus = NULL, 
-                                 child = NULL)
-
+d_transcripts <- get_transcripts()
 head(d_transcripts)
 ```
 
 If you only want information about a specific collection, such as the English-American transcripts, then you can specify this in the collection argument. 
 
 ```{r}
-d_eng_na <- get_transcripts(collection = "Eng-NA", 
-                            corpus = NULL, 
-                            child = NULL)
-
+d_eng_na <- get_transcripts(collection = "Eng-NA")
 head(d_eng_na)
 ```
 
@@ -58,9 +54,7 @@ If you know the corpus that you want to analyze, then you can specify this in th
 
 ```{r}
 # returns all transcripts in the brown corpus
-d_brown_transcripts <- get_transcripts(collection = NULL, 
-                                       corpus = "Brown", 
-                                       child = NULL)
+d_brown_transcripts <- get_transcripts(corpus = "Brown")
 # print the number of rows
 nrow(d_brown_transcripts)
 ```
@@ -68,9 +62,7 @@ nrow(d_brown_transcripts)
 If you want more than one corpus, then you can pass a multiple corpus names. You can also pass more than one name to the collections and child arguments.
 
 ```{r}
-d_many_corpora <- get_transcripts(collection = NULL, 
-                                  corpus = c("Brown", "Clark"), 
-                                  child = NULL)
+d_many_corpora <- get_transcripts(corpus = c("Brown", "Clark"))
 # print the number of rows
 nrow(d_many_corpora)
 ```
@@ -78,9 +70,8 @@ nrow(d_many_corpora)
 If you want transcript information about a specific child from a corpus, then you pass their name to the child argument. *Note* that the following function call will not return any of the transcripts from the Brown corpus because the child Shem is not present in that corpus. 
 
 ```{r}
-d_shem <- get_transcripts(collection = NULL, 
-                          corpus = c("Brown", "Clark"), 
-                          child = "Shem")
+d_shem <- get_transcripts(corpus = c("Brown", "Clark"),
+                          target_child = "Shem")
 # print the number of rows
 nrow(d_shem)
 ```
@@ -96,27 +87,17 @@ The `get_participants` function returns background information about the speaker
   * youngest age of transcript
   * oldest age of transcript
 
-Again, if you run the function with all arguments set to NULL (the default), then you get all the background information for all speakers in the database.
+Again, if you run the function with no arguments, then you get all the background information for all speakers in the database.
 
 ```{r}
-d_participants <- get_participants(collection = NULL, 
-                                   corpus = NULL, 
-                                   child = NULL,
-                                   role = NULL, 
-                                   age = NULL, 
-                                   sex = NULL)
+d_participants <- get_participants()
 head(d_participants)
 ```
 
 The participants function introduces three new arguments: role, age, and sex. The role argument allows you to get information about a specific kind of speaker, such as the "target_child." 
 
 ```{r}
-d_target_child <- get_participants(collection = NULL, 
-                                   corpus = NULL, 
-                                   child = NULL,
-                                   role = "target_child", 
-                                   age = NULL, 
-                                   sex = NULL)
+d_target_child <- get_participants(role = "target_child")
 head(d_target_child)
 ```
 
@@ -129,12 +110,7 @@ The age argument takes a number indicating the age(s) of children (in months) th
 For example, you can get the participant information for all of the children who had transcripts between the ages of 24 and 36 months. 
 
 ```{r}
-d_age_range <- get_participants(collection = NULL, 
-                                corpus = NULL, 
-                                child = NULL,
-                                role = NULL, 
-                                age = c(24, 36), 
-                                sex = NULL)
+d_age_range <- get_participants(age = c(24, 36))
 head(d_age_range)
 ```
 
@@ -145,12 +121,9 @@ The `get_tokens` function returns a table with a row for each token based on a s
 For example, if you wanted to get all of the production data for a specific token(s), then you could run the following call to get all instances of "dog" and "ball" for Adam in the Brown corpus. 
 
 ```{r}
-d_adam_prod <- get_tokens(collection = NULL, 
-                          corpus = "Brown", 
+d_adam_prod <- get_tokens(corpus = "Brown",
                           role = "target_child",
-                          age = NULL, 
-                          sex = NULL, 
-                          child = "Adam",
+                          target_child = "Adam",
                           token = c("dog", "ball"))
 
 # view the structure of the data
@@ -167,13 +140,9 @@ The `get_types()` function works like the `get_tokens()` function, returning a t
 For example, if you wanted to get all of the production data for a specific type(s), then you could run the following call to get counts of "dog" and "ball" for all of Adam's transcripts in the Brown corpus. 
 
 ```{r}
-d_adam_types <- get_types(collection = NULL, 
-                          corpus = "Brown", 
-                          child = "Adam", 
+d_adam_types <- get_types(corpus = "Brown",
+                          target_child = "Adam",
                           role = "target_child",
-                          role_exclude = NULL, 
-                          age = NULL, 
-                          sex = NULL, 
                           type = c("dog", "ball"))
 
 # print the number of times ball appears in the first transcript
@@ -185,12 +154,8 @@ c(d_adam_types$gloss[1], d_adam_types$count[1])
 The `get_utterances` function returns a table with a row for each utterance based on user-defined filtering criteria. For example, the following function will get you all of the utterances in the Brown Corpus for the child Adam. 
 
 ```{r}
-d_adam_utts <- get_utterances(collection = NULL, 
-                              corpus = "Brown", 
-                              role = NULL,
-                              age = NULL, 
-                              sex = NULL, 
-                              child = "Adam")
+d_adam_utts <- get_utterances(corpus = "Brown",
+                              target_child = "Adam")
 
 # view the structure of the data
 str(d_adam_utts)
@@ -204,21 +169,19 @@ d_adam_utts$gloss[1:5]
 The `get_speaker_statistics()` function returns a table with a row for each transcript and columns that contain a set of summary statistics for that transcript. The summary statistics include: 
 
   * number of utterances (`num_utterances`) 
-  * mean length of utterances (`mlu`)
   * number of types (`num_types`)
   * number of tokens (`num_tokens`)
+  * number of morphemes (`num_morphemes`)
+  * mean length of utterances in words (`mlu_w`)
+  * mean length of utterances in morphemes (`mlu_m`)
   
 For example, if we wanted to get the summary statistics for Adam's production data, we could run the following call. 
 
 ```{r}
-d_adam_stats <- get_speaker_statistics(collection = NULL, 
-                                       corpus = "Brown", 
-                                       child = "Adam", 
-                                       role = "target_child",
-                                       role_exclude = NULL, 
-                                       age = NULL, 
-                                       sex = NULL)
+d_adam_stats <- get_speaker_statistics(corpus = "Brown",
+                                       target_child = "Adam",
+                                       role = "target_child")
 
 # get the average mlu across all Adam's transcripts
-mean(d_adam_stats$mlu)
+mean(d_adam_stats$mlu_w)
 ```
