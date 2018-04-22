@@ -6,8 +6,8 @@
 \usage{
 get_tokens(collection = NULL, language = NULL, corpus = NULL,
   target_child = NULL, role = NULL, role_exclude = NULL, age = NULL,
-  sex = NULL, token, connection = NULL, db_version = "current",
-  db_args = NULL)
+  sex = NULL, token, stem = NULL, part_of_speech = NULL,
+  connection = NULL, db_version = "current", db_args = NULL)
 }
 \arguments{
 \item{collection}{A character vector of one or more names of collections}
@@ -31,11 +31,15 @@ get_tokens(collection = NULL, language = NULL, corpus = NULL,
 any number of wildcard characters, `_` matches exactly one wildcard
 character)}
 
+\item{stem}{A character vector of one or more stems}
+
+\item{part_of_speech}{A character vector of one or more parts of speech}
+
 \item{connection}{A connection to the CHILDES database}
 
 \item{db_version}{String of the name of database version to use}
 
-\item{db_args}{(optional) List with host, user, and password defined}
+\item{db_args}{List with host, user, and password defined}
 }
 \value{
 A `tbl` of Token data, filtered down by collection, corpus, target

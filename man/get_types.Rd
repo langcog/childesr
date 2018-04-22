@@ -34,7 +34,7 @@ number of wildcard characters, `_` matches exactly one wildcard character)}
 
 \item{db_version}{String of the name of database version to use}
 
-\item{db_args}{(optional) List with host, user, and password defined}
+\item{db_args}{List with host, user, and password defined}
 }
 \value{
 A `tbl` of Type data, filtered down by collection, corpus, target

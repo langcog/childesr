@@ -11,7 +11,7 @@ get_collections(connection = NULL, db_version = "current", db_args = NULL)
 
 \item{db_version}{String of the name of database version to use}
 
-\item{db_args}{(optional) List with host, user, and password defined}
+\item{db_args}{List with host, user, and password defined}
 }
 \value{
 A `tbl` of Collection data. If `connection` is supplied, the result

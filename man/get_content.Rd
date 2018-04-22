@@ -6,7 +6,8 @@
 \usage{
 get_content(content_type, collection = NULL, language = NULL,
   corpus = NULL, role = NULL, role_exclude = NULL, age = NULL,
-  sex = NULL, target_child = NULL, token = NULL, connection)
+  sex = NULL, target_child = NULL, token = NULL, stem = NULL,
+  part_of_speech = NULL, connection)
 }
 \arguments{
 \item{content_type}{One of "token" or "utterance"}
@@ -31,6 +32,10 @@ get_content(content_type, collection = NULL, language = NULL,
 \item{token}{A character vector of one or more token patterns (`\%` matches
 any number of wildcard characters, `_` matches exactly one wildcard
 character)}
+
+\item{stem}{A character vector of one or more stems}
+
+\item{part_of_speech}{A character vector of one or more parts of speech}
 
 \item{connection}{A connection to the CHILDES database}
 }

@@ -28,7 +28,7 @@ get_participants(collection = NULL, corpus = NULL, target_child = NULL,
 
 \item{db_version}{String of the name of database version to use}
 
-\item{db_args}{(optional) List with host, user, and password defined}
+\item{db_args}{List with host, user, and password defined}
 }
 \value{
 A `tbl` of Participant data, filtered down by collection, corpus,

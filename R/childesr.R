@@ -54,7 +54,7 @@ resolve_connection <- function(connection, db_version = NULL, db_args = NULL) {
 #' Connect to CHILDES
 #'
 #' @param db_version String of the name of database version to use
-#' @param db_args (optional) List with host, user, and password defined
+#' @param db_args List with host, user, and password defined
 #' @return con A DBIConnection object for the CHILDES database
 #' @export
 #'
@@ -363,11 +363,14 @@ get_speaker_statistics <- function(collection = NULL, corpus = NULL,
 #' @param token A character vector of one or more token patterns (`\%` matches
 #'   any number of wildcard characters, `_` matches exactly one wildcard
 #'   character)
+#' @param stem A character vector of one or more stems
+#' @param part_of_speech A character vector of one or more parts of speech
 #' @param language A character vector of one or more languages
 get_content <- function(content_type, collection = NULL, language = NULL,
                         corpus = NULL, role = NULL, role_exclude = NULL,
                         age = NULL, sex = NULL, target_child = NULL,
-                        token = NULL, connection) {
+                        token = NULL, stem = NULL, part_of_speech = NULL,
+                        connection) {
 
   transcripts <- get_transcripts(collection, corpus, target_child, connection)
 
@@ -392,6 +395,16 @@ get_content <- function(content_type, collection = NULL, language = NULL,
     token_filter <- sprintf("gloss %%like%% '%s'", token) %>%
       paste(collapse = " | ")
     content %<>% dplyr::filter_(token_filter)
+  }
+
+  if (!is.null(stem)) {
+    stem_filter <- stem
+    content %<>% dplyr::filter(stem %in% stem_filter)
+  }
+
+  if (!is.null(part_of_speech)) {
+    part_of_speech_filter <- part_of_speech
+    content %<>% dplyr::filter(part_of_speech %in% part_of_speech_filter)
   }
 
   if (!num_corpora) {
@@ -457,12 +470,13 @@ get_content <- function(content_type, collection = NULL, language = NULL,
 #' }
 get_tokens <- function(collection = NULL, language = NULL, corpus = NULL,
                        target_child = NULL, role = NULL, role_exclude = NULL,
-                       age = NULL, sex = NULL, token, connection = NULL,
+                       age = NULL, sex = NULL, token, stem = NULL,
+                       part_of_speech = NULL, connection = NULL,
                        db_version = "current", db_args = NULL) {
 
   if (missing(token))
-    stop("Argument \"token\" is missing. To fetch all tokens, supply \"*\" for
-         argument \"token\". Caution: this may result in a long-running query.")
+    stop("Argument 'token' is missing. To fetch all tokens, supply '*' for ",
+         "argument 'token'. Caution: this may result in a long-running query.")
 
   con <- resolve_connection(connection, db_version, db_args)
   tokens <- get_content(content_type = "token",
@@ -475,6 +489,8 @@ get_tokens <- function(collection = NULL, language = NULL, corpus = NULL,
                         sex = sex,
                         target_child = target_child,
                         token = token,
+                        stem = stem,
+                        part_of_speech = part_of_speech,
                         connection = con)
 
   if (is.null(connection)) {

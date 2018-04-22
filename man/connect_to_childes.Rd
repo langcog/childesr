@@ -9,7 +9,7 @@ connect_to_childes(db_version = "current", db_args = NULL)
 \arguments{
 \item{db_version}{String of the name of database version to use}
 
-\item{db_args}{(optional) List with host, user, and password defined}
+\item{db_args}{List with host, user, and password defined}
 }
 \value{
 con A DBIConnection object for the CHILDES database

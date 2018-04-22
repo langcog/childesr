@@ -12,7 +12,7 @@ get_database_version(connection = NULL, db_version = "current",
 
 \item{db_version}{String of the name of database version to use}
 
-\item{db_args}{(optional) List with host, user, and password defined}
+\item{db_args}{List with host, user, and password defined}
 }
 \value{
 The database version as a string
