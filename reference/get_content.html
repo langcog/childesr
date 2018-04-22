@@ -21,6 +21,8 @@
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
+
+
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
@@ -80,7 +82,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/access_childes_db.html">Accessing childes-db</a>
+      <a href="../articles/access_childes_db.html">Accessing `childes-db`</a>
     </li>
   </ul>
 </li>
@@ -106,18 +108,20 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Get content</h1>
-    <small>Source: <a href='https://github.com/langcog/childesr/blob/master/R/childesr.R'><code>R/childesr.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/langcog/childesr/blob/master/R/childesr.R'><code>R/childesr.R</code></a></small>
     <div class="hidden name"><code>get_content.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>Get content</p>
     
+    </div>
 
     <pre class="usage"><span class='fu'>get_content</span>(<span class='no'>content_type</span>, <span class='kw'>collection</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>language</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>corpus</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>role</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>role_exclude</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>age</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>sex</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>child</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>token</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>connection</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>version</span> <span class='kw'>=</span> <span class='st'>"current"</span>, <span class='kw'>connectionDetails</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+  <span class='kw'>sex</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>target_child</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>token</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>stem</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>part_of_speech</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>connection</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -156,7 +160,7 @@
       <td><p>A character vector of values "male" and/or "female"</p></td>
     </tr>
     <tr>
-      <th>child</th>
+      <th>target_child</th>
       <td><p>A character vector of one or more names of children</p></td>
     </tr>
     <tr>
@@ -166,16 +170,16 @@ any number of wildcard characters, `_` matches exactly one wildcard
 character)</p></td>
     </tr>
     <tr>
+      <th>stem</th>
+      <td><p>A character vector of one or more stems</p></td>
+    </tr>
+    <tr>
+      <th>part_of_speech</th>
+      <td><p>A character vector of one or more parts of speech</p></td>
+    </tr>
+    <tr>
       <th>connection</th>
       <td><p>A connection to the CHILDES database</p></td>
-    </tr>
-    <tr>
-      <th>version</th>
-      <td><p>String with the version name (used as the database name)</p></td>
-    </tr>
-    <tr>
-      <th>connectionDetails</th>
-      <td><p>List with with host, user, and password</p></td>
     </tr>
     </table>
     
@@ -192,7 +196,7 @@ character)</p></td>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Mika Braginsky, Daniel Yurovsky, Kyle MacDonald.</p>
+  <p>Developed by Mika Braginsky, Daniel Yurovsky.</p>
 </div>
 
 <div class="pkgdown">

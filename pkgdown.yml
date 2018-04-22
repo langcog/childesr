@@ -1,6 +1,5 @@
-pandoc: 1.17.2
+pandoc: 1.15.2
 pkgdown: 0.1.0.9000
-pkgdown_sha: d6ebaea156244a88bee4f14b4e8bcfb9e36f7727
-articles:
-  access_childes_db: access_childes_db.html
+pkgdown_sha: cfc0f1dbfd535cfad839cc90cd1c41d3c9db26a7
+articles: []
 
