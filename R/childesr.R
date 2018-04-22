@@ -7,6 +7,8 @@ utils::globalVariables(c("collection_id", "collection_name", "corpus_id",
                          "name", "speaker_role", "target_child_id",
                          "target_child_name", "target_child_age"))
 
+avg_month <- 365.2425 / 12
+
 translate_version <- function(db_version, db_args, db_info) {
 
   # using the childes-db hosted server
@@ -177,6 +179,9 @@ get_transcripts <- function(collection = NULL, corpus = NULL,
     transcripts %<>% dplyr::filter(target_child_name %in% target_child)
   }
 
+  transcripts %<>%
+    dplyr::mutate(target_child_age = target_child_age / avg_month)
+
   if (is.null(connection)) {
     transcripts %<>% dplyr::collect()
     DBI::dbDisconnect(con)
@@ -220,7 +225,7 @@ get_participants <- function(collection = NULL, corpus = NULL,
   }
 
   if (!is.null(age)) {
-    days <- age * 30.5
+    days <- age * avg_month
     if (length(age) == 1) {
       participants %<>% dplyr::filter(max_age >= days & min_age <= days)
     } else if (length(age) == 2) {
@@ -263,6 +268,9 @@ get_participants <- function(collection = NULL, corpus = NULL,
   # TODO remove after https://github.com/langcog/childes-db/issues/30 resolved
   participants %<>%
     dplyr::left_join(target_children, by = "target_child_id")
+
+  participants %<>% dplyr::mutate(max_age = max_age / avg_month)
+  participants %<>% dplyr::mutate(min_age = min_age / avg_month)
 
   if (is.null(connection)) {
     participants %<>% dplyr::collect()
@@ -310,17 +318,13 @@ get_speaker_statistics <- function(collection = NULL, corpus = NULL,
     speaker_statistics %<>% dplyr::filter(target_child_id %in% corpus_filter)
   }
 
+
   if (!is.null(age)) {
-    days <- age * 30.5
-    if (length(age) == 1) {
-      speaker_statistics %<>%
-        dplyr::filter(max_age >= days & min_age <= days)
-    } else if (length(age) == 2) {
-      speaker_statistics %<>%
-        dplyr::filter(max_age >= days[1] | min_age <= days[2])
-    } else {
-      stop("`age` argument must be of length 1 or 2")
-    }
+    if (!(length(age) %in% 1:2)) stop("`age` argument must be of length 1 or 2")
+    days <- age * avg_month
+    if (length(age) == 1) days <- c(days, days + avg_month)
+    speaker_statistics %<>% dplyr::filter(target_child_age >= days[1],
+                                          target_child_age <= days[2])
   }
 
   if (!is.null(sex)) {
@@ -340,6 +344,9 @@ get_speaker_statistics <- function(collection = NULL, corpus = NULL,
   if (!is.null(role_exclude)) {
     speaker_statistics %<>% dplyr::filter(!(speaker_role %in% role_exclude))
   }
+
+  speaker_statistics %<>%
+    dplyr::mutate(target_child_age = target_child_age / avg_month)
 
   if (is.null(connection)) {
     suppressWarnings(speaker_statistics %<>% dplyr::collect())
@@ -403,13 +410,9 @@ get_content <- function(content_type, collection = NULL, language = NULL,
   }
 
   if (!is.null(age)) {
-    if (!(length(age) %in% 1:2)) {
-      stop("`age` argument must be of length 1 or 2")
-    }
-
-    days <- age * 30.5
-    if (length(age) == 1) days <- c(days, days + 30.49)
-
+    if (!(length(age) %in% 1:2)) stop("`age` argument must be of length 1 or 2")
+    days <- age * avg_month
+    if (length(age) == 1) days <- c(days, days + avg_month)
     content %<>% dplyr::filter(target_child_age >= days[1],
                                target_child_age <= days[2])
   }
@@ -431,6 +434,9 @@ get_content <- function(content_type, collection = NULL, language = NULL,
     language_filter <- language
     content %<>% dplyr::filter(language %in% language_filter)
   }
+
+  content %<>%
+    dplyr::mutate(target_child_age = target_child_age / avg_month)
 
   return(content)
 }
