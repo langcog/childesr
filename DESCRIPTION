@@ -1,0 +1,31 @@
+Package: childesr
+Type: Package
+Title: Accessing the CHILDES Database
+Description: Tools for connecting to CHILDES, an open repository for
+    transcripts of parent-child interaction.
+Version: 0.1.0
+Authors@R: c(
+    person("Mika", "Braginsky", email = "mika.br@gmail.com", role = c("aut", "cre")),
+    person("Daniel", "Yurovsky", email = "dyurovsky@gmail.com", role = c("aut")),
+    person("Kyle", "MacDonald", email = "kylem412@gmail.com", role = c("ctb")),
+    person("Stephan", "Meylan", email = "meylan.stephan@gmail.com", role = c("ctb")),
+    person("Alessandro", "Sanchez", email = "amsan7@gmail.com", role = c("ctb"))
+    )
+Depends: R (>= 3.4.0)
+License: GPL-3
+URL: https://github.com/langcog/childesr
+BugReports: http://github.com/langcog/childesr/issues
+Encoding: UTF-8
+LazyData: true
+Imports:
+    DBI (>= 0.7),
+    dbplyr (>= 1.1.0),
+    dplyr (>= 0.7.4),
+    jsonlite (>= 1.5),
+    magrittr (>= 1.5),
+    RMySQL (>= 0.10.13)
+RoxygenNote: 6.0.1
+Suggests:
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
