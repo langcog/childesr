@@ -71,11 +71,15 @@ connect_to_childes <- function(db_version = "current", db_args = NULL) {
 
   if (is.null(db_args)) db_args <- db_info
 
-  DBI::dbConnect(RMySQL::MySQL(),
-                 host = db_args$host,
-                 dbname = translate_version(db_version, db_args, db_info),
-                 user = db_args$user,
-                 password = db_args$password)
+  con <- DBI::dbConnect(
+    RMySQL::MySQL(),
+    host = db_args$host,
+    dbname = translate_version(db_version, db_args, db_info),
+    user = db_args$user,
+    password = db_args$password
+  )
+  DBI::dbGetQuery(con, "SET NAMES utf8")
+  return(con)
 }
 
 #' Get table
