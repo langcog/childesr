@@ -1,6 +1,6 @@
 language: r
 cache: packages
-after-success:
+after_success:
   - chmod +x ./build_docs.sh
   - ./build_docs.sh
 deploy:
