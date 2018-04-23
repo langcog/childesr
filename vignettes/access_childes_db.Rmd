@@ -34,9 +34,9 @@ library(childesr)
 
 ## Get transcripts
 
-The `get_transcripts` function returns high-level information about the transcripts that are available in the database. You can filter your query to get the transcripts for a specific collection, corpus, or child. 
+The `get_transcripts()` function returns high-level information about the transcripts that are available in the database. You can filter your query to get the transcripts for a specific collection, corpus, or child. 
 
-For example, you can run `get_transcripts` without any arguments to return all of the transcripts in the database.
+For example, you can run `get_transcripts()` without any arguments to return all of the transcripts in the database.
 
 ```{r}
 d_transcripts <- get_transcripts()
@@ -78,7 +78,7 @@ nrow(d_shem)
 
 ## Get participants
 
-The `get_participants` function returns background information about the speakers (both the children and the adults) in the database. This includes information about:
+The `get_participants()` function returns background information about the speakers (both the children and the adults) in the database. This includes information about:
 
   * the speaker's role in the conversation
   * language
@@ -116,7 +116,7 @@ head(d_age_range)
 
 ## Get tokens
 
-The `get_tokens` function returns a table with a row for each token based on a set of filtering criteria. The token argument allows you to pass a vector of one or more tokens that you want to analyze.
+The `get_tokens()` function returns a table with a row for each token based on a set of filtering criteria. The token argument allows you to pass a vector of one or more tokens that you want to analyze.
 
 For example, if you wanted to get all of the production data for a specific token(s), then you could run the following call to get all instances of "dog" and "ball" for Adam in the Brown corpus. 
 
@@ -131,7 +131,7 @@ str(d_adam_prod)
 
 # print the unique tokens
 unique(d_adam_prod$gloss)
-```  
+```
 
 ## Get types
 
@@ -175,7 +175,7 @@ The `get_speaker_statistics()` function returns a table with a row for each tran
   * mean length of utterances in words (`mlu_w`)
   * mean length of utterances in morphemes (`mlu_m`)
   
-For example, if we wanted to get the summary statistics for Adam's production data, we could run the following call. 
+For example, if we wanted to get the summary statistics for Adam's production data, you could run the following call. 
 
 ```{r}
 d_adam_stats <- get_speaker_statistics(corpus = "Brown",
@@ -184,4 +184,24 @@ d_adam_stats <- get_speaker_statistics(corpus = "Brown",
 
 # get the average mlu across all Adam's transcripts
 mean(d_adam_stats$mlu_w)
+```
+
+## Get contexts
+
+The `get_contexts()` function returns a table with a row for each utterance that is within a given window of the utterances that contain the given token(s).
+
+For example, you could run the following call to get all utterances containg "dog" for Adam in the Brown corpus, along with the preceeding utterance and succeeding utterance for each one.
+
+```{r}
+d_adam_context <- get_contexts(corpus = "Brown",
+                               role = "target_child",
+                               target_child = "Adam",
+                               token = "dog",
+                               window = c(1, 1))
+
+# view the structure of the data
+str(d_adam_context)
+
+# print the first five utterances
+d_adam_context$gloss[1:5]
 ```

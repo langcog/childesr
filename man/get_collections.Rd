@@ -15,7 +15,7 @@ get_collections(connection = NULL, db_version = "current", db_args = NULL)
 }
 \value{
 A `tbl` of Collection data. If `connection` is supplied, the result
-  is collected locally, otherwise it remains remote.
+  remains a remote query, otherwise it is retrieved into a local tibble.
 }
 \description{
 Get collections

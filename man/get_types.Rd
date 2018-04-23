@@ -5,9 +5,9 @@
 \title{Get types}
 \usage{
 get_types(collection = NULL, language = NULL, corpus = NULL,
-  target_child = NULL, role = NULL, role_exclude = NULL, age = NULL,
-  sex = NULL, type = NULL, connection = NULL, db_version = "current",
-  db_args = NULL)
+  role = NULL, role_exclude = NULL, age = NULL, sex = NULL,
+  target_child = NULL, type = NULL, connection = NULL,
+  db_version = "current", db_args = NULL)
 }
 \arguments{
 \item{collection}{A character vector of one or more names of collections}
@@ -15,8 +15,6 @@ get_types(collection = NULL, language = NULL, corpus = NULL,
 \item{language}{A character vector of one or more languages}
 
 \item{corpus}{A character vector of one or more names of corpora}
-
-\item{target_child}{A character vector of one or more names of children}
 
 \item{role}{A character vector of one or more roles to include}
 
@@ -26,6 +24,8 @@ get_types(collection = NULL, language = NULL, corpus = NULL,
 (exclusive) in months}
 
 \item{sex}{A character vector of values "male" and/or "female"}
+
+\item{target_child}{A character vector of one or more names of children}
 
 \item{type}{A character vector of one or more type patterns (`%` matches any
 number of wildcard characters, `_` matches exactly one wildcard character)}
@@ -37,8 +37,9 @@ number of wildcard characters, `_` matches exactly one wildcard character)}
 \item{db_args}{List with host, user, and password defined}
 }
 \value{
-A `tbl` of Type data, filtered down by collection, corpus, target
-  child, role, age, sex, and token supplied, if any.
+A `tbl` of Type data, filtered down by supplied arguments. If
+  `connection` is supplied, the result remains a remote query, otherwise it
+  is retrieved into a local tibble.
 }
 \description{
 Get types

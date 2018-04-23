@@ -5,7 +5,8 @@ NULL
 utils::globalVariables(c("collection_id", "collection_name", "corpus_id",
                          "corpus_name", "gloss", "id", "max_age", "min_age",
                          "name", "speaker_role", "target_child_id",
-                         "target_child_name", "target_child_age"))
+                         "target_child_name", "target_child_age",
+                         "utterance_id", "transcript_id", "utterance_order"))
 
 avg_month <- 365.2425 / 12
 
@@ -98,7 +99,7 @@ get_table <- function(connection, name) {
 #' @param connection A connection to the CHILDES database
 #'
 #' @return A `tbl` of Collection data. If `connection` is supplied, the result
-#'   is collected locally, otherwise it remains remote.
+#'   remains a remote query, otherwise it is retrieved into a local tibble.
 #' @export
 #'
 #' @examples
@@ -125,8 +126,8 @@ get_collections <- function(connection = NULL, db_version = "current",
 #'
 #' @inheritParams get_collections
 #'
-#' @return A `tbl` of Corpus data. If `connection` is supplied, the result is
-#'   collected locally, otherwise it remains remote.
+#' @return A `tbl` of Corpus data. If `connection` is supplied, the result
+#'   remains a remote query, otherwise it is retrieved into a local tibble.
 #' @export
 #'
 #' @examples
@@ -156,8 +157,9 @@ get_corpora <- function(connection = NULL, db_version = "current",
 #' @param target_child A character vector of one or more names of children
 #' @inheritParams get_collections
 #'
-#' @return A `tbl` of Transcript data, filtered down by collection, corpus, and
-#'   target child supplied, if any.
+#' @return A `tbl` of Transcript data, filtered down by supplied arguments. If
+#'   `connection` is supplied, the result remains a remote query, otherwise it
+#'   is retrieved into a local tibble.
 #' @export
 #'
 #' @examples
@@ -203,8 +205,9 @@ get_transcripts <- function(collection = NULL, corpus = NULL,
 #'   (exclusive) in months
 #' @param sex A character vector of values "male" and/or "female"
 #'
-#' @return A `tbl` of Participant data, filtered down by collection, corpus,
-#'   target_child, role, role_exclude, age, and sex supplied, if any.
+#' @return A `tbl` of Participant data, filtered down by supplied arguments. If
+#'   `connection` is supplied, the result remains a remote query, otherwise it
+#'   is retrieved into a local tibble.
 #' @export
 #'
 #' @examples
@@ -287,8 +290,9 @@ get_participants <- function(collection = NULL, corpus = NULL,
 #' Get speaker statistics
 #'
 #' @inheritParams get_participants
-#' @return A `tbl` of Speaker statistics, filtered down by collection, corpus,
-#'   target child, role, role_exclude, age, and sex supplied, if any.
+#' @return A `tbl` of Speaker statistics, filtered down by supplied arguments.
+#'   If `connection` is supplied, the result remains a remote query, otherwise
+#'   it is retrieved into a local tibble.
 #' @export
 #'
 #' @examples
@@ -464,8 +468,9 @@ get_content <- function(content_type, collection = NULL, language = NULL,
 #' @inheritParams connect_to_childes
 #' @inheritParams get_content
 #'
-#' @return A `tbl` of Token data, filtered down by collection, corpus, target
-#'   child, role, age, sex, and token supplied, if any.
+#' @return A `tbl` of Token data, filtered down by supplied arguments. If
+#'   `connection` is supplied, the result remains a remote query, otherwise it
+#'   is retrieved into a local tibble.
 #' @export
 #'
 #' @examples
@@ -473,8 +478,8 @@ get_content <- function(content_type, collection = NULL, language = NULL,
 #' get_tokens(token = "dog")
 #' }
 get_tokens <- function(collection = NULL, language = NULL, corpus = NULL,
-                       target_child = NULL, role = NULL, role_exclude = NULL,
-                       age = NULL, sex = NULL, token, stem = NULL,
+                       role = NULL, role_exclude = NULL, age = NULL, sex = NULL,
+                       target_child = NULL, token, stem = NULL,
                        part_of_speech = NULL, connection = NULL,
                        db_version = "current", db_args = NULL) {
 
@@ -512,8 +517,9 @@ get_tokens <- function(collection = NULL, language = NULL, corpus = NULL,
 #' @param type A character vector of one or more type patterns (`%` matches any
 #'   number of wildcard characters, `_` matches exactly one wildcard character)
 #'
-#' @return A `tbl` of Type data, filtered down by collection, corpus, target
-#'   child, role, age, sex, and token supplied, if any.
+#' @return A `tbl` of Type data, filtered down by supplied arguments. If
+#'   `connection` is supplied, the result remains a remote query, otherwise it
+#'   is retrieved into a local tibble.
 #' @export
 #'
 #' @examples
@@ -521,8 +527,8 @@ get_tokens <- function(collection = NULL, language = NULL, corpus = NULL,
 #' get_types()
 #' }
 get_types <- function(collection = NULL, language = NULL, corpus = NULL,
-                      target_child = NULL, role = NULL, role_exclude = NULL,
-                      age = NULL, sex = NULL, type = NULL, connection = NULL,
+                      role = NULL, role_exclude = NULL, age = NULL, sex = NULL,
+                      target_child = NULL, type = NULL, connection = NULL,
                       db_version = "current", db_args = NULL) {
 
   con <- resolve_connection(connection, db_version, db_args)
@@ -550,8 +556,9 @@ get_types <- function(collection = NULL, language = NULL, corpus = NULL,
 #' @inheritParams get_participants
 #' @param language A character vector of one or more languages
 #'
-#' @return A `tbl` of Utterance data, filtered down by collection, corpus,
-#'   target child, role, age, and sex supplied, if any.
+#' @return A `tbl` of Utterance data, filtered down by supplied arguments. If
+#'   `connection` is supplied, the result remains a remote query, otherwise it
+#'   is retrieved into a local tibble.
 #' @export
 #'
 #' @examples
@@ -560,9 +567,8 @@ get_types <- function(collection = NULL, language = NULL, corpus = NULL,
 #' }
 get_utterances <- function(collection = NULL, language = NULL, corpus = NULL,
                            role = NULL, role_exclude = NULL, age = NULL,
-                           sex = NULL, target_child = NULL,
-                           connection = NULL, db_version = "current",
-                           db_args = NULL) {
+                           sex = NULL, target_child = NULL, connection = NULL,
+                           db_version = "current", db_args = NULL) {
 
   con <- resolve_connection(connection, db_version, db_args)
   utterances <- get_content(content_type = "utterance",
@@ -581,6 +587,81 @@ get_utterances <- function(collection = NULL, language = NULL, corpus = NULL,
     DBI::dbDisconnect(con)
   }
   return(utterances)
+}
+
+#' Get the utterances surrounding a token(s)
+#'
+#' @inheritParams get_utterances
+#' @inheritParams get_tokens
+#' @param window A length 2 numeric vector of how many utterances before and
+#'   after each utterance containing the target token to retrieve
+#' @param remove_duplicates A boolean indicating whether to remove duplicate
+#'   utterances from the results
+#'
+#' @return A 'tbl' of Utterance data, filtered down by supplied arguments.
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' get_contexts(target_child = "Shem", token = "dog")
+#' }
+get_contexts <- function(collection = NULL, language = NULL, corpus = NULL,
+                        role = NULL, role_exclude = NULL, age = NULL,
+                        sex = NULL, target_child = NULL, token,
+                        window = c(0, 0), remove_duplicates = TRUE,
+                        connection = NULL, db_version = "current",
+                        db_args = NULL) {
+
+  con <- resolve_connection(connection, db_version, db_args)
+
+  token_utterances <- get_tokens(collection = collection,
+                                 language = language,
+                                 corpus = corpus,
+                                 role = role,
+                                 role_exclude = role_exclude,
+                                 age = age,
+                                 sex = sex,
+                                 target_child = target_child,
+                                 token = token,
+                                 connection = con) %>%
+    dplyr::pull(utterance_id)
+
+  suppressMessages(
+    utterances <- get_utterances(collection = collection,
+                                 language = language,
+                                 corpus = corpus,
+                                 role = role,
+                                 role_exclude = role_exclude,
+                                 age = age,
+                                 sex = sex,
+                                 target_child = target_child,
+                                 connection = con) %>%
+      dplyr::rename(utterance_id = id)
+  )
+
+  utterance_orders <- utterances %>%
+    dplyr::filter(utterance_id %in% token_utterances) %>%
+    dplyr::select(transcript_id, utterance_order) %>%
+    dplyr::collect()
+
+  contexts <- purrr::map2_df(utterance_orders$transcript_id,
+                             utterance_orders$utterance_order,
+                             function(tid, index) {
+    utterances %>%
+      dplyr::filter(transcript_id == tid,
+                    utterance_order >= (index - window[1]),
+                    utterance_order <= (index + window[2])) %>%
+      dplyr::collect()
+  })
+
+  if (remove_duplicates) {
+    contexts %<>% dplyr::distinct(transcript_id, utterance_id, .keep_all = TRUE)
+  }
+
+  if (is.null(connection)) {
+    DBI::dbDisconnect(con)
+  }
+  return(contexts)
 }
 
 #' Get database version

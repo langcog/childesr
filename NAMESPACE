@@ -2,6 +2,7 @@
 
 export(connect_to_childes)
 export(get_collections)
+export(get_contexts)
 export(get_corpora)
 export(get_database_version)
 export(get_participants)

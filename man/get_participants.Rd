@@ -31,8 +31,9 @@ get_participants(collection = NULL, corpus = NULL, target_child = NULL,
 \item{db_args}{List with host, user, and password defined}
 }
 \value{
-A `tbl` of Participant data, filtered down by collection, corpus,
-  target_child, role, role_exclude, age, and sex supplied, if any.
+A `tbl` of Participant data, filtered down by supplied arguments. If
+  `connection` is supplied, the result remains a remote query, otherwise it
+  is retrieved into a local tibble.
 }
 \description{
 Get participants
