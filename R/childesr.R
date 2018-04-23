@@ -463,6 +463,8 @@ get_content <- function(content_type, collection = NULL, language = NULL,
 #'
 #' @inheritParams connect_to_childes
 #' @inheritParams get_content
+#' @param replace A boolean indicating whether to replace gloss with
+#'   replacement, when available (defaults to \code{TRUE})
 #'
 #' @return A `tbl` of Token data, filtered down by collection, corpus, target
 #'   child, role, age, sex, and token supplied, if any.
@@ -475,7 +477,7 @@ get_content <- function(content_type, collection = NULL, language = NULL,
 get_tokens <- function(collection = NULL, language = NULL, corpus = NULL,
                        target_child = NULL, role = NULL, role_exclude = NULL,
                        age = NULL, sex = NULL, token, stem = NULL,
-                       part_of_speech = NULL, connection = NULL,
+                       part_of_speech = NULL, replace = TRUE, connection = NULL,
                        db_version = "current", db_args = NULL) {
 
   if (missing(token))
@@ -496,6 +498,13 @@ get_tokens <- function(collection = NULL, language = NULL, corpus = NULL,
                         stem = stem,
                         part_of_speech = part_of_speech,
                         connection = con)
+
+  if (replace) {
+    tokens %<>%
+      dplyr::mutate(gloss = dplyr::if_else(replacement == "", gloss,
+                                           replacement)) %>%
+      dplyr::select(-replacement)
+  }
 
   if (is.null(connection)) {
     tokens %<>% dplyr::collect()
