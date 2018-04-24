@@ -5,7 +5,8 @@ NULL
 utils::globalVariables(c("collection_id", "collection_name", "corpus_id",
                          "corpus_name", "gloss", "id", "max_age", "min_age",
                          "name", "speaker_role", "target_child_id",
-                         "target_child_name", "target_child_age"))
+                         "target_child_name", "target_child_age",
+                         "replacement"))
 
 avg_month <- 365.2425 / 12
 
@@ -501,8 +502,7 @@ get_tokens <- function(collection = NULL, language = NULL, corpus = NULL,
 
   if (replace) {
     tokens %<>%
-      dplyr::mutate(gloss = dplyr::if_else(replacement == "", gloss,
-                                           replacement)) %>%
+      dplyr::mutate(gloss = if (replacement == "") gloss else replacement) %>%
       dplyr::select(-replacement)
   }
 
