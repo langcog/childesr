@@ -464,8 +464,8 @@ get_content <- function(content_type, collection = NULL, language = NULL,
 #'
 #' @inheritParams connect_to_childes
 #' @inheritParams get_content
-#' @param replace A boolean indicating whether to replace gloss with
-#'   replacement, when available (defaults to \code{TRUE})
+#' @param replace A boolean indicating whether to replace "gloss" with
+#'   "replacement" (i.e. phonologically assimilated form), when available (defaults to \code{TRUE})
 #'
 #' @return A `tbl` of Token data, filtered down by collection, corpus, target
 #'   child, role, age, sex, and token supplied, if any.
