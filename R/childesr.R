@@ -6,7 +6,8 @@ utils::globalVariables(c("collection_id", "collection_name", "corpus_id",
                          "corpus_name", "gloss", "id", "max_age", "min_age",
                          "name", "speaker_role", "target_child_id",
                          "target_child_name", "target_child_age",
-                         "utterance_id", "transcript_id", "utterance_order"))
+                         "utterance_id", "transcript_id", "utterance_order",
+                         "replacement"))
 
 avg_month <- 365.2425 / 12
 
@@ -467,6 +468,8 @@ get_content <- function(content_type, collection = NULL, language = NULL,
 #'
 #' @inheritParams connect_to_childes
 #' @inheritParams get_content
+#' @param replace A boolean indicating whether to replace "gloss" with
+#'   "replacement" (i.e. phonologically assimilated form), when available (defaults to \code{TRUE})
 #'
 #' @return A `tbl` of Token data, filtered down by supplied arguments. If
 #'   `connection` is supplied, the result remains a remote query, otherwise it
@@ -478,9 +481,9 @@ get_content <- function(content_type, collection = NULL, language = NULL,
 #' get_tokens(token = "dog")
 #' }
 get_tokens <- function(collection = NULL, language = NULL, corpus = NULL,
-                       role = NULL, role_exclude = NULL, age = NULL, sex = NULL,
-                       target_child = NULL, token, stem = NULL,
-                       part_of_speech = NULL, connection = NULL,
+                       target_child = NULL, role = NULL, role_exclude = NULL,
+                       age = NULL, sex = NULL, token, stem = NULL,
+                       part_of_speech = NULL, replace = TRUE, connection = NULL,
                        db_version = "current", db_args = NULL) {
 
   if (missing(token))
@@ -501,6 +504,12 @@ get_tokens <- function(collection = NULL, language = NULL, corpus = NULL,
                         stem = stem,
                         part_of_speech = part_of_speech,
                         connection = con)
+
+  if (replace) {
+    tokens %<>%
+      dplyr::mutate(gloss = if (replacement == "") gloss else replacement) %>%
+      dplyr::select(-replacement)
+  }
 
   if (is.null(connection)) {
     tokens %<>% dplyr::collect()

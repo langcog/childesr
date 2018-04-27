@@ -5,8 +5,8 @@
 \title{Get tokens}
 \usage{
 get_tokens(collection = NULL, language = NULL, corpus = NULL,
-  role = NULL, role_exclude = NULL, age = NULL, sex = NULL,
-  target_child = NULL, token, stem = NULL, part_of_speech = NULL,
+  target_child = NULL, role = NULL, role_exclude = NULL, age = NULL,
+  sex = NULL, token, stem = NULL, part_of_speech = NULL, replace = TRUE,
   connection = NULL, db_version = "current", db_args = NULL)
 }
 \arguments{
@@ -15,6 +15,8 @@ get_tokens(collection = NULL, language = NULL, corpus = NULL,
 \item{language}{A character vector of one or more languages}
 
 \item{corpus}{A character vector of one or more names of corpora}
+
+\item{target_child}{A character vector of one or more names of children}
 
 \item{role}{A character vector of one or more roles to include}
 
@@ -25,8 +27,6 @@ get_tokens(collection = NULL, language = NULL, corpus = NULL,
 
 \item{sex}{A character vector of values "male" and/or "female"}
 
-\item{target_child}{A character vector of one or more names of children}
-
 \item{token}{A character vector of one or more token patterns (`\%` matches
 any number of wildcard characters, `_` matches exactly one wildcard
 character)}
@@ -34,6 +34,9 @@ character)}
 \item{stem}{A character vector of one or more stems}
 
 \item{part_of_speech}{A character vector of one or more parts of speech}
+
+\item{replace}{A boolean indicating whether to replace "gloss" with
+"replacement" (i.e. phonologically assimilated form), when available (defaults to \code{TRUE})}
 
 \item{connection}{A connection to the CHILDES database}
 
