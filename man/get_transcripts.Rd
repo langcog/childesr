@@ -21,8 +21,9 @@ get_transcripts(collection = NULL, corpus = NULL, target_child = NULL,
 \item{db_args}{List with host, user, and password defined}
 }
 \value{
-A `tbl` of Transcript data, filtered down by collection, corpus, and
-  target child supplied, if any.
+A `tbl` of Transcript data, filtered down by supplied arguments. If
+  `connection` is supplied, the result remains a remote query, otherwise it
+  is retrieved into a local tibble.
 }
 \description{
 Get transcripts

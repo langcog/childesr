@@ -14,8 +14,8 @@ get_corpora(connection = NULL, db_version = "current", db_args = NULL)
 \item{db_args}{List with host, user, and password defined}
 }
 \value{
-A `tbl` of Corpus data. If `connection` is supplied, the result is
-  collected locally, otherwise it remains remote.
+A `tbl` of Corpus data. If `connection` is supplied, the result
+  remains a remote query, otherwise it is retrieved into a local tibble.
 }
 \description{
 Get corpora
