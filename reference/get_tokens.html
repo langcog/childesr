@@ -107,7 +107,7 @@
 
     <pre class="usage"><span class='fu'>get_tokens</span>(<span class='kw'>collection</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>language</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>corpus</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>target_child</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>role</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>role_exclude</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>age</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>sex</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>token</span>, <span class='kw'>stem</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>part_of_speech</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>sex</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>token</span>, <span class='kw'>stem</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>part_of_speech</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>replace</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>connection</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>db_version</span> <span class='kw'>=</span> <span class='st'>"current"</span>, <span class='kw'>db_args</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -159,6 +159,11 @@ character)</p></td>
     <tr>
       <th>part_of_speech</th>
       <td><p>A character vector of one or more parts of speech</p></td>
+    </tr>
+    <tr>
+      <th>replace</th>
+      <td><p>A boolean indicating whether to replace gloss with
+replacement, when available (defaults to <code>TRUE</code>)</p></td>
     </tr>
     <tr>
       <th>connection</th>
