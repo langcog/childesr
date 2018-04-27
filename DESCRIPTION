@@ -25,4 +25,8 @@ Imports:
     magrittr (>= 1.5),
     purrr (>= 0.2.4),
     RMySQL (>= 0.10.14)
+Suggests:
+    knitr,
+    rmarkdown
 RoxygenNote: 6.0.1
+VignetteBuilder: knitr
