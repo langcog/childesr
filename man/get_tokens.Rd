@@ -6,7 +6,7 @@
 \usage{
 get_tokens(collection = NULL, language = NULL, corpus = NULL,
   target_child = NULL, role = NULL, role_exclude = NULL, age = NULL,
-  sex = NULL, token, stem = NULL, part_of_speech = NULL,
+  sex = NULL, token, stem = NULL, part_of_speech = NULL, replace = TRUE,
   connection = NULL, db_version = "current", db_args = NULL)
 }
 \arguments{
@@ -34,6 +34,9 @@ character)}
 \item{stem}{A character vector of one or more stems}
 
 \item{part_of_speech}{A character vector of one or more parts of speech}
+
+\item{replace}{A boolean indicating whether to replace gloss with
+replacement, when available (defaults to \code{TRUE})}
 
 \item{connection}{A connection to the CHILDES database}
 
