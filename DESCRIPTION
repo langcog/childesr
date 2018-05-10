@@ -27,6 +27,7 @@ Imports:
     RMySQL (>= 0.10.14)
 Suggests:
     knitr,
-    rmarkdown
+    rmarkdown,
+    curl
 RoxygenNote: 6.0.1
 VignetteBuilder: knitr
