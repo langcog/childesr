@@ -24,10 +24,10 @@ Imports:
     jsonlite (>= 1.5),
     magrittr (>= 1.5),
     purrr (>= 0.2.4),
-    RMySQL (>= 0.10.14)
+    RMySQL (>= 0.10.14),
+    curl (>= 3.1)
 Suggests:
     knitr,
-    rmarkdown,
-    curl
+    rmarkdown
 RoxygenNote: 6.0.1
 VignetteBuilder: knitr
