@@ -1,6 +1,0 @@
-pandoc: 1.17.2
-pkgdown: 1.0.0
-pkgdown_sha: ~
-articles:
-  access_childes_db: access_childes_db.html
-
