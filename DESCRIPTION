@@ -6,10 +6,10 @@ Description: Tools for connecting to CHILDES, an open repository for
 Version: 0.1.0
 Authors@R: c(
     person("Mika", "Braginsky", email = "mika.br@gmail.com", role = c("aut", "cre")),
+    person("Alessandro", "Sanchez", email = "amsan7@gmail.com", role = c("aut", "ctb")),
     person("Daniel", "Yurovsky", email = "dyurovsky@gmail.com", role = c("aut")),
     person("Kyle", "MacDonald", email = "kylem412@gmail.com", role = c("ctb")),
-    person("Stephan", "Meylan", email = "meylan.stephan@gmail.com", role = c("ctb")),
-    person("Alessandro", "Sanchez", email = "amsan7@gmail.com", role = c("ctb"))
+    person("Stephan", "Meylan", email = "meylan.stephan@gmail.com", role = c("ctb"))
     )
 Depends: R (>= 3.5.0)
 License: GPL-3
