@@ -180,9 +180,26 @@
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='fu'>get_utterances</span>(<span class='kw'>target_child</span> <span class='kw'>=</span> <span class='st'>"Shem"</span>)
-<span class='co'># }</span></pre>
+    <pre class="examples"><div class='input'><span class='fu'>get_utterances</span>(<span class='kw'>target_child</span> <span class='kw'>=</span> <span class='st'>"Shem"</span>)</div><div class='output co'>#&gt; <span class='message'>Using current database version: '2018.1'.</span></div><div class='output co'>#&gt; <span class='message'>Getting data from 1 child in 1 corpus ...</span></div><div class='output co'>#&gt; # A tibble: 42,467 x 25
+#&gt;        id speaker_id utterance_order transcript_id corpus_id gloss   num_tokens
+#&gt;     &lt;int&gt;      &lt;int&gt;           &lt;int&gt;         &lt;int&gt;     &lt;int&gt; &lt;chr&gt;        &lt;int&gt;
+#&gt;  1 776196       2454               1          2765        29 yeah             1
+#&gt;  2 776202       2455               2          2765        29 what w…          5
+#&gt;  3 776217       2454               3          2765        29 ow               1
+#&gt;  4 776227       2455               4          2765        29 ow               1
+#&gt;  5 776235       2454               5          2765        29 yeah             1
+#&gt;  6 776244       2455               6          2765        29 want a…          6
+#&gt;  7 776261       2454               7          2765        29 ow               1
+#&gt;  8 776267       2455               8          2765        29 ow wha…          3
+#&gt;  9 776279       2455               9          2765        29 Richard          1
+#&gt; 10 776284       2454              10          2765        29 no               1
+#&gt; # ... with 42,457 more rows, and 18 more variables: stem &lt;chr&gt;,
+#&gt; #   part_of_speech &lt;chr&gt;, speaker_code &lt;chr&gt;, speaker_name &lt;chr&gt;,
+#&gt; #   speaker_role &lt;chr&gt;, target_child_id &lt;int&gt;, target_child_age &lt;dbl&gt;,
+#&gt; #   target_child_name &lt;chr&gt;, target_child_sex &lt;chr&gt;, type &lt;chr&gt;,
+#&gt; #   media_end &lt;dbl&gt;, media_start &lt;dbl&gt;, media_unit &lt;chr&gt;, collection_id &lt;int&gt;,
+#&gt; #   collection_name &lt;chr&gt;, num_morphemes &lt;int&gt;, language &lt;chr&gt;,
+#&gt; #   corpus_name &lt;chr&gt;</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

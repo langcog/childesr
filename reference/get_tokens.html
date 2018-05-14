@@ -199,9 +199,26 @@ character)</p></td>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='fu'>get_tokens</span>(<span class='kw'>token</span> <span class='kw'>=</span> <span class='st'>"dog"</span>)
-<span class='co'># }</span></pre>
+    <pre class="examples"><div class='input'><span class='fu'>get_tokens</span>(<span class='kw'>token</span> <span class='kw'>=</span> <span class='st'>"dog"</span>)</div><div class='output co'>#&gt; <span class='message'>Using current database version: '2018.1'.</span></div><div class='output co'>#&gt; <span class='message'>Getting data from 4853 children in 287 corpora...</span></div><div class='output co'>#&gt; # A tibble: 22,148 x 26
+#&gt;         id gloss stem  part_of_speech speaker_id utterance_id token_order
+#&gt;      &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;               &lt;int&gt;        &lt;int&gt;       &lt;int&gt;
+#&gt;  1  184379 Dog   ""    ""                     76        54153           6
+#&gt;  2  207989 Dog   ""    ""                    115        58787           8
+#&gt;  3  251131 Dog   ""    ""                    156        65689          11
+#&gt;  4  251244 Dog   ""    ""                    156        65722           1
+#&gt;  5  251664 Dog   ""    ""                    156        65781           6
+#&gt;  6  252184 Dog   ""    ""                    156        65874           1
+#&gt;  7  252691 Dog   ""    ""                    156        65945           8
+#&gt;  8  253011 Dog   ""    ""                    157        66011           3
+#&gt;  9 1968143 dog   ""    ""                   1025       506100           2
+#&gt; 10 1968193 dog   ""    ""                   1296       506122           2
+#&gt; # ... with 22,138 more rows, and 19 more variables: corpus_id &lt;int&gt;,
+#&gt; #   transcript_id &lt;int&gt;, speaker_code &lt;chr&gt;, speaker_name &lt;chr&gt;,
+#&gt; #   speaker_role &lt;chr&gt;, target_child_id &lt;int&gt;, target_child_age &lt;dbl&gt;,
+#&gt; #   target_child_name &lt;chr&gt;, target_child_sex &lt;chr&gt;, utterance_type &lt;chr&gt;,
+#&gt; #   collection_id &lt;int&gt;, collection_name &lt;chr&gt;, english &lt;chr&gt;, prefix &lt;chr&gt;,
+#&gt; #   suffix &lt;chr&gt;, num_morphemes &lt;int&gt;, language &lt;chr&gt;, corpus_name &lt;chr&gt;,
+#&gt; #   clitic &lt;chr&gt;</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
