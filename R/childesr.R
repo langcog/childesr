@@ -61,7 +61,7 @@ resolve_connection <- function(connection, db_version = NULL, db_args = NULL) {
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' con <- connect_to_childes(db_version = "current", db_args = NULL)
 #' DBI::dbDisconnect(con)
 #' }
@@ -104,7 +104,7 @@ get_table <- function(connection, name) {
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' get_collections()
 #' }
 get_collections <- function(connection = NULL, db_version = "current",
@@ -132,7 +132,7 @@ get_collections <- function(connection = NULL, db_version = "current",
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' get_corpora()
 #' }
 get_corpora <- function(connection = NULL, db_version = "current",
@@ -164,7 +164,7 @@ get_corpora <- function(connection = NULL, db_version = "current",
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' get_transcripts()
 #' }
 get_transcripts <- function(collection = NULL, corpus = NULL,
@@ -212,7 +212,7 @@ get_transcripts <- function(collection = NULL, corpus = NULL,
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' get_participants()
 #' }
 get_participants <- function(collection = NULL, corpus = NULL,
@@ -297,7 +297,7 @@ get_participants <- function(collection = NULL, corpus = NULL,
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' get_speaker_statistics()
 #' }
 get_speaker_statistics <- function(collection = NULL, corpus = NULL,
@@ -477,7 +477,7 @@ get_content <- function(content_type, collection = NULL, language = NULL,
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' get_tokens(token = "dog")
 #' }
 get_tokens <- function(collection = NULL, language = NULL, corpus = NULL,
@@ -532,7 +532,7 @@ get_tokens <- function(collection = NULL, language = NULL, corpus = NULL,
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' get_types()
 #' }
 get_types <- function(collection = NULL, language = NULL, corpus = NULL,
@@ -571,7 +571,7 @@ get_types <- function(collection = NULL, language = NULL, corpus = NULL,
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' get_utterances(target_child = "Shem")
 #' }
 get_utterances <- function(collection = NULL, language = NULL, corpus = NULL,
@@ -611,7 +611,7 @@ get_utterances <- function(collection = NULL, language = NULL, corpus = NULL,
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' get_contexts(target_child = "Shem", token = "dog")
 #' }
 get_contexts <- function(collection = NULL, language = NULL, corpus = NULL,
@@ -682,7 +682,7 @@ get_contexts <- function(collection = NULL, language = NULL, corpus = NULL,
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' get_database_version()
 #' }
 get_database_version <- function(connection = NULL, db_version = "current",

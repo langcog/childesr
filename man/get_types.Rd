@@ -45,7 +45,7 @@ A `tbl` of Type data, filtered down by supplied arguments. If
 Get types
 }
 \examples{
-\dontrun{
+\donttest{
 get_types()
 }
 }

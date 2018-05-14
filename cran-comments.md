@@ -13,7 +13,4 @@ Maintainer: ‘Mika Braginsky <mika.br@gmail.com>’
 
 New submission
 
-Possibly mis-spelled words in DESCRIPTION:
-  CHILDES (3:22, 4:38)
-
-This is a new package. CHILDES is not a spelling error.
+This is a new package.

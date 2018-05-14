@@ -21,7 +21,7 @@ A `tbl` of Corpus data. If `connection` is supplied, the result
 Get corpora
 }
 \examples{
-\dontrun{
+\donttest{
 get_corpora()
 }
 }

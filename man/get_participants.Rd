@@ -39,7 +39,7 @@ A `tbl` of Participant data, filtered down by supplied arguments. If
 Get participants
 }
 \examples{
-\dontrun{
+\donttest{
 get_participants()
 }
 }

@@ -21,7 +21,7 @@ The database version as a string
 Get database version
 }
 \examples{
-\dontrun{
+\donttest{
 get_database_version()
 }
 }

@@ -42,7 +42,7 @@ A `tbl` of Utterance data, filtered down by supplied arguments. If
 Get utterances
 }
 \examples{
-\dontrun{
+\donttest{
 get_utterances(target_child = "Shem")
 }
 }

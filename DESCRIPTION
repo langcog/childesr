@@ -1,8 +1,8 @@
 Package: childesr
 Type: Package
-Title: Accessing the CHILDES Database
-Description: Tools for connecting to CHILDES, an open repository for
-    transcripts of parent-child interaction.
+Title: Accessing the 'CHILDES' Database
+Description: Tools for connecting to 'CHILDES', an open repository for
+    transcripts of parent-child interaction. <http://childes-db.stanford.edu>.
 Version: 0.1.0
 Authors@R: c(
     person("Mika", "Braginsky", email = "mika.br@gmail.com", role = c("aut", "cre")),

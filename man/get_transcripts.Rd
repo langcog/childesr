@@ -29,7 +29,7 @@ A `tbl` of Transcript data, filtered down by supplied arguments. If
 Get transcripts
 }
 \examples{
-\dontrun{
+\donttest{
 get_transcripts()
 }
 }

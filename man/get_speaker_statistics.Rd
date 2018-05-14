@@ -39,7 +39,7 @@ A `tbl` of Speaker statistics, filtered down by supplied arguments.
 Get speaker statistics
 }
 \examples{
-\dontrun{
+\donttest{
 get_speaker_statistics()
 }
 }

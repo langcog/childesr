@@ -18,7 +18,7 @@ con A DBIConnection object for the CHILDES database
 Connect to CHILDES
 }
 \examples{
-\dontrun{
+\donttest{
 con <- connect_to_childes(db_version = "current", db_args = NULL)
 DBI::dbDisconnect(con)
 }
