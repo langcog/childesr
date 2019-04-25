@@ -5,9 +5,10 @@
 \title{Get tokens}
 \usage{
 get_tokens(collection = NULL, language = NULL, corpus = NULL,
-  target_child = NULL, role = NULL, role_exclude = NULL, age = NULL,
-  sex = NULL, token, stem = NULL, part_of_speech = NULL, replace = TRUE,
-  connection = NULL, db_version = "current", db_args = NULL)
+  target_child = NULL, role = NULL, role_exclude = NULL,
+  age = NULL, sex = NULL, token, stem = NULL,
+  part_of_speech = NULL, replace = TRUE, connection = NULL,
+  db_version = "current", db_args = NULL)
 }
 \arguments{
 \item{collection}{A character vector of one or more names of collections}

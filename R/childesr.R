@@ -237,7 +237,9 @@ get_participants <- function(collection = NULL, corpus = NULL,
     if (length(age) == 1) {
       participants %<>% dplyr::filter(max_age >= days & min_age <= days)
     } else if (length(age) == 2) {
-      participants %<>% dplyr::filter(max_age >= days[1] | min_age <= days[2])
+      days_1 <- days[1]
+      days_2 <- days[2]
+      participants %<>% dplyr::filter(max_age >= days_1 | min_age <= days_2)
     } else {
       stop("`age` argument must be of length 1 or 2")
     }

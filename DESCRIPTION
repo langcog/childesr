@@ -4,7 +4,7 @@ Title: Accessing the 'CHILDES' Database
 Description: Tools for connecting to 'CHILDES', an open repository for
     transcripts of parent-child interaction. For more information on the
     underlying data, see <http://childes-db.stanford.edu>.
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: c(
     person("Mika", "Braginsky", email = "mika.br@gmail.com", role = c("aut", "cre")),
     person("Alessandro", "Sanchez", email = "amsan7@gmail.com", role = c("aut", "ctb")),
@@ -30,5 +30,5 @@ Suggests:
     knitr,
     rmarkdown,
     curl
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.1
 VignetteBuilder: knitr

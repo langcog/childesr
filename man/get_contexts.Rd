@@ -6,8 +6,9 @@
 \usage{
 get_contexts(collection = NULL, language = NULL, corpus = NULL,
   role = NULL, role_exclude = NULL, age = NULL, sex = NULL,
-  target_child = NULL, token, window = c(0, 0), remove_duplicates = TRUE,
-  connection = NULL, db_version = "current", db_args = NULL)
+  target_child = NULL, token, window = c(0, 0),
+  remove_duplicates = TRUE, connection = NULL,
+  db_version = "current", db_args = NULL)
 }
 \arguments{
 \item{collection}{A character vector of one or more names of collections}

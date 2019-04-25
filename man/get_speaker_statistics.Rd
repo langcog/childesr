@@ -5,8 +5,9 @@
 \title{Get speaker statistics}
 \usage{
 get_speaker_statistics(collection = NULL, corpus = NULL,
-  target_child = NULL, role = NULL, role_exclude = NULL, age = NULL,
-  sex = NULL, connection = NULL, db_version = "current", db_args = NULL)
+  target_child = NULL, role = NULL, role_exclude = NULL,
+  age = NULL, sex = NULL, connection = NULL,
+  db_version = "current", db_args = NULL)
 }
 \arguments{
 \item{collection}{A character vector of one or more names of collections}

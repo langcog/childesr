@@ -4,8 +4,9 @@
 \alias{get_transcripts}
 \title{Get transcripts}
 \usage{
-get_transcripts(collection = NULL, corpus = NULL, target_child = NULL,
-  connection = NULL, db_version = "current", db_args = NULL)
+get_transcripts(collection = NULL, corpus = NULL,
+  target_child = NULL, connection = NULL, db_version = "current",
+  db_args = NULL)
 }
 \arguments{
 \item{collection}{A character vector of one or more names of collections}
