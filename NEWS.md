@@ -1,0 +1,1 @@
+- compatibility with dbplyr 1.4.0
