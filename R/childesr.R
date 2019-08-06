@@ -658,10 +658,10 @@ get_contexts <- function(collection = NULL, language = NULL, corpus = NULL,
   contexts <- purrr::map2_df(utterance_orders$transcript_id,
                              utterance_orders$utterance_order,
                              function(tid, index) {
+    start <- index - window[1]
+    end <- index + window[2]
     utterances %>%
-      dplyr::filter(transcript_id == tid,
-                    utterance_order >= (index - window[1]),
-                    utterance_order <= (index + window[2])) %>%
+      dplyr::filter(transcript_id == tid, utterance_order >= start, utterance_order <= end) %>%
       dplyr::collect()
   })
 
