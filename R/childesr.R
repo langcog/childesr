@@ -329,13 +329,14 @@ get_speaker_statistics <- function(collection = NULL, corpus = NULL,
     speaker_statistics %<>% dplyr::filter(target_child_id %in% corpus_filter)
   }
 
-
   if (!is.null(age)) {
     if (!(length(age) %in% 1:2)) stop("`age` argument must be of length 1 or 2")
     days <- age * avg_month
     if (length(age) == 1) days <- c(days, days + avg_month)
-    speaker_statistics %<>% dplyr::filter(target_child_age >= days[1],
-                                          target_child_age <= days[2])
+    days_1 <- days[1]
+    days_2 <- days[2]
+    speaker_statistics %<>% dplyr::filter(target_child_age >= days_1,
+                                          target_child_age <= days_2)
   }
 
   if (!is.null(sex)) {
@@ -437,8 +438,10 @@ get_content <- function(content_type, collection = NULL, language = NULL,
     if (!(length(age) %in% 1:2)) stop("`age` argument must be of length 1 or 2")
     days <- age * avg_month
     if (length(age) == 1) days <- c(days, days + avg_month)
-    content %<>% dplyr::filter(target_child_age >= days[1],
-                               target_child_age <= days[2])
+    days_1 <- days[1]
+    days_2 <- days[2]
+    content %<>% dplyr::filter(target_child_age >= days_1,
+                               target_child_age <= days_2)
   }
 
   if (!is.null(sex)) {
