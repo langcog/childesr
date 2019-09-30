@@ -20,13 +20,13 @@ translate_version <- function(db_version, db_args, db_info) {
     if (db_version == "current") {
       db_to_use <- db_info[["current"]]
       message("Using current database version: '", db_to_use, "'.")
-      return("childesdb")
+      return(db_to_use)
 
     # supported version
     } else if (db_version %in% db_info[["supported"]]) {
       db_to_use <- db_version
       message("Using supported database version: '", db_to_use, "'.")
-      return("childesdb")
+      return(db_to_use)
 
     # historical version
     } else if (db_version %in% db_info[["historical"]]) {
@@ -53,6 +53,20 @@ resolve_connection <- function(connection, db_version = NULL, db_args = NULL) {
   else connection
 }
 
+#' Get information on database connection options
+#'
+#' @return List of database info: host name, current version, supported
+#'   versions, historical versions, username, password
+#' @export
+#'
+#' @examples
+#' \donttest{
+#' get_db_info()
+#' }
+get_db_info <- function() {
+  jsonlite::fromJSON("https://childes-db.stanford.edu/childes-db.json")
+}
+
 #' Connect to CHILDES
 #'
 #' @param db_version String of the name of database version to use
@@ -67,9 +81,7 @@ resolve_connection <- function(connection, db_version = NULL, db_args = NULL) {
 #' }
 connect_to_childes <- function(db_version = "current", db_args = NULL) {
 
-  db_info <- jsonlite::fromJSON(
-    "https://childes-db.stanford.edu/childes-db.json"
-  )
+  db_info <- get_db_info()
 
   if (is.null(db_args)) db_args <- db_info
 
