@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">childesr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
       </span>
     </div>
 
@@ -85,7 +85,7 @@
       <h1>Accessing <code>childes-db</code>
 </h1>
             
-            <h4 class="date">2019-09-30</h4>
+            <h4 class="date">2019-10-16</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/langcog/childesr/blob/master/vignettes/access_childes_db.Rmd"><code>vignettes/access_childes_db.Rmd</code></a></small>
       <div class="hidden name"><code>access_childes_db.Rmd</code></div>
@@ -107,7 +107,7 @@
 <li><code><a href="../reference/get_utterances.html">get_utterances()</a></code></li>
 <li><code><a href="../reference/get_speaker_statistics.html">get_speaker_statistics()</a></code></li>
 </ul>
-<p><strong>Technical note 1</strong>: You do not have to explicitly establish a connection to the childes-db since the <code>childesr</code> functions will manage these connections. But if you would like to establish your own connection, you can do so with <code><a href="../reference/connect_to_childes.html">connect_to_childes()</a></code> and pass it as an argument to any of the <code>get_</code> functions.</p>
+<p><strong>Technical note 1</strong>: You do not have to explicitly establish a connection to the childes-db since the <code>childesr</code> functions will manage these connections. But if you would like to establish your own connection, you can do so with <code><a href="../reference/connect_to_childes.html">connect_to_childes()</a></code> and pass it as an argument to any of the <code>get_</code> functions. If you do so, make sure to disconnect the connections you make by using <code><a href="https://rdrr.io/pkg/DBI/man/dbDisconnect.html">DBI::dbDisconnect()</a></code>, <code><a href="../reference/clear_connections.html">childesr::clear_connections()</a></code>, or restarting your R session.</p>
 <p><strong>Technical note 2</strong>: We have tried to optimize the time it takes to get data from the database. But if you try to query and get all of the tokens, it will take a long time.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co"># load the library</span></a>
 <a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(childesr)</a></code></pre></div>
@@ -117,9 +117,8 @@
 <a href="#get-transcripts" class="anchor"></a>Get transcripts</h2>
 <p>The <code>get_transcripts</code> function returns high-level information about the transcripts that are available in the database. You can filter your query to get the transcripts for a specific collection, corpus, or child.</p>
 <p>For example, you can run <code>get_transcripts</code> without any arguments to return all of the transcripts in the database.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">d_transcripts &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_transcripts.html">get_transcripts</a></span>()</a></code></pre></div>
-<pre><code>## Using current database version: '2018.1'.</code></pre>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(d_transcripts)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">d_transcripts &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_transcripts.html">get_transcripts</a></span>()</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(d_transcripts)</a></code></pre></div>
 <pre><code>## # A tibble: 6 x 13
 ##   transcript_id language date  filename corpus_id target_child_id
 ##           &lt;int&gt; &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;        &lt;int&gt;           &lt;int&gt;
@@ -133,9 +132,8 @@
 ## #   target_child_name &lt;chr&gt;, target_child_sex &lt;chr&gt;, collection_id &lt;int&gt;,
 ## #   collection_name &lt;chr&gt;, pid &lt;chr&gt;, corpus_name &lt;chr&gt;</code></pre>
 <p>If you only want information about a specific collection, such as the English-American transcripts, then you can specify this in the collection argument.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">d_eng_na &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_transcripts.html">get_transcripts</a></span>(<span class="dt">collection =</span> <span class="st">"Eng-NA"</span>)</a></code></pre></div>
-<pre><code>## Using current database version: '2018.1'.</code></pre>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(d_eng_na)</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">d_eng_na &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_transcripts.html">get_transcripts</a></span>(<span class="dt">collection =</span> <span class="st">"Eng-NA"</span>)</a>
+<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(d_eng_na)</a></code></pre></div>
 <pre><code>## # A tibble: 6 x 13
 ##   transcript_id language date  filename corpus_id target_child_id
 ##           &lt;int&gt; &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;        &lt;int&gt;           &lt;int&gt;
@@ -149,24 +147,21 @@
 ## #   target_child_name &lt;chr&gt;, target_child_sex &lt;chr&gt;, collection_id &lt;int&gt;,
 ## #   collection_name &lt;chr&gt;, pid &lt;chr&gt;, corpus_name &lt;chr&gt;</code></pre>
 <p>If you know the corpus that you want to analyze, then you can specify this in the corpus argument. The following function call will return information about all of the transcripts in the Brown corpus.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="co"># returns all transcripts in the brown corpus</span></a>
-<a class="sourceLine" id="cb10-2" data-line-number="2">d_brown_transcripts &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_transcripts.html">get_transcripts</a></span>(<span class="dt">corpus =</span> <span class="st">"Brown"</span>)</a></code></pre></div>
-<pre><code>## Using current database version: '2018.1'.</code></pre>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="co"># print the number of rows</span></a>
-<a class="sourceLine" id="cb12-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(d_brown_transcripts)</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="co"># returns all transcripts in the brown corpus</span></a>
+<a class="sourceLine" id="cb6-2" data-line-number="2">d_brown_transcripts &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_transcripts.html">get_transcripts</a></span>(<span class="dt">corpus =</span> <span class="st">"Brown"</span>)</a>
+<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="co"># print the number of rows</span></a>
+<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="kw"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(d_brown_transcripts)</a></code></pre></div>
 <pre><code>## [1] 214</code></pre>
 <p>If you want more than one corpus, then you can pass a multiple corpus names. You can also pass more than one name to the collections and child arguments.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1">d_many_corpora &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_transcripts.html">get_transcripts</a></span>(<span class="dt">corpus =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Brown"</span>, <span class="st">"Clark"</span>))</a></code></pre></div>
-<pre><code>## Using current database version: '2018.1'.</code></pre>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="co"># print the number of rows</span></a>
-<a class="sourceLine" id="cb16-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(d_many_corpora)</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">d_many_corpora &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_transcripts.html">get_transcripts</a></span>(<span class="dt">corpus =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Brown"</span>, <span class="st">"Clark"</span>))</a>
+<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="co"># print the number of rows</span></a>
+<a class="sourceLine" id="cb8-3" data-line-number="3"><span class="kw"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(d_many_corpora)</a></code></pre></div>
 <pre><code>## [1] 261</code></pre>
 <p>If you want transcript information about a specific child from a corpus, then you pass their name to the child argument. <em>Note</em> that the following function call will not return any of the transcripts from the Brown corpus because the child Shem is not present in that corpus.</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1">d_shem &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_transcripts.html">get_transcripts</a></span>(<span class="dt">corpus =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Brown"</span>, <span class="st">"Clark"</span>),</a>
-<a class="sourceLine" id="cb18-2" data-line-number="2">                          <span class="dt">target_child =</span> <span class="st">"Shem"</span>)</a></code></pre></div>
-<pre><code>## Using current database version: '2018.1'.</code></pre>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1"><span class="co"># print the number of rows</span></a>
-<a class="sourceLine" id="cb20-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(d_shem)</a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">d_shem &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_transcripts.html">get_transcripts</a></span>(<span class="dt">corpus =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Brown"</span>, <span class="st">"Clark"</span>),</a>
+<a class="sourceLine" id="cb10-2" data-line-number="2">                          <span class="dt">target_child =</span> <span class="st">"Shem"</span>)</a>
+<a class="sourceLine" id="cb10-3" data-line-number="3"><span class="co"># print the number of rows</span></a>
+<a class="sourceLine" id="cb10-4" data-line-number="4"><span class="kw"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(d_shem)</a></code></pre></div>
 <pre><code>## [1] 47</code></pre>
 </div>
 <div id="get-participants" class="section level2">
@@ -182,9 +177,8 @@
 <li>oldest age of transcript</li>
 </ul>
 <p>Again, if you run the function with no arguments, then you get all the background information for all speakers in the database.</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1">d_participants &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_participants.html">get_participants</a></span>()</a></code></pre></div>
-<pre><code>## Using current database version: '2018.1'.</code></pre>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(d_participants)</a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">d_participants &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_participants.html">get_participants</a></span>()</a>
+<a class="sourceLine" id="cb12-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(d_participants)</a></code></pre></div>
 <pre><code>## # A tibble: 6 x 18
 ##      id code  name  role  language group sex   ses   education custom
 ##   &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt; 
@@ -198,9 +192,8 @@
 ## #   target_child_id &lt;int&gt;, collection_id &lt;int&gt;, collection_name &lt;chr&gt;,
 ## #   corpus_name &lt;chr&gt;, target_child_name &lt;chr&gt;</code></pre>
 <p>The participants function introduces three new arguments: role, age, and sex. The role argument allows you to get information about a specific kind of speaker, such as the “target_child.”</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1">d_target_child &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_participants.html">get_participants</a></span>(<span class="dt">role =</span> <span class="st">"target_child"</span>)</a></code></pre></div>
-<pre><code>## Using current database version: '2018.1'.</code></pre>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(d_target_child)</a></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1">d_target_child &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_participants.html">get_participants</a></span>(<span class="dt">role =</span> <span class="st">"target_child"</span>)</a>
+<a class="sourceLine" id="cb14-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(d_target_child)</a></code></pre></div>
 <pre><code>## # A tibble: 6 x 18
 ##      id code  name  role  language group sex   ses   education custom
 ##   &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt; 
@@ -219,9 +212,8 @@
 <li>Pass a range of ages to get information about all participants who have transcript within a certain age range.</li>
 </ol>
 <p>For example, you can get the participant information for all of the children who had transcripts between the ages of 24 and 36 months.</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" data-line-number="1">d_age_range &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_participants.html">get_participants</a></span>(<span class="dt">age =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">24</span>, <span class="dv">36</span>))</a></code></pre></div>
-<pre><code>## Using current database version: '2018.1'.</code></pre>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(d_age_range)</a></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1">d_age_range &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_participants.html">get_participants</a></span>(<span class="dt">age =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">24</span>, <span class="dv">36</span>))</a>
+<a class="sourceLine" id="cb16-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(d_age_range)</a></code></pre></div>
 <pre><code>## # A tibble: 6 x 18
 ##      id code  name  role  language group sex   ses   education custom
 ##   &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt; 
@@ -240,14 +232,13 @@
 <a href="#get-tokens" class="anchor"></a>Get tokens</h2>
 <p>The <code>get_tokens</code> function returns a table with a row for each token based on a set of filtering criteria. The token argument allows you to pass a vector of one or more tokens that you want to analyze.</p>
 <p>For example, if you wanted to get all of the production data for a specific token(s), then you could run the following call to get all instances of “dog” and “ball” for Adam in the Brown corpus.</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" data-line-number="1">d_adam_prod &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_tokens.html">get_tokens</a></span>(<span class="dt">corpus =</span> <span class="st">"Brown"</span>,</a>
-<a class="sourceLine" id="cb34-2" data-line-number="2">                          <span class="dt">role =</span> <span class="st">"target_child"</span>,</a>
-<a class="sourceLine" id="cb34-3" data-line-number="3">                          <span class="dt">target_child =</span> <span class="st">"Adam"</span>,</a>
-<a class="sourceLine" id="cb34-4" data-line-number="4">                          <span class="dt">token =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"dog"</span>, <span class="st">"ball"</span>))</a></code></pre></div>
-<pre><code>## Using current database version: '2018.1'.</code></pre>
-<pre><code>## Getting data from 1 child in 1 corpus ...</code></pre>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" data-line-number="1"><span class="co"># view the structure of the data</span></a>
-<a class="sourceLine" id="cb37-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/utils/str.html">str</a></span>(d_adam_prod)</a></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1">d_adam_prod &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_tokens.html">get_tokens</a></span>(<span class="dt">corpus =</span> <span class="st">"Brown"</span>,</a>
+<a class="sourceLine" id="cb18-2" data-line-number="2">                          <span class="dt">role =</span> <span class="st">"target_child"</span>,</a>
+<a class="sourceLine" id="cb18-3" data-line-number="3">                          <span class="dt">target_child =</span> <span class="st">"Adam"</span>,</a>
+<a class="sourceLine" id="cb18-4" data-line-number="4">                          <span class="dt">token =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"dog"</span>, <span class="st">"ball"</span>))</a>
+<a class="sourceLine" id="cb18-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb18-6" data-line-number="6"><span class="co"># view the structure of the data</span></a>
+<a class="sourceLine" id="cb18-7" data-line-number="7"><span class="kw"><a href="https://rdrr.io/r/utils/str.html">str</a></span>(d_adam_prod)</a></code></pre></div>
 <pre><code>## Classes 'tbl_df', 'tbl' and 'data.frame':    265 obs. of  26 variables:
 ##  $ id               : int  3816766 3816797 3816850 3816998 3817149 3817469 3817520 3818128 3819292 3821303 ...
 ##  $ gloss            : chr  "ball" "ball" "ball" "ball" ...
@@ -275,8 +266,8 @@
 ##  $ language         : chr  "eng" "eng" "eng" "eng" ...
 ##  $ corpus_name      : chr  "Brown" "Brown" "Brown" "Brown" ...
 ##  $ clitic           : chr  "" "" "" "" ...</code></pre>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" data-line-number="1"><span class="co"># print the unique tokens</span></a>
-<a class="sourceLine" id="cb39-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>(d_adam_prod<span class="op">$</span>gloss)</a></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1"><span class="co"># print the unique tokens</span></a>
+<a class="sourceLine" id="cb20-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>(d_adam_prod<span class="op">$</span>gloss)</a></code></pre></div>
 <pre><code>## [1] "ball" "dog"</code></pre>
 </div>
 <div id="get-types" class="section level2">
@@ -284,26 +275,24 @@
 <a href="#get-types" class="anchor"></a>Get types</h2>
 <p>The <code><a href="../reference/get_types.html">get_types()</a></code> function works like the <code><a href="../reference/get_tokens.html">get_tokens()</a></code> function, returning a table with a row for each type based on set of filtering criteria. The type argument allows you to pass a vector of one or more types that you want to analyze. The main difference is that you now have a single row for each type (i.e., a concept) and a variable <code>count</code> that tracks the number of times that type appeared in a particular transcript.</p>
 <p>For example, if you wanted to get all of the production data for a specific type(s), then you could run the following call to get counts of “dog” and “ball” for all of Adam’s transcripts in the Brown corpus.</p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" data-line-number="1">d_adam_types &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_types.html">get_types</a></span>(<span class="dt">corpus =</span> <span class="st">"Brown"</span>,</a>
-<a class="sourceLine" id="cb41-2" data-line-number="2">                          <span class="dt">target_child =</span> <span class="st">"Adam"</span>,</a>
-<a class="sourceLine" id="cb41-3" data-line-number="3">                          <span class="dt">role =</span> <span class="st">"target_child"</span>,</a>
-<a class="sourceLine" id="cb41-4" data-line-number="4">                          <span class="dt">type =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"dog"</span>, <span class="st">"ball"</span>))</a></code></pre></div>
-<pre><code>## Using current database version: '2018.1'.</code></pre>
-<pre><code>## Getting data from 1 child in 1 corpus ...</code></pre>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb44-1" data-line-number="1"><span class="co"># print the number of times ball appears in the first transcript</span></a>
-<a class="sourceLine" id="cb44-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(d_adam_types<span class="op">$</span>gloss[<span class="dv">1</span>], d_adam_types<span class="op">$</span>count[<span class="dv">1</span>])</a></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1">d_adam_types &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_types.html">get_types</a></span>(<span class="dt">corpus =</span> <span class="st">"Brown"</span>,</a>
+<a class="sourceLine" id="cb22-2" data-line-number="2">                          <span class="dt">target_child =</span> <span class="st">"Adam"</span>,</a>
+<a class="sourceLine" id="cb22-3" data-line-number="3">                          <span class="dt">role =</span> <span class="st">"target_child"</span>,</a>
+<a class="sourceLine" id="cb22-4" data-line-number="4">                          <span class="dt">type =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"dog"</span>, <span class="st">"ball"</span>))</a>
+<a class="sourceLine" id="cb22-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb22-6" data-line-number="6"><span class="co"># print the number of times ball appears in the first transcript</span></a>
+<a class="sourceLine" id="cb22-7" data-line-number="7"><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(d_adam_types<span class="op">$</span>gloss[<span class="dv">1</span>], d_adam_types<span class="op">$</span>count[<span class="dv">1</span>])</a></code></pre></div>
 <pre><code>## [1] "ball" "3"</code></pre>
 </div>
 <div id="get-utterances" class="section level2">
 <h2 class="hasAnchor">
 <a href="#get-utterances" class="anchor"></a>Get utterances</h2>
 <p>The <code>get_utterances</code> function returns a table with a row for each utterance based on user-defined filtering criteria. For example, the following function will get you all of the utterances in the Brown Corpus for the child Adam.</p>
-<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb46-1" data-line-number="1">d_adam_utts &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_utterances.html">get_utterances</a></span>(<span class="dt">corpus =</span> <span class="st">"Brown"</span>,</a>
-<a class="sourceLine" id="cb46-2" data-line-number="2">                              <span class="dt">target_child =</span> <span class="st">"Adam"</span>)</a></code></pre></div>
-<pre><code>## Using current database version: '2018.1'.</code></pre>
-<pre><code>## Getting data from 1 child in 1 corpus ...</code></pre>
-<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb49-1" data-line-number="1"><span class="co"># view the structure of the data</span></a>
-<a class="sourceLine" id="cb49-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/utils/str.html">str</a></span>(d_adam_utts)</a></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1">d_adam_utts &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_utterances.html">get_utterances</a></span>(<span class="dt">corpus =</span> <span class="st">"Brown"</span>,</a>
+<a class="sourceLine" id="cb24-2" data-line-number="2">                              <span class="dt">target_child =</span> <span class="st">"Adam"</span>)</a>
+<a class="sourceLine" id="cb24-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb24-4" data-line-number="4"><span class="co"># view the structure of the data</span></a>
+<a class="sourceLine" id="cb24-5" data-line-number="5"><span class="kw"><a href="https://rdrr.io/r/utils/str.html">str</a></span>(d_adam_utts)</a></code></pre></div>
 <pre><code>## Classes 'tbl_df', 'tbl' and 'data.frame':    73431 obs. of  25 variables:
 ##  $ id               : int  964592 964598 964606 964617 964627 964633 964643 964649 964652 964657 ...
 ##  $ speaker_id       : int  2949 2949 2953 2949 2949 2949 2949 2953 2949 2953 ...
@@ -330,8 +319,8 @@
 ##  $ num_morphemes    : int  3 2 2 2 2 2 1 1 2 4 ...
 ##  $ language         : chr  "eng" "eng" "eng" "eng" ...
 ##  $ corpus_name      : chr  "Brown" "Brown" "Brown" "Brown" ...</code></pre>
-<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb51-1" data-line-number="1"><span class="co"># print the first five utterances</span></a>
-<a class="sourceLine" id="cb51-2" data-line-number="2">d_adam_utts<span class="op">$</span>gloss[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>]</a></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1"><span class="co"># print the first five utterances</span></a>
+<a class="sourceLine" id="cb26-2" data-line-number="2">d_adam_utts<span class="op">$</span>gloss[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>]</a></code></pre></div>
 <pre><code>## [1] "play checkers" "big drum"      "big drum"      "big drum"     
 ## [5] "big drum"</code></pre>
 </div>
@@ -348,12 +337,12 @@
 <li>mean length of utterances in morphemes (<code>mlu_m</code>)</li>
 </ul>
 <p>For example, if we wanted to get the summary statistics for Adam’s production data, we could run the following call.</p>
-<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb53-1" data-line-number="1">d_adam_stats &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_speaker_statistics.html">get_speaker_statistics</a></span>(<span class="dt">corpus =</span> <span class="st">"Brown"</span>,</a>
-<a class="sourceLine" id="cb53-2" data-line-number="2">                                       <span class="dt">target_child =</span> <span class="st">"Adam"</span>,</a>
-<a class="sourceLine" id="cb53-3" data-line-number="3">                                       <span class="dt">role =</span> <span class="st">"target_child"</span>)</a></code></pre></div>
-<pre><code>## Using current database version: '2018.1'.</code></pre>
-<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb55-1" data-line-number="1"><span class="co"># get the average mlu across all Adam's transcripts</span></a>
-<a class="sourceLine" id="cb55-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(d_adam_stats<span class="op">$</span>mlu_w)</a></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1">d_adam_stats &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_speaker_statistics.html">get_speaker_statistics</a></span>(<span class="dt">corpus =</span> <span class="st">"Brown"</span>,</a>
+<a class="sourceLine" id="cb28-2" data-line-number="2">                                       <span class="dt">target_child =</span> <span class="st">"Adam"</span>,</a>
+<a class="sourceLine" id="cb28-3" data-line-number="3">                                       <span class="dt">role =</span> <span class="st">"target_child"</span>)</a>
+<a class="sourceLine" id="cb28-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb28-5" data-line-number="5"><span class="co"># get the average mlu across all Adam's transcripts</span></a>
+<a class="sourceLine" id="cb28-6" data-line-number="6"><span class="kw"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(d_adam_stats<span class="op">$</span>mlu_w)</a></code></pre></div>
 <pre><code>## [1] 3.567691</code></pre>
 </div>
   </div>
