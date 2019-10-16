@@ -100,7 +100,7 @@ connect_to_childes <- function(db_version = "current", db_args = NULL) {
 #'
 #' @inheritParams connect_to_childes
 #'
-#' @return Logical indicating whether a connection was succesfully formed
+#' @return Logical indicating whether a connection was successfully formed
 #' @export
 check_connection <- function(db_version = "current", db_args = NULL) {
   con <- tryCatch(connect_to_childes(db_version, db_args),

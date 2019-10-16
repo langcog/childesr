@@ -12,7 +12,7 @@ check_connection(db_version = "current", db_args = NULL)
 \item{db_args}{List with host, user, and password defined}
 }
 \value{
-Logical indicating whether a connection was succesfully formed
+Logical indicating whether a connection was successfully formed
 }
 \description{
 Check if connecting to childes db is possible
