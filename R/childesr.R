@@ -96,6 +96,32 @@ connect_to_childes <- function(db_version = "current", db_args = NULL) {
   return(con)
 }
 
+#' Check if connecting to childes db is possible
+#'
+#' @inheritParams connect_to_childes
+#'
+#' @return Logical indicating whether a connection was succesfully formed
+#' @export
+check_connection <- function(db_version = "current", db_args = NULL) {
+  con <- tryCatch(connect_to_childes(db_version, db_args),
+                  error = function(e) NULL)
+  if (!is.null(con)) {
+    DBI::dbDisconnect(con)
+    return(TRUE)
+  }
+  return(FALSE)
+}
+
+#' Clear all MySQL connections
+#'
+#' @return
+#' @export
+clear_connections <- function() {
+  cons <- DBI::dbListConnections(RMySQL::MySQL())
+  purrr::walk(cons, DBI::dbDisconnect)
+  message(sprintf("Cleared %s connections", length(cons)))
+}
+
 #' Get table
 #'
 #' @param connection A connection to the CHILDES database

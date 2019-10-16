@@ -9,32 +9,37 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
-  
+
 ## Overview
-  
+
 The `childesr` package allows you to access data in the childes-db from R. This removes the need to write complex SQL queries in order to get the information you want from the database. This vignette shows some examples of how to use the data loading functions and what the resulting data look like.
-  
-There are several different `get_` functions that you can use to extract different types of data from the childes-db: 
-  
+
+There are several different `get_` functions that you can use to extract different types of data from the childes-db:
+
   * `get_transcripts()`
   * `get_participants()`
   * `get_tokens()`
   * `get_types()`
   * `get_utterances()`
   * `get_speaker_statistics()`
-  
-**Technical note 1**: You do not have to explicitly establish a connection to the childes-db since the `childesr` functions will manage these connections. But if you would like to establish your own connection, you can do so with `connect_to_childes()` and pass it as an argument to any of the `get_` functions.
-  
+
+**Technical note 1**: You do not have to explicitly establish a connection to the childes-db since the `childesr` functions will manage these connections. But if you would like to establish your own connection, you can do so with `connect_to_childes()` and pass it as an argument to any of the `get_` functions. If you do so, make sure to disconnect the connections you make by using `DBI::dbDisconnect()`, `childesr::clear_connections()`, or restarting your R session.
+
 **Technical note 2**: We have tried to optimize the time it takes to get data from the database. But if you try to query and get all of the tokens, it will take a long time.
-  
+
 ```{r, warning=FALSE, message=FALSE}
 # load the library
 library(childesr)
 ```
 
+```{r, echo=FALSE, message=FALSE}
+can_connect <- check_connection()
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, eval = can_connect)
+```
+
 ## Get transcripts
 
-The `get_transcripts` function returns high-level information about the transcripts that are available in the database. You can filter your query to get the transcripts for a specific collection, corpus, or child. 
+The `get_transcripts` function returns high-level information about the transcripts that are available in the database. You can filter your query to get the transcripts for a specific collection, corpus, or child.
 
 For example, you can run `get_transcripts` without any arguments to return all of the transcripts in the database.
 
@@ -43,7 +48,7 @@ d_transcripts <- get_transcripts()
 head(d_transcripts)
 ```
 
-If you only want information about a specific collection, such as the English-American transcripts, then you can specify this in the collection argument. 
+If you only want information about a specific collection, such as the English-American transcripts, then you can specify this in the collection argument.
 
 ```{r}
 d_eng_na <- get_transcripts(collection = "Eng-NA")
@@ -174,8 +179,8 @@ The `get_speaker_statistics()` function returns a table with a row for each tran
   * number of morphemes (`num_morphemes`)
   * mean length of utterances in words (`mlu_w`)
   * mean length of utterances in morphemes (`mlu_m`)
-  
-For example, if we wanted to get the summary statistics for Adam's production data, we could run the following call. 
+
+For example, if we wanted to get the summary statistics for Adam's production data, we could run the following call.
 
 ```{r}
 d_adam_stats <- get_speaker_statistics(corpus = "Brown",
