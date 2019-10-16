@@ -1,1 +1,3 @@
-- compatibility with dbplyr 1.4.0
+- enable connections to previous versions of childes-db
+- add function for clearing all database connections
+- don't run code in vignette if unable to connect to childes-db
