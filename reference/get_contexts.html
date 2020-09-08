@@ -10,23 +10,27 @@
 
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -37,7 +41,6 @@
 
 <meta property="og:title" content="Get the utterances surrounding a token(s) — get_contexts" />
 <meta property="og:description" content="Get the utterances surrounding a token(s)" />
-<meta name="twitter:card" content="summary" />
 
 
 
@@ -55,7 +58,7 @@
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -69,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">childesr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2.9001</span>
       </span>
     </div>
 
@@ -102,7 +105,7 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/langcog/childesr">
+  <a href="http://github.com/langcog/childesr/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -121,7 +124,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Get the utterances surrounding a token(s)</h1>
-    <small class="dont-index">Source: <a href='https://github.com/langcog/childesr/blob/master/R/childesr.R'><code>R/childesr.R</code></a></small>
+    <small class="dont-index">Source: <a href='http://github.com/langcog/childesr/blob/master/R/childesr.R'><code>R/childesr.R</code></a></small>
     <div class="hidden name"><code>get_contexts.Rd</code></div>
     </div>
 
@@ -129,11 +132,22 @@
     <p>Get the utterances surrounding a token(s)</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_contexts</span>(<span class='kw'>collection</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>language</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>corpus</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>role</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>role_exclude</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>age</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>sex</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>target_child</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>token</span>, <span class='kw'>window</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>0</span>),
-  <span class='kw'>remove_duplicates</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>connection</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>db_version</span> <span class='kw'>=</span> <span class='st'>"current"</span>, <span class='kw'>db_args</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>get_contexts</span>(
+  collection = <span class='kw'>NULL</span>,
+  language = <span class='kw'>NULL</span>,
+  corpus = <span class='kw'>NULL</span>,
+  role = <span class='kw'>NULL</span>,
+  role_exclude = <span class='kw'>NULL</span>,
+  age = <span class='kw'>NULL</span>,
+  sex = <span class='kw'>NULL</span>,
+  target_child = <span class='kw'>NULL</span>,
+  <span class='kw'>token</span>,
+  window = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>0</span>),
+  remove_duplicates = <span class='fl'>TRUE</span>,
+  connection = <span class='kw'>NULL</span>,
+  db_version = <span class='st'>"current"</span>,
+  db_args = <span class='kw'>NULL</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -160,8 +174,11 @@
     </tr>
     <tr>
       <th>age</th>
-      <td><p>A numeric vector of an age or a min age (inclusive) and max age
-(exclusive) in months</p></td>
+      <td><p>A numeric vector of an single age value or a min age value
+(inclusive) and max age value (exclusive) in months. For a single age
+value, participants are returned for which that age is within their age
+range; for two ages, participants are returned for whose age overlaps with
+the interval between those two ages.</p></td>
     </tr>
     <tr>
       <th>sex</th>
@@ -207,36 +224,37 @@ utterances from the results</p></td>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
-<span class='fu'>get_contexts</span>(<span class='kw'>target_child</span> <span class='kw'>=</span> <span class='st'>"Shem"</span>, <span class='kw'>token</span> <span class='kw'>=</span> <span class='st'>"dog"</span>)</div><div class='output co'>#&gt; <span class='message'>Using current database version: '2018.1'.</span></div><div class='output co'>#&gt; <span class='message'>Getting data from 1 child in 1 corpus ...</span></div><div class='output co'>#&gt; # A tibble: 199 x 25
+<span class='fu'>get_contexts</span>(target_child = <span class='st'>"Shem"</span>, token = <span class='st'>"dog"</span>)
+</div><div class='output co'>#&gt; <span class='message'>Using current database version: '2018.1'.</span></div><div class='output co'>#&gt; <span class='message'>Getting data from 1 child in 1 corpus ...</span></div><div class='output co'>#&gt; <span class='warning'>Warning: `filter_()` is deprecated as of dplyr 0.7.0.</span>
+#&gt; <span class='warning'>Please use `filter()` instead.</span>
+#&gt; <span class='warning'>See vignette('programming') for more help</span>
+#&gt; <span class='warning'><span style='color: #555555;'>This warning is displayed once every 8 hours.</span><span></span>
+#&gt; <span class='warning'></span><span style='color: #555555;'>Call `lifecycle::last_warnings()` to see where this warning was generated.</span><span></span></div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble: 199 x 25</span><span>
 #&gt;    utterance_id speaker_id utterance_order transcript_id corpus_id gloss
-#&gt;           &lt;int&gt;      &lt;int&gt;           &lt;int&gt;         &lt;int&gt;     &lt;int&gt; &lt;chr&gt;
-#&gt;  1       776315       2454              13          2765        29 dog  
-#&gt;  2       776323       2455              14          2765        29 that…
-#&gt;  3       776344       2455              16          2765        29 what…
-#&gt;  4       776378       2455              20          2765        29 is t…
-#&gt;  5       776404       2455              22          2765        29 when…
-#&gt;  6       780058       2455             156          2770        29 this…
-#&gt;  7       780102       2454             160          2770        29 fire…
-#&gt;  8       780590       2455             185          2766        29 now …
-#&gt;  9       780627       2454             187          2766        29 what…
-#&gt; 10       780644       2455             188          2766        29 he w…
-#&gt; # … with 189 more rows, and 19 more variables: num_tokens &lt;int&gt;, stem &lt;chr&gt;,
-#&gt; #   part_of_speech &lt;chr&gt;, speaker_code &lt;chr&gt;, speaker_name &lt;chr&gt;,
-#&gt; #   speaker_role &lt;chr&gt;, target_child_id &lt;int&gt;, target_child_age &lt;dbl&gt;,
-#&gt; #   target_child_name &lt;chr&gt;, target_child_sex &lt;chr&gt;, type &lt;chr&gt;,
-#&gt; #   media_end &lt;dbl&gt;, media_start &lt;dbl&gt;, media_unit &lt;chr&gt;, collection_id &lt;int&gt;,
-#&gt; #   collection_name &lt;chr&gt;, num_morphemes &lt;int&gt;, language &lt;chr&gt;,
-#&gt; #   corpus_name &lt;chr&gt;</div><div class='input'># }
-</div></pre>
+#&gt;           </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span>      </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span>           </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span>         </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>
+#&gt; </span><span style='color: #555555;'> 1</span><span>       </span><span style='text-decoration: underline;'>776</span><span>315       </span><span style='text-decoration: underline;'>2</span><span>454              13          </span><span style='text-decoration: underline;'>2</span><span>765        29 dog  
+#&gt; </span><span style='color: #555555;'> 2</span><span>       </span><span style='text-decoration: underline;'>776</span><span>323       </span><span style='text-decoration: underline;'>2</span><span>455              14          </span><span style='text-decoration: underline;'>2</span><span>765        29 that…
+#&gt; </span><span style='color: #555555;'> 3</span><span>       </span><span style='text-decoration: underline;'>776</span><span>344       </span><span style='text-decoration: underline;'>2</span><span>455              16          </span><span style='text-decoration: underline;'>2</span><span>765        29 what…
+#&gt; </span><span style='color: #555555;'> 4</span><span>       </span><span style='text-decoration: underline;'>776</span><span>378       </span><span style='text-decoration: underline;'>2</span><span>455              20          </span><span style='text-decoration: underline;'>2</span><span>765        29 is t…
+#&gt; </span><span style='color: #555555;'> 5</span><span>       </span><span style='text-decoration: underline;'>776</span><span>404       </span><span style='text-decoration: underline;'>2</span><span>455              22          </span><span style='text-decoration: underline;'>2</span><span>765        29 when…
+#&gt; </span><span style='color: #555555;'> 6</span><span>       </span><span style='text-decoration: underline;'>780</span><span>058       </span><span style='text-decoration: underline;'>2</span><span>455             156          </span><span style='text-decoration: underline;'>2</span><span>770        29 this…
+#&gt; </span><span style='color: #555555;'> 7</span><span>       </span><span style='text-decoration: underline;'>780</span><span>102       </span><span style='text-decoration: underline;'>2</span><span>454             160          </span><span style='text-decoration: underline;'>2</span><span>770        29 fire…
+#&gt; </span><span style='color: #555555;'> 8</span><span>       </span><span style='text-decoration: underline;'>780</span><span>590       </span><span style='text-decoration: underline;'>2</span><span>455             185          </span><span style='text-decoration: underline;'>2</span><span>766        29 now …
+#&gt; </span><span style='color: #555555;'> 9</span><span>       </span><span style='text-decoration: underline;'>780</span><span>627       </span><span style='text-decoration: underline;'>2</span><span>454             187          </span><span style='text-decoration: underline;'>2</span><span>766        29 what…
+#&gt; </span><span style='color: #555555;'>10</span><span>       </span><span style='text-decoration: underline;'>780</span><span>644       </span><span style='text-decoration: underline;'>2</span><span>455             188          </span><span style='text-decoration: underline;'>2</span><span>766        29 he w…
+#&gt; </span><span style='color: #555555;'># … with 189 more rows, and 19 more variables: num_tokens </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span style='color: #555555;'>, stem </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span style='color: #555555;'>,</span><span>
+#&gt; </span><span style='color: #555555;'>#   part_of_speech </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span style='color: #555555;'>, speaker_code </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span style='color: #555555;'>, speaker_name </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span style='color: #555555;'>,</span><span>
+#&gt; </span><span style='color: #555555;'>#   speaker_role </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span style='color: #555555;'>, target_child_id </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span style='color: #555555;'>, target_child_age </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>,</span><span>
+#&gt; </span><span style='color: #555555;'>#   target_child_name </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span style='color: #555555;'>, target_child_sex </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span style='color: #555555;'>, type </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span style='color: #555555;'>,</span><span>
+#&gt; </span><span style='color: #555555;'>#   media_end </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, media_start </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, media_unit </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span style='color: #555555;'>, collection_id </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span style='color: #555555;'>,</span><span>
+#&gt; </span><span style='color: #555555;'>#   collection_name </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span style='color: #555555;'>, num_morphemes </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span style='color: #555555;'>, language </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span style='color: #555555;'>,</span><span>
+#&gt; </span><span style='color: #555555;'>#   corpus_name </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span></div><div class='input'><span class='co'># }</span>
+</div></span></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -247,7 +265,7 @@ utterances from the results</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
 </div>
 
       </footer>
