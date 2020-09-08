@@ -4,8 +4,7 @@
 \alias{get_collections}
 \title{Get collections}
 \usage{
-get_collections(connection = NULL, db_version = "current",
-  db_args = NULL)
+get_collections(connection = NULL, db_version = "current", db_args = NULL)
 }
 \arguments{
 \item{connection}{A connection to the CHILDES database}

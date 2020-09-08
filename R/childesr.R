@@ -114,7 +114,6 @@ check_connection <- function(db_version = "current", db_args = NULL) {
 
 #' Clear all MySQL connections
 #'
-#' @return
 #' @export
 clear_connections <- function() {
   cons <- DBI::dbListConnections(RMySQL::MySQL())
@@ -240,8 +239,11 @@ get_transcripts <- function(collection = NULL, corpus = NULL,
 #' @inheritParams get_transcripts
 #' @param role A character vector of one or more roles to include
 #' @param role_exclude A character vector of one or more roles to exclude
-#' @param age A numeric vector of an age or a min age (inclusive) and max age
-#'   (exclusive) in months
+#' @param age A numeric vector of an single age value or a min age value
+#'   (inclusive) and max age value (exclusive) in months. For a single age
+#'   value, participants are returned for which that age is within their age
+#'   range; for two ages, participants are returned for whose age overlaps with
+#'   the interval between those two ages.
 #' @param sex A character vector of values "male" and/or "female"
 #'
 #' @return A `tbl` of Participant data, filtered down by supplied arguments. If
@@ -277,7 +279,7 @@ get_participants <- function(collection = NULL, corpus = NULL,
     } else if (length(age) == 2) {
       days_1 <- days[1]
       days_2 <- days[2]
-      participants %<>% dplyr::filter(max_age >= days_1 | min_age <= days_2)
+      participants %<>% dplyr::filter((max_age >= days_1 & min_age <= days_2) | (min_age <= days_2 & max_age >= days_1))
     } else {
       stop("`age` argument must be of length 1 or 2")
     }

@@ -4,10 +4,18 @@
 \alias{get_speaker_statistics}
 \title{Get speaker statistics}
 \usage{
-get_speaker_statistics(collection = NULL, corpus = NULL,
-  target_child = NULL, role = NULL, role_exclude = NULL,
-  age = NULL, sex = NULL, connection = NULL,
-  db_version = "current", db_args = NULL)
+get_speaker_statistics(
+  collection = NULL,
+  corpus = NULL,
+  target_child = NULL,
+  role = NULL,
+  role_exclude = NULL,
+  age = NULL,
+  sex = NULL,
+  connection = NULL,
+  db_version = "current",
+  db_args = NULL
+)
 }
 \arguments{
 \item{collection}{A character vector of one or more names of collections}
@@ -20,8 +28,11 @@ get_speaker_statistics(collection = NULL, corpus = NULL,
 
 \item{role_exclude}{A character vector of one or more roles to exclude}
 
-\item{age}{A numeric vector of an age or a min age (inclusive) and max age
-(exclusive) in months}
+\item{age}{A numeric vector of an single age value or a min age value
+(inclusive) and max age value (exclusive) in months. For a single age
+value, participants are returned for which that age is within their age
+range; for two ages, participants are returned for whose age overlaps with
+the interval between those two ages.}
 
 \item{sex}{A character vector of values "male" and/or "female"}
 

@@ -4,8 +4,7 @@
 \alias{get_corpora}
 \title{Get corpora}
 \usage{
-get_corpora(connection = NULL, db_version = "current",
-  db_args = NULL)
+get_corpora(connection = NULL, db_version = "current", db_args = NULL)
 }
 \arguments{
 \item{connection}{A connection to the CHILDES database}
