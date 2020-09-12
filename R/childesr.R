@@ -757,8 +757,10 @@ get_database_version <- function(connection = NULL, db_version = "current",
 #' }
 get_sql_query <- function(sql_query_string, connection = NULL, db_version = "current", db_args=NULL){
   con <- resolve_connection(connection, db_version, db_args)
-  query <- dplyr::tbl(con, dplyr::sql(sql_query_string))
+  returned_sql_query <- dplyr::tbl(con, dplyr::sql(sql_query_string))  %>% dplyr::collect()
+
   if (is.null(connection)) {
     DBI::dbDisconnect(con)
   }
-  return(query)}
+
+  return(returned_sql_query)}
