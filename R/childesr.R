@@ -742,3 +742,24 @@ get_database_version <- function(connection = NULL, db_version = "current",
 
   return(admin$version[1])
 }
+
+#' Run a SQL Query script on the CHILDES database
+#'
+#' @inheritParams connect_to_childes
+#' @param connection A connection to the CHILDES database
+#'
+#' @return The database after calling the supplied SQL query
+#' @export
+#'
+#' @examples
+#' \donttest{
+#' get_sql_query("SELECT * FROM collection")
+#' }
+get_sql_query <- function(sql_query_string, connection = NULL, db_version = "current", db_args=NULL){
+  con <- resolve_connection(connection, db_version, db_args)
+  return_table <- dplyr::tbl(con, dplyr::sql(sql_query_string)) %>% dplyr::collect()
+  if (is.null(connection)) {
+    DBI::dbDisconnect(con)
+  }
+  return(return_table)
+}
