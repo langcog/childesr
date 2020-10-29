@@ -746,6 +746,7 @@ get_database_version <- function(connection = NULL, db_version = "current",
 #' Run a SQL Query script on the CHILDES database
 #'
 #' @inheritParams connect_to_childes
+#' @param sql_query_string A valid sql query string character
 #' @param connection A connection to the CHILDES database
 #'
 #' @return The database after calling the supplied SQL query

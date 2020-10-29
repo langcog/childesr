@@ -22,6 +22,7 @@ There are several different `get_` functions that you can use to extract differe
   * `get_types()`
   * `get_utterances()`
   * `get_speaker_statistics()`
+  * `get_sql_query()`
 
 **Technical note 1**: You do not have to explicitly establish a connection to the childes-db since the `childesr` functions will manage these connections. But if you would like to establish your own connection, you can do so with `connect_to_childes()` and pass it as an argument to any of the `get_` functions. If you do so, make sure to disconnect the connections you make by using `DBI::dbDisconnect()`, `childesr::clear_connections()`, or restarting your R session.
 
@@ -190,3 +191,15 @@ d_adam_stats <- get_speaker_statistics(corpus = "Brown",
 # get the average mlu across all Adam's transcripts
 mean(d_adam_stats$mlu_w)
 ```
+
+### Get SQL Query
+
+The `get_sql_query()` function returns a table from a SQL query run on the specified database. For example, if you wanted to see the top 10 corpora in the `Eng-NA` collection with the highest count of token for "dog", you could run the following call.
+
+```{r}
+d_na_dog <- get_sql_query("SELECT corpus_name, COUNT(id) AS count FROM token WHERE collection_name = 'Eng-NA' AND gloss = 'dog' GROUP BY corpus_name")
+
+head(d_na_dog[order(d_na_dog[, "count"], decreasing = TRUE),,drop=FALSE],10)
+
+```
+
