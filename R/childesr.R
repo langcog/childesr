@@ -239,11 +239,11 @@ get_transcripts <- function(collection = NULL, corpus = NULL,
 #' @inheritParams get_transcripts
 #' @param role A character vector of one or more roles to include
 #' @param role_exclude A character vector of one or more roles to exclude
-#' @param age A numeric vector of an single age value or a min age value
-#'   (inclusive) and max age value (exclusive) in months. For a single age
-#'   value, participants are returned for which that age is within their age
-#'   range; for two ages, participants are returned for whose age overlaps with
-#'   the interval between those two ages.
+#' @param age A numeric vector of an single age value or a min age value and max
+#'   age value (inclusive) in months. For a single age value, participants are
+#'   returned for which that age is within their age range; for two ages,
+#'   participants are returned for whose age overlaps with the interval between
+#'   those two ages.
 #' @param sex A character vector of values "male" and/or "female"
 #'
 #' @return A `tbl` of Participant data, filtered down by supplied arguments. If
@@ -743,3 +743,26 @@ get_database_version <- function(connection = NULL, db_version = "current",
 
   return(admin$version[1])
 }
+
+#' Run a SQL Query script on the CHILDES database
+#'
+#' @inheritParams connect_to_childes
+#' @param sql_query_string A valid sql query string character
+#' @param connection A connection to the CHILDES database
+#'
+#' @return The database after calling the supplied SQL query
+#' @export
+#'
+#' @examples
+#' \donttest{
+#' get_sql_query("SELECT * FROM collection")
+#' }
+get_sql_query <- function(sql_query_string, connection = NULL, db_version = "current", db_args=NULL){
+  con <- resolve_connection(connection, db_version, db_args)
+  returned_sql_query <- dplyr::tbl(con, dplyr::sql(sql_query_string))  %>% dplyr::collect()
+
+  if (is.null(connection)) {
+    DBI::dbDisconnect(con)
+  }
+
+  return(returned_sql_query)}
