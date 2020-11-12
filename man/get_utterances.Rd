@@ -29,11 +29,11 @@ get_utterances(
 
 \item{role_exclude}{A character vector of one or more roles to exclude}
 
-\item{age}{A numeric vector of an single age value or a min age value
-(inclusive) and max age value (exclusive) in months. For a single age
-value, participants are returned for which that age is within their age
-range; for two ages, participants are returned for whose age overlaps with
-the interval between those two ages.}
+\item{age}{A numeric vector of an single age value or a min age value and max
+age value (inclusive) in months. For a single age value, participants are
+returned for which that age is within their age range; for two ages,
+participants are returned for whose age overlaps with the interval between
+those two ages.}
 
 \item{sex}{A character vector of values "male" and/or "female"}
 

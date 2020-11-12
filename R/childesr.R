@@ -279,7 +279,8 @@ get_participants <- function(collection = NULL, corpus = NULL,
     } else if (length(age) == 2) {
       days_1 <- days[1]
       days_2 <- days[2]
-      participants %<>% dplyr::filter((max_age >= days_1 & min_age <= days_2) | (min_age <= days_2 & max_age >= days_1))
+      participants %<>% dplyr::filter((max_age >= days_1 & min_age <= days_2) |
+                                        (min_age <= days_2 & max_age >= days_1))
     } else {
       stop("`age` argument must be of length 1 or 2")
     }
@@ -515,7 +516,8 @@ get_content <- function(content_type, collection = NULL, language = NULL,
 #' @inheritParams connect_to_childes
 #' @inheritParams get_content
 #' @param replace A boolean indicating whether to replace "gloss" with
-#'   "replacement" (i.e. phonologically assimilated form), when available (defaults to \code{TRUE})
+#'   "replacement" (i.e. phonologically assimilated form), when available
+#'   (defaults to \code{TRUE})
 #'
 #' @return A `tbl` of Token data, filtered down by supplied arguments. If
 #'   `connection` is supplied, the result remains a remote query, otherwise it
@@ -705,7 +707,8 @@ get_contexts <- function(collection = NULL, language = NULL, corpus = NULL,
     start <- index - window[1]
     end <- index + window[2]
     utterances %>%
-      dplyr::filter(transcript_id == tid, utterance_order >= start, utterance_order <= end) %>%
+      dplyr::filter(transcript_id == tid, utterance_order >= start,
+                    utterance_order <= end) %>%
       dplyr::collect()
   })
 
@@ -757,12 +760,16 @@ get_database_version <- function(connection = NULL, db_version = "current",
 #' \donttest{
 #' get_sql_query("SELECT * FROM collection")
 #' }
-get_sql_query <- function(sql_query_string, connection = NULL, db_version = "current", db_args=NULL){
-  con <- resolve_connection(connection, db_version, db_args)
-  returned_sql_query <- dplyr::tbl(con, dplyr::sql(sql_query_string))  %>% dplyr::collect()
 
+get_sql_query <- function(sql_query_string, connection = NULL,
+                          db_version = "current", db_args = NULL) {
+  con <- resolve_connection(connection, db_version, db_args)
+
+  returned_sql_query <- dplyr::tbl(con, dplyr::sql(sql_query_string)) %>%
+    dplyr::collect()
   if (is.null(connection)) {
     DBI::dbDisconnect(con)
   }
+  return(returned_sql_query)
+}
 
-  return(returned_sql_query)}
