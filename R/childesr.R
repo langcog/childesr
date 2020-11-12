@@ -442,11 +442,12 @@ get_content <- function(content_type, collection = NULL, language = NULL,
 
   content <- dplyr::tbl(connection, content_type)
 
-  if (content_type %in% c("token", "token_frequency") & !is.null(token) &
+  if (content_type %in% c("token", "token_frequency") && !is.null(token) &&
       !identical("*", token)) {
-    token_filter <- sprintf("gloss %%like%% '%s'", token) %>%
-      paste(collapse = " | ")
-    content %<>% dplyr::filter_(token_filter)
+
+    token_string <- paste0("gloss %like% '", token, "'", collapse = " | ")
+    token_expr <- parse(text = token_string)[[1]]
+    content %<>% dplyr::filter(!!token_expr)
   }
 
   if (!is.null(stem)) {
