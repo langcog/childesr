@@ -199,7 +199,6 @@ The `get_sql_query()` function returns a table from a SQL query run on the speci
 ```{r}
 d_na_dog <- get_sql_query("SELECT corpus_name, COUNT(id) AS count FROM token WHERE collection_name = 'Eng-NA' AND gloss = 'dog' GROUP BY corpus_name")
 
-head(d_na_dog[order(d_na_dog[, "count"], decreasing = TRUE),,drop=FALSE],10)
-
+d_na_dog
 ```
 

@@ -1,6 +1,8 @@
 # childesr 0.2.2
 - fix age filtering in get_participants()
 - add support for SQL Query strings
+- update for compatibility with dbplyr 2.0.0 and dplyr
+
 
 # childesr 0.2.1
 
