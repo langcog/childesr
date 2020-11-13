@@ -31,6 +31,7 @@ There are several different `get_` functions that you can use to extract differe
 ```{r, warning=FALSE, message=FALSE}
 # load the library
 library(childesr)
+library(dplyr)
 ```
 
 ```{r, echo=FALSE, message=FALSE}
@@ -199,6 +200,6 @@ The `get_sql_query()` function returns a table from a SQL query run on the speci
 ```{r}
 d_na_dog <- get_sql_query("SELECT corpus_name, COUNT(id) AS count FROM token WHERE collection_name = 'Eng-NA' AND gloss = 'dog' GROUP BY corpus_name")
 
-d_na_dog
-```
+dplyr::arrange(d_na_dog, desc(count))
 
+```
