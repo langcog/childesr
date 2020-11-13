@@ -722,30 +722,6 @@ get_contexts <- function(collection = NULL, language = NULL, corpus = NULL,
   return(contexts)
 }
 
-#' Get database version
-#'
-#' @inheritParams connect_to_childes
-#' @inheritParams get_table
-#'
-#' @return The database version as a string
-#' @export
-#'
-#' @examples
-#' \donttest{
-#' get_database_version()
-#' }
-get_database_version <- function(connection = NULL, db_version = "current",
-                                 db_args = NULL) {
-
-  con <- resolve_connection(connection, db_version, db_args)
-  admin <- dplyr::tbl(con, "admin") %>% dplyr::collect()
-
-  if (is.null(connection)) {
-    DBI::dbDisconnect(con)
-  }
-
-  return(admin$version[1])
-}
 
 #' Run a SQL Query script on the CHILDES database
 #'
