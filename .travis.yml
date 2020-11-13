@@ -5,4 +5,3 @@ notifications:
     on_success: change
     on_failure: always
   slack: langcog:n48V2GKFt8a0c39qExWBr8ri
-install: travis_wait 30 mvn install
