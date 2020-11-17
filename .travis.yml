@@ -1,5 +1,22 @@
 language: r
 cache: packages
+apt_packages:
+  - libharfbuzz-dev
+  - libfribidi-dev
+r_packages:
+  - devtools
+  - pkgdown
+after_success:
+  - chmod +x ./build_docs.sh
+  - ./build_docs.sh
+deploy:
+  provider: pages
+  skip-cleanup: true
+  github-token: $GITHUB_TOKEN
+  keep-history: true
+  local-dir: docs
+  on:
+    branch: master
 notifications:
   email:
     on_success: change
