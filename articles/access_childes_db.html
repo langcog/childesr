@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">childesr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
       </span>
     </div>
 
@@ -64,7 +64,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="http://github.com/langcog/childesr/">
+  <a href="https://github.com/langcog/childesr/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -79,15 +79,16 @@
 
       
 
-      </header><div class="row">
+      </header><script src="access_childes_db_files/accessible-code-block-0.0.1/empty-anchor.js"></script><link href="access_childes_db_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet">
+<script src="access_childes_db_files/anchor-sections-1.0/anchor-sections.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Accessing <code>childes-db</code>
 </h1>
             
-            <h4 class="date">2020-09-08</h4>
+            <h4 class="date">2020-11-16</h4>
       
-      <small class="dont-index">Source: <a href="http://github.com/langcog/childesr/blob/master/vignettes/access_childes_db.Rmd"><code>vignettes/access_childes_db.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/langcog/childesr/blob/master/vignettes/access_childes_db.Rmd"><code>vignettes/access_childes_db.Rmd</code></a></small>
       <div class="hidden name"><code>access_childes_db.Rmd</code></div>
 
     </div>
@@ -106,13 +107,14 @@
 <li><code><a href="../reference/get_types.html">get_types()</a></code></li>
 <li><code><a href="../reference/get_utterances.html">get_utterances()</a></code></li>
 <li><code><a href="../reference/get_speaker_statistics.html">get_speaker_statistics()</a></code></li>
+<li><code><a href="../reference/get_sql_query.html">get_sql_query()</a></code></li>
 </ul>
 <p><strong>Technical note 1</strong>: You do not have to explicitly establish a connection to the childes-db since the <code>childesr</code> functions will manage these connections. But if you would like to establish your own connection, you can do so with <code><a href="../reference/connect_to_childes.html">connect_to_childes()</a></code> and pass it as an argument to any of the <code>get_</code> functions. If you do so, make sure to disconnect the connections you make by using <code><a href="https://dbi.r-dbi.org/reference/dbDisconnect.html">DBI::dbDisconnect()</a></code>, <code><a href="../reference/clear_connections.html">childesr::clear_connections()</a></code>, or restarting your R session.</p>
 <p><strong>Technical note 2</strong>: We have tried to optimize the time it takes to get data from the database. But if you try to query and get all of the tokens, it will take a long time.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit">
 <span class="co"># load the library</span>
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://github.com/langcog/childesr">childesr</a></span>)
-</pre></div>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/langcog/childesr">childesr</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span></pre></div>
 </div>
 <div id="get-transcripts" class="section level2">
 <h2 class="hasAnchor">
@@ -120,60 +122,55 @@
 <p>The <code>get_transcripts</code> function returns high-level information about the transcripts that are available in the database. You can filter your query to get the transcripts for a specific collection, corpus, or child.</p>
 <p>For example, you can run <code>get_transcripts</code> without any arguments to return all of the transcripts in the database.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="kw">d_transcripts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_transcripts.html">get_transcripts</a></span>()
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="kw">d_transcripts</span>)
-</pre></div>
+<span class="va">d_transcripts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_transcripts.html">get_transcripts</a></span><span class="op">(</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">d_transcripts</span><span class="op">)</span></pre></div>
 <pre><code>## # A tibble: 6 x 13
-##   transcript_id language date  filename corpus_id target_child_id
-##           &lt;int&gt; &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;        &lt;int&gt;           &lt;int&gt;
-## 1             1 spa      1999… Hess/d1…         1              NA
-## 2             2 spa      1999… Hess/d1…         1              NA
-## 3             3 spa      1999… Hess/d1…         1              NA
-## 4             4 spa      1999… Hess/d1…         1              NA
-## 5             5 spa      1999… Hess/d1…         1              NA
-## 6             6 spa      1999… Hess/d1…         1              NA
-## # … with 7 more variables: target_child_age &lt;dbl&gt;, target_child_name &lt;chr&gt;,
-## #   target_child_sex &lt;chr&gt;, collection_id &lt;int&gt;, collection_name &lt;chr&gt;,
-## #   pid &lt;chr&gt;, corpus_name &lt;chr&gt;</code></pre>
+##   transcript_id corpus_name language date  filename target_child_na…
+##           &lt;int&gt; &lt;chr&gt;       &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt;           
+## 1             1 English-Wo… eng      1989… Frogs/E… John            
+## 2             2 English-Wo… eng      1989… Frogs/E… Rachel          
+## 3             3 English-Wo… eng      1989… Frogs/E… Christina       
+## 4             4 English-Wo… eng      &lt;NA&gt;  Frogs/E… Margaret        
+## 5             5 English-Wo… eng      1989… Frogs/E… Erin            
+## 6             6 English-Wo… eng      1989… Frogs/E… Andrew          
+## # … with 7 more variables: target_child_age &lt;dbl&gt;, target_child_sex &lt;chr&gt;,
+## #   collection_name &lt;chr&gt;, pid &lt;chr&gt;, collection_id &lt;int&gt;, corpus_id &lt;int&gt;,
+## #   target_child_id &lt;int&gt;</code></pre>
 <p>If you only want information about a specific collection, such as the English-American transcripts, then you can specify this in the collection argument.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit">
-<span class="kw">d_eng_na</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_transcripts.html">get_transcripts</a></span>(collection = <span class="st">"Eng-NA"</span>)
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="kw">d_eng_na</span>)
-</pre></div>
+<span class="va">d_eng_na</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_transcripts.html">get_transcripts</a></span><span class="op">(</span>collection <span class="op">=</span> <span class="st">"Eng-NA"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">d_eng_na</span><span class="op">)</span></pre></div>
 <pre><code>## # A tibble: 6 x 13
-##   transcript_id language date  filename corpus_id target_child_id
-##           &lt;int&gt; &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;        &lt;int&gt;           &lt;int&gt;
-## 1          2765 eng      1976… Clark/0…        29            2454
-## 2          2766 eng      1976… Clark/0…        29            2454
-## 3          2767 eng      1976… Clark/0…        29            2454
-## 4          2768 eng      1976… Clark/0…        29            2454
-## 5          2769 eng      1976… Clark/0…        29            2454
-## 6          2770 eng      1976… Clark/0…        29            2454
-## # … with 7 more variables: target_child_age &lt;dbl&gt;, target_child_name &lt;chr&gt;,
-## #   target_child_sex &lt;chr&gt;, collection_id &lt;int&gt;, collection_name &lt;chr&gt;,
-## #   pid &lt;chr&gt;, corpus_name &lt;chr&gt;</code></pre>
+##   transcript_id corpus_name language date  filename target_child_na…
+##           &lt;int&gt; &lt;chr&gt;       &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt;           
+## 1          3260 Garvey      eng      &lt;NA&gt;  Eng-NA/… &lt;NA&gt;            
+## 2          3261 Garvey      eng      &lt;NA&gt;  Eng-NA/… &lt;NA&gt;            
+## 3          3262 Garvey      eng      &lt;NA&gt;  Eng-NA/… &lt;NA&gt;            
+## 4          3263 Garvey      eng      &lt;NA&gt;  Eng-NA/… &lt;NA&gt;            
+## 5          3264 Garvey      eng      &lt;NA&gt;  Eng-NA/… &lt;NA&gt;            
+## 6          3265 Garvey      eng      &lt;NA&gt;  Eng-NA/… &lt;NA&gt;            
+## # … with 7 more variables: target_child_age &lt;dbl&gt;, target_child_sex &lt;chr&gt;,
+## #   collection_name &lt;chr&gt;, pid &lt;chr&gt;, collection_id &lt;int&gt;, corpus_id &lt;int&gt;,
+## #   target_child_id &lt;int&gt;</code></pre>
 <p>If you know the corpus that you want to analyze, then you can specify this in the corpus argument. The following function call will return information about all of the transcripts in the Brown corpus.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit">
 <span class="co"># returns all transcripts in the brown corpus</span>
-<span class="kw">d_brown_transcripts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_transcripts.html">get_transcripts</a></span>(corpus = <span class="st">"Brown"</span>)
+<span class="va">d_brown_transcripts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_transcripts.html">get_transcripts</a></span><span class="op">(</span>corpus <span class="op">=</span> <span class="st">"Brown"</span><span class="op">)</span>
 <span class="co"># print the number of rows</span>
-<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="kw">d_brown_transcripts</span>)
-</pre></div>
+<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">d_brown_transcripts</span><span class="op">)</span></pre></div>
 <pre><code>## [1] 214</code></pre>
 <p>If you want more than one corpus, then you can pass a multiple corpus names. You can also pass more than one name to the collections and child arguments.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit">
-<span class="kw">d_many_corpora</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_transcripts.html">get_transcripts</a></span>(corpus = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Brown"</span>, <span class="st">"Clark"</span>))
+<span class="va">d_many_corpora</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_transcripts.html">get_transcripts</a></span><span class="op">(</span>corpus <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Brown"</span>, <span class="st">"Clark"</span><span class="op">)</span><span class="op">)</span>
 <span class="co"># print the number of rows</span>
-<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="kw">d_many_corpora</span>)
-</pre></div>
+<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">d_many_corpora</span><span class="op">)</span></pre></div>
 <pre><code>## [1] 261</code></pre>
 <p>If you want transcript information about a specific child from a corpus, then you pass their name to the child argument. <em>Note</em> that the following function call will not return any of the transcripts from the Brown corpus because the child Shem is not present in that corpus.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit">
-<span class="kw">d_shem</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_transcripts.html">get_transcripts</a></span>(corpus = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Brown"</span>, <span class="st">"Clark"</span>),
-                          target_child = <span class="st">"Shem"</span>)
+<span class="va">d_shem</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_transcripts.html">get_transcripts</a></span><span class="op">(</span>corpus <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Brown"</span>, <span class="st">"Clark"</span><span class="op">)</span>,
+                          target_child <span class="op">=</span> <span class="st">"Shem"</span><span class="op">)</span>
 <span class="co"># print the number of rows</span>
-<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="kw">d_shem</span>)
-</pre></div>
+<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">d_shem</span><span class="op">)</span></pre></div>
 <pre><code>## [1] 47</code></pre>
 </div>
 <div id="get-participants" class="section level2">
@@ -190,38 +187,36 @@
 </ul>
 <p>Again, if you run the function with no arguments, then you get all the background information for all speakers in the database.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit">
-<span class="kw">d_participants</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_participants.html">get_participants</a></span>()
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="kw">d_participants</span>)
-</pre></div>
+<span class="va">d_participants</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_participants.html">get_participants</a></span><span class="op">(</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">d_participants</span><span class="op">)</span></pre></div>
 <pre><code>## # A tibble: 6 x 18
-##      id code  name  role  language group sex   ses   education custom corpus_id
-##   &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt;      &lt;int&gt;
-## 1     1 KAR   Kari… Adult spa      &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;      &lt;NA&gt;           1
-## 2     2 DIA   Diana Child spa      &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;      &lt;NA&gt;           1
-## 3     3 NAY   Naye… Child spa      &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;      &lt;NA&gt;           1
-## 4     4 EDG   Edgar Child spa      &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;      &lt;NA&gt;           1
-## 5     5 OSC   Oscar Child spa      &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;      &lt;NA&gt;           1
-## 6     6 ABR   Abril Child spa      &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;      &lt;NA&gt;           1
-## # … with 7 more variables: max_age &lt;dbl&gt;, min_age &lt;dbl&gt;, target_child_id &lt;int&gt;,
-## #   collection_id &lt;int&gt;, collection_name &lt;chr&gt;, corpus_name &lt;chr&gt;,
-## #   target_child_name &lt;chr&gt;</code></pre>
+##      id code  name  role  corpus_name min_age max_age language group sex   ses  
+##   &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;         &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;
+## 1     1 CHI   John  Targ… English-Wo…    78.0    102. eng      &lt;NA&gt;  male  WC   
+## 2     2 CHI   Rach… Targ… English-Wo…    80.0    101. eng      &lt;NA&gt;  fema… WC   
+## 3     3 CHI   Marg… Targ… English-Wo…    80.0    105. eng      &lt;NA&gt;  fema… MC   
+## 4     4 CHI   Erin  Targ… English-Wo…    79.0    103. eng      &lt;NA&gt;  fema… WC   
+## 5     5 CHI   Chri… Targ… English-Wo…    77.0    105. eng      &lt;NA&gt;  fema… MC   
+## 6     7 INV   Nina  Inve… English-Wo…    NA       NA  eng      &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt; 
+## # … with 7 more variables: education &lt;chr&gt;, custom &lt;chr&gt;,
+## #   collection_name &lt;chr&gt;, collection_id &lt;int&gt;, corpus_id &lt;int&gt;,
+## #   target_child_id &lt;int&gt;, target_child_name &lt;chr&gt;</code></pre>
 <p>The participants function introduces three new arguments: role, age, and sex. The role argument allows you to get information about a specific kind of speaker, such as the “target_child.”</p>
 <div class="sourceCode" id="cb14"><pre class="downlit">
-<span class="kw">d_target_child</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_participants.html">get_participants</a></span>(role = <span class="st">"target_child"</span>)
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="kw">d_target_child</span>)
-</pre></div>
+<span class="va">d_target_child</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_participants.html">get_participants</a></span><span class="op">(</span>role <span class="op">=</span> <span class="st">"target_child"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">d_target_child</span><span class="op">)</span></pre></div>
 <pre><code>## # A tibble: 6 x 18
-##      id code  name  role  language group sex   ses   education custom corpus_id
-##   &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt;      &lt;int&gt;
-## 1    25 CHI   Niño… Targ… spa      &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;      &lt;NA&gt;           2
-## 2    28 CHI   Juan  Targ… spa      &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;      &lt;NA&gt;           2
-## 3    37 CHI   Niño  Targ… spa      &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;      &lt;NA&gt;           2
-## 4    42 CHI   emil… Targ… spa      &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;      &lt;NA&gt;           3
-## 5    63 CHI   Edua… Targ… spa      &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;      &lt;NA&gt;           4
-## 6    78 CHI   Bray… Targ… spa      &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;      &lt;NA&gt;           6
-## # … with 7 more variables: max_age &lt;dbl&gt;, min_age &lt;dbl&gt;, target_child_id &lt;int&gt;,
-## #   collection_id &lt;int&gt;, collection_name &lt;chr&gt;, corpus_name &lt;chr&gt;,
-## #   target_child_name &lt;chr&gt;</code></pre>
+##      id code  name  role  corpus_name min_age max_age language group sex   ses  
+##   &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;         &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;
+## 1     1 CHI   John  Targ… English-Wo…    78.0    102. eng      &lt;NA&gt;  male  WC   
+## 2     2 CHI   Rach… Targ… English-Wo…    80.0    101. eng      &lt;NA&gt;  fema… WC   
+## 3     3 CHI   Marg… Targ… English-Wo…    80.0    105. eng      &lt;NA&gt;  fema… MC   
+## 4     4 CHI   Erin  Targ… English-Wo…    79.0    103. eng      &lt;NA&gt;  fema… WC   
+## 5     5 CHI   Chri… Targ… English-Wo…    77.0    105. eng      &lt;NA&gt;  fema… MC   
+## 6    11 CHI   Joan… Targ… English-Wo…    79.0    104. eng      &lt;NA&gt;  fema… WC   
+## # … with 7 more variables: education &lt;chr&gt;, custom &lt;chr&gt;,
+## #   collection_name &lt;chr&gt;, collection_id &lt;int&gt;, corpus_id &lt;int&gt;,
+## #   target_child_id &lt;int&gt;, target_child_name &lt;chr&gt;</code></pre>
 <p>The age argument takes a number indicating the age(s) of children (in months) that you want to analyze. you can use this argument in two ways</p>
 <ol style="list-style-type: decimal">
 <li>Pass a single number to information about all participants who have a transcript at that age.</li>
@@ -229,21 +224,20 @@
 </ol>
 <p>For example, you can get the participant information for all of the children who had transcripts between the ages of 24 and 36 months.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit">
-<span class="kw">d_age_range</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_participants.html">get_participants</a></span>(age = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">24</span>, <span class="fl">36</span>))
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="kw">d_age_range</span>)
-</pre></div>
+<span class="va">d_age_range</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_participants.html">get_participants</a></span><span class="op">(</span>age <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">24</span>, <span class="fl">36</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">d_age_range</span><span class="op">)</span></pre></div>
 <pre><code>## # A tibble: 6 x 18
-##      id code  name  role  language group sex   ses   education custom corpus_id
-##   &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt;      &lt;int&gt;
-## 1    28 CHI   Juan  Targ… spa      &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;      &lt;NA&gt;           2
-## 2    35 JAI   Jaime Brot… spa      &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;      &lt;NA&gt;           2
-## 3    42 CHI   emil… Targ… spa      &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;      &lt;NA&gt;           3
-## 4    63 CHI   Edua… Targ… spa      &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;      &lt;NA&gt;           4
-## 5    73 VIC   Vicky Child spa      &lt;NA&gt;  fema… MC    &lt;NA&gt;      &lt;NA&gt;           5
-## 6   316 CHI   Koki  Targ… spa eng  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;      &lt;NA&gt;           8
-## # … with 7 more variables: max_age &lt;dbl&gt;, min_age &lt;dbl&gt;, target_child_id &lt;int&gt;,
-## #   collection_id &lt;int&gt;, collection_name &lt;chr&gt;, corpus_name &lt;chr&gt;,
-## #   target_child_name &lt;chr&gt;</code></pre>
+##      id code  name  role  corpus_name min_age max_age language group sex   ses  
+##   &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;         &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;
+## 1  1612 CHI   &lt;NA&gt;  Targ… Chinese-Ta…    32.2    60.6 zho      &lt;NA&gt;  male  &lt;NA&gt; 
+## 2  1629 CHI   &lt;NA&gt;  Targ… Chinese-Ta…    35.0    35.0 zho      &lt;NA&gt;  male  &lt;NA&gt; 
+## 3  1672 CHI   Ian   Targ… Garvey         34.0    34.0 eng      &lt;NA&gt;  male  &lt;NA&gt; 
+## 4  1689 CHI   Nan   Targ… Garvey         34.0    34.0 eng      &lt;NA&gt;  fema… &lt;NA&gt; 
+## 5  1691 NAN   Nan   Targ… Garvey         34.0    34.0 eng      &lt;NA&gt;  fema… &lt;NA&gt; 
+## 6  1703 CHI   Sam   Targ… Garvey         35.0    35.0 eng      &lt;NA&gt;  male  &lt;NA&gt; 
+## # … with 7 more variables: education &lt;chr&gt;, custom &lt;chr&gt;,
+## #   collection_name &lt;chr&gt;, collection_id &lt;int&gt;, corpus_id &lt;int&gt;,
+## #   target_child_id &lt;int&gt;, target_child_name &lt;chr&gt;</code></pre>
 </div>
 <div id="get-tokens" class="section level2">
 <h2 class="hasAnchor">
@@ -251,110 +245,103 @@
 <p>The <code>get_tokens</code> function returns a table with a row for each token based on a set of filtering criteria. The token argument allows you to pass a vector of one or more tokens that you want to analyze.</p>
 <p>For example, if you wanted to get all of the production data for a specific token(s), then you could run the following call to get all instances of “dog” and “ball” for Adam in the Brown corpus.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit">
-<span class="kw">d_adam_prod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_tokens.html">get_tokens</a></span>(corpus = <span class="st">"Brown"</span>,
-                          role = <span class="st">"target_child"</span>,
-                          target_child = <span class="st">"Adam"</span>,
-                          token = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"dog"</span>, <span class="st">"ball"</span>))
-</pre></div>
-<pre><code>## Warning: `filter_()` is deprecated as of dplyr 0.7.0.
-## Please use `filter()` instead.
-## See vignette('programming') for more help
-## This warning is displayed once every 8 hours.
-## Call `lifecycle::last_warnings()` to see where this warning was generated.</code></pre>
-<div class="sourceCode" id="cb20"><pre class="downlit">
+<span class="va">d_adam_prod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_tokens.html">get_tokens</a></span><span class="op">(</span>corpus <span class="op">=</span> <span class="st">"Brown"</span>,
+                          role <span class="op">=</span> <span class="st">"target_child"</span>,
+                          target_child <span class="op">=</span> <span class="st">"Adam"</span>,
+                          token <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"dog"</span>, <span class="st">"ball"</span><span class="op">)</span><span class="op">)</span>
+
 <span class="co"># view the structure of the data</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span>(<span class="kw">d_adam_prod</span>)
-</pre></div>
-<pre><code>## tibble [265 × 26] (S3: tbl_df/tbl/data.frame)
-##  $ id               : int [1:265] 3816766 3816797 3816850 3816998 3817149 3817469 3817520 3818128 3819292 3821303 ...
-##  $ gloss            : chr [1:265] "ball" "ball" "ball" "ball" ...
-##  $ stem             : chr [1:265] "ball" "ball" "ball" "ball" ...
+<span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span><span class="op">(</span><span class="va">d_adam_prod</span><span class="op">)</span></pre></div>
+<pre><code>## tibble [265 × 28] (S3: tbl_df/tbl/data.frame)
+##  $ id               : int [1:265] 7305680 7305743 7306035 7306038 7306232 7306285 7308842 7308843 7308844 7308845 ...
+##  $ gloss            : chr [1:265] "dog" "ball" "ball" "ball" ...
+##  $ language         : chr [1:265] "eng" "eng" "eng" "eng" ...
+##  $ token_order      : int [1:265] 3 2 2 3 1 3 1 2 3 4 ...
+##  $ prefix           : chr [1:265] "" "" "" "" ...
 ##  $ part_of_speech   : chr [1:265] "n" "n" "n" "n" ...
-##  $ speaker_id       : int [1:265] 2949 2949 2949 2949 2949 2949 2949 2949 2949 2949 ...
-##  $ utterance_id     : int [1:265] 965272 965276 965284 965326 965364 965448 965466 965624 965984 966620 ...
-##  $ token_order      : int [1:265] 2 2 3 3 2 2 2 2 2 3 ...
-##  $ corpus_id        : int [1:265] 36 36 36 36 36 36 36 36 36 36 ...
-##  $ transcript_id    : int [1:265] 3273 3273 3273 3273 3273 3273 3273 3273 3272 3284 ...
+##  $ stem             : chr [1:265] "dog" "ball" "ball" "ball" ...
+##  $ actual_phonology : chr [1:265] "" "" "" "" ...
+##  $ model_phonology  : chr [1:265] "" "" "" "" ...
+##  $ suffix           : chr [1:265] "" "" "" "" ...
+##  $ num_morphemes    : int [1:265] 1 1 1 1 1 1 1 1 1 1 ...
+##  $ english          : chr [1:265] "" "" "" "" ...
+##  $ clitic           : chr [1:265] "" "" "" "" ...
+##  $ utterance_type   : chr [1:265] "declarative" "declarative" "declarative" "declarative" ...
+##  $ corpus_name      : chr [1:265] "Brown" "Brown" "Brown" "Brown" ...
 ##  $ speaker_code     : chr [1:265] "CHI" "CHI" "CHI" "CHI" ...
 ##  $ speaker_name     : chr [1:265] "Adam" "Adam" "Adam" "Adam" ...
 ##  $ speaker_role     : chr [1:265] "Target_Child" "Target_Child" "Target_Child" "Target_Child" ...
-##  $ target_child_id  : int [1:265] 2949 2949 2949 2949 2949 2949 2949 2949 2949 2949 ...
-##  $ target_child_age : num [1:265] 27.6 27.6 27.6 27.6 27.6 ...
 ##  $ target_child_name: chr [1:265] "Adam" "Adam" "Adam" "Adam" ...
+##  $ target_child_age : num [1:265] 27.1 27.1 27.1 27.1 27.1 ...
 ##  $ target_child_sex : chr [1:265] "male" "male" "male" "male" ...
-##  $ utterance_type   : chr [1:265] "declarative" "declarative" "declarative" "declarative" ...
-##  $ collection_id    : int [1:265] 3 3 3 3 3 3 3 3 3 3 ...
 ##  $ collection_name  : chr [1:265] "Eng-NA" "Eng-NA" "Eng-NA" "Eng-NA" ...
-##  $ english          : chr [1:265] "" "" "" "" ...
-##  $ prefix           : chr [1:265] "" "" "" "" ...
-##  $ suffix           : chr [1:265] "" "" "" "" ...
-##  $ num_morphemes    : int [1:265] 1 1 1 1 1 1 1 1 1 1 ...
-##  $ language         : chr [1:265] "eng" "eng" "eng" "eng" ...
-##  $ corpus_name      : chr [1:265] "Brown" "Brown" "Brown" "Brown" ...
-##  $ clitic           : chr [1:265] "" "" "" "" ...</code></pre>
-<div class="sourceCode" id="cb22"><pre class="downlit">
+##  $ collection_id    : int [1:265] 2 2 2 2 2 2 2 2 2 2 ...
+##  $ corpus_id        : int [1:265] 58 58 58 58 58 58 58 58 58 58 ...
+##  $ speaker_id       : int [1:265] 3330 3330 3330 3330 3330 3330 3330 3330 3330 3330 ...
+##  $ target_child_id  : int [1:265] 3330 3330 3330 3330 3330 3330 3330 3330 3330 3330 ...
+##  $ transcript_id    : int [1:265] 6858 6858 6858 6858 6858 6858 6858 6858 6858 6858 ...
+##  $ utterance_id     : int [1:265] 1701699 1701841 1702315 1702317 1702442 1702471 1704086 1704086 1704086 1704086 ...</code></pre>
+<div class="sourceCode" id="cb20"><pre class="downlit">
 <span class="co"># print the unique tokens</span>
-<span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>(<span class="kw">d_adam_prod</span><span class="op">$</span><span class="kw">gloss</span>)
-</pre></div>
-<pre><code>## [1] "ball" "dog"</code></pre>
+<span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">d_adam_prod</span><span class="op">$</span><span class="va">gloss</span><span class="op">)</span></pre></div>
+<pre><code>## [1] "dog"  "ball"</code></pre>
 </div>
 <div id="get-types" class="section level2">
 <h2 class="hasAnchor">
 <a href="#get-types" class="anchor"></a>Get types</h2>
 <p>The <code><a href="../reference/get_types.html">get_types()</a></code> function works like the <code><a href="../reference/get_tokens.html">get_tokens()</a></code> function, returning a table with a row for each type based on set of filtering criteria. The type argument allows you to pass a vector of one or more types that you want to analyze. The main difference is that you now have a single row for each type (i.e., a concept) and a variable <code>count</code> that tracks the number of times that type appeared in a particular transcript.</p>
 <p>For example, if you wanted to get all of the production data for a specific type(s), then you could run the following call to get counts of “dog” and “ball” for all of Adam’s transcripts in the Brown corpus.</p>
-<div class="sourceCode" id="cb24"><pre class="downlit">
-<span class="kw">d_adam_types</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_types.html">get_types</a></span>(corpus = <span class="st">"Brown"</span>,
-                          target_child = <span class="st">"Adam"</span>,
-                          role = <span class="st">"target_child"</span>,
-                          type = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"dog"</span>, <span class="st">"ball"</span>))
+<div class="sourceCode" id="cb22"><pre class="downlit">
+<span class="va">d_adam_types</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_types.html">get_types</a></span><span class="op">(</span>corpus <span class="op">=</span> <span class="st">"Brown"</span>,
+                          target_child <span class="op">=</span> <span class="st">"Adam"</span>,
+                          role <span class="op">=</span> <span class="st">"target_child"</span>,
+                          type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"dog"</span>, <span class="st">"ball"</span><span class="op">)</span><span class="op">)</span>
 
 <span class="co"># print the number of times ball appears in the first transcript</span>
-<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="kw">d_adam_types</span><span class="op">$</span><span class="kw">gloss</span>[<span class="fl">1</span>], <span class="kw">d_adam_types</span><span class="op">$</span><span class="kw">count</span>[<span class="fl">1</span>])
-</pre></div>
-<pre><code>## [1] "ball" "3"</code></pre>
+<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">d_adam_types</span><span class="op">$</span><span class="va">gloss</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="va">d_adam_types</span><span class="op">$</span><span class="va">count</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></pre></div>
+<pre><code>## [1] "dog" "4"</code></pre>
 </div>
 <div id="get-utterances" class="section level2">
 <h2 class="hasAnchor">
 <a href="#get-utterances" class="anchor"></a>Get utterances</h2>
 <p>The <code>get_utterances</code> function returns a table with a row for each utterance based on user-defined filtering criteria. For example, the following function will get you all of the utterances in the Brown Corpus for the child Adam.</p>
-<div class="sourceCode" id="cb26"><pre class="downlit">
-<span class="kw">d_adam_utts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_utterances.html">get_utterances</a></span>(corpus = <span class="st">"Brown"</span>,
-                              target_child = <span class="st">"Adam"</span>)
+<div class="sourceCode" id="cb24"><pre class="downlit">
+<span class="va">d_adam_utts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_utterances.html">get_utterances</a></span><span class="op">(</span>corpus <span class="op">=</span> <span class="st">"Brown"</span>,
+                              target_child <span class="op">=</span> <span class="st">"Adam"</span><span class="op">)</span>
 
 <span class="co"># view the structure of the data</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span>(<span class="kw">d_adam_utts</span>)
-</pre></div>
-<pre><code>## tibble [73,431 × 25] (S3: tbl_df/tbl/data.frame)
-##  $ id               : int [1:73431] 964592 964598 964606 964617 964627 964633 964643 964649 964652 964657 ...
-##  $ speaker_id       : int [1:73431] 2949 2949 2953 2949 2949 2949 2949 2953 2949 2953 ...
-##  $ utterance_order  : int [1:73431] 1 2 3 4 5 6 7 8 9 10 ...
-##  $ transcript_id    : int [1:73431] 3272 3272 3272 3272 3272 3272 3272 3272 3272 3272 ...
-##  $ corpus_id        : int [1:73431] 36 36 36 36 36 36 36 36 36 36 ...
+<span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span><span class="op">(</span><span class="va">d_adam_utts</span><span class="op">)</span></pre></div>
+<pre><code>## tibble [73,431 × 27] (S3: tbl_df/tbl/data.frame)
+##  $ id               : int [1:73431] 1700744 1700757 1700765 1700772 1700779 1700790 1700801 1700811 1700819 1700829 ...
 ##  $ gloss            : chr [1:73431] "play checkers" "big drum" "big drum" "big drum" ...
-##  $ num_tokens       : int [1:73431] 2 2 2 2 2 2 1 1 2 3 ...
 ##  $ stem             : chr [1:73431] "play checker" "big drum" "big drum" "big drum" ...
+##  $ actual_phonology : chr [1:73431] "" "" "" "" ...
+##  $ model_phonology  : chr [1:73431] "" "" "" "" ...
+##  $ type             : chr [1:73431] "declarative" "declarative" "question" "declarative" ...
+##  $ language         : chr [1:73431] "eng" "eng" "eng" "eng" ...
+##  $ num_morphemes    : int [1:73431] 3 2 2 2 2 2 1 1 2 4 ...
+##  $ num_tokens       : int [1:73431] 2 2 2 2 2 2 1 1 2 3 ...
+##  $ utterance_order  : int [1:73431] 1 2 3 4 5 6 7 8 9 10 ...
+##  $ corpus_name      : chr [1:73431] "Brown" "Brown" "Brown" "Brown" ...
 ##  $ part_of_speech   : chr [1:73431] "n n" "adj n" "adj n" "adj n" ...
 ##  $ speaker_code     : chr [1:73431] "CHI" "CHI" "MOT" "CHI" ...
 ##  $ speaker_name     : chr [1:73431] "Adam" "Adam" NA "Adam" ...
 ##  $ speaker_role     : chr [1:73431] "Target_Child" "Target_Child" "Mother" "Target_Child" ...
-##  $ target_child_id  : int [1:73431] 2949 2949 2949 2949 2949 2949 2949 2949 2949 2949 ...
-##  $ target_child_age : num [1:73431] 27.1 27.1 27.1 27.1 27.1 ...
 ##  $ target_child_name: chr [1:73431] "Adam" "Adam" "Adam" "Adam" ...
+##  $ target_child_age : num [1:73431] 27.1 27.1 27.1 27.1 27.1 ...
 ##  $ target_child_sex : chr [1:73431] "male" "male" "male" "male" ...
-##  $ type             : chr [1:73431] "declarative" "declarative" "question" "declarative" ...
-##  $ media_end        : num [1:73431] NA NA NA NA NA NA NA NA NA NA ...
 ##  $ media_start      : num [1:73431] NA NA NA NA NA NA NA NA NA NA ...
+##  $ media_end        : num [1:73431] NA NA NA NA NA NA NA NA NA NA ...
 ##  $ media_unit       : chr [1:73431] NA NA NA NA ...
-##  $ collection_id    : int [1:73431] 3 3 3 3 3 3 3 3 3 3 ...
 ##  $ collection_name  : chr [1:73431] "Eng-NA" "Eng-NA" "Eng-NA" "Eng-NA" ...
-##  $ num_morphemes    : int [1:73431] 3 2 2 2 2 2 1 1 2 4 ...
-##  $ language         : chr [1:73431] "eng" "eng" "eng" "eng" ...
-##  $ corpus_name      : chr [1:73431] "Brown" "Brown" "Brown" "Brown" ...</code></pre>
-<div class="sourceCode" id="cb28"><pre class="downlit">
+##  $ collection_id    : int [1:73431] 2 2 2 2 2 2 2 2 2 2 ...
+##  $ corpus_id        : int [1:73431] 58 58 58 58 58 58 58 58 58 58 ...
+##  $ speaker_id       : int [1:73431] 3330 3330 3331 3330 3330 3330 3330 3331 3330 3331 ...
+##  $ target_child_id  : int [1:73431] 3330 3330 3330 3330 3330 3330 3330 3330 3330 3330 ...
+##  $ transcript_id    : int [1:73431] 6858 6858 6858 6858 6858 6858 6858 6858 6858 6858 ...</code></pre>
+<div class="sourceCode" id="cb26"><pre class="downlit">
 <span class="co"># print the first five utterances</span>
-<span class="kw">d_adam_utts</span><span class="op">$</span><span class="kw">gloss</span>[<span class="fl">1</span><span class="op">:</span><span class="fl">5</span>]
-</pre></div>
+<span class="va">d_adam_utts</span><span class="op">$</span><span class="va">gloss</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></pre></div>
 <pre><code>## [1] "play checkers" "big drum"      "big drum"      "big drum"     
 ## [5] "big drum"</code></pre>
 </div>
@@ -371,15 +358,37 @@
 <li>mean length of utterances in morphemes (<code>mlu_m</code>)</li>
 </ul>
 <p>For example, if we wanted to get the summary statistics for Adam’s production data, we could run the following call.</p>
-<div class="sourceCode" id="cb30"><pre class="downlit">
-<span class="kw">d_adam_stats</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_speaker_statistics.html">get_speaker_statistics</a></span>(corpus = <span class="st">"Brown"</span>,
-                                       target_child = <span class="st">"Adam"</span>,
-                                       role = <span class="st">"target_child"</span>)
+<div class="sourceCode" id="cb28"><pre class="downlit">
+<span class="va">d_adam_stats</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_speaker_statistics.html">get_speaker_statistics</a></span><span class="op">(</span>corpus <span class="op">=</span> <span class="st">"Brown"</span>,
+                                       target_child <span class="op">=</span> <span class="st">"Adam"</span>,
+                                       role <span class="op">=</span> <span class="st">"target_child"</span><span class="op">)</span>
 
 <span class="co"># get the average mlu across all Adam's transcripts</span>
-<span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="kw">d_adam_stats</span><span class="op">$</span><span class="kw">mlu_w</span>)
-</pre></div>
-<pre><code>## [1] 3.567691</code></pre>
+<span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">d_adam_stats</span><span class="op">$</span><span class="va">mlu_w</span><span class="op">)</span></pre></div>
+<pre><code>## [1] 3.559118</code></pre>
+<div id="get-sql-query" class="section level3">
+<h3 class="hasAnchor">
+<a href="#get-sql-query" class="anchor"></a>Get SQL Query</h3>
+<p>The <code><a href="../reference/get_sql_query.html">get_sql_query()</a></code> function returns a table from a SQL query run on the specified database. For example, if you wanted to see the top 10 corpora in the <code>Eng-NA</code> collection with the highest count of token for “dog”, you could run the following call.</p>
+<div class="sourceCode" id="cb30"><pre class="downlit">
+<span class="va">d_na_dog</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_sql_query.html">get_sql_query</a></span><span class="op">(</span><span class="st">"SELECT corpus_name, COUNT(id) AS count FROM token WHERE collection_name = 'Eng-NA' AND gloss = 'dog' GROUP BY corpus_name"</span><span class="op">)</span>
+
+<span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">d_na_dog</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="va">count</span><span class="op">)</span><span class="op">)</span></pre></div>
+<pre><code>## # A tibble: 55 x 2
+##    corpus_name  count
+##    &lt;chr&gt;        &lt;dbl&gt;
+##  1 HSLLD         1261
+##  2 Providence     862
+##  3 Brown          546
+##  4 Weist          437
+##  5 NewmanRatner   433
+##  6 Suppes         421
+##  7 Gelman         388
+##  8 Hall           337
+##  9 Brent          277
+## 10 Davis          241
+## # … with 45 more rows</code></pre>
+</div>
 </div>
   </div>
 
@@ -398,7 +407,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

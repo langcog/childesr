@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">childesr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
       </span>
     </div>
 
@@ -105,7 +105,7 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="http://github.com/langcog/childesr/">
+  <a href="https://github.com/langcog/childesr/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -124,7 +124,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Get corpora</h1>
-    <small class="dont-index">Source: <a href='http://github.com/langcog/childesr/blob/master/R/childesr.R'><code>R/childesr.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/langcog/childesr/blob/master/R/childesr.R'><code>R/childesr.R</code></a></small>
     <div class="hidden name"><code>get_corpora.Rd</code></div>
     </div>
 
@@ -132,7 +132,7 @@
     <p>Get corpora</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_corpora</span>(connection = <span class='kw'>NULL</span>, db_version = <span class='st'>"current"</span>, db_args = <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>get_corpora</span><span class='op'>(</span>connection <span class='op'>=</span> <span class='cn'>NULL</span>, db_version <span class='op'>=</span> <span class='st'>"current"</span>, db_args <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -158,21 +158,21 @@
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
-<span class='fu'>get_corpora</span>()
-</div><div class='output co'>#&gt; <span class='message'>Using current database version: '2018.1'.</span></div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 289 x 4</span><span>
-#&gt;    corpus_id corpus_name collection_id collection_name
-#&gt;        </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>               </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>          
-#&gt; </span><span style='color: #555555;'> 1</span><span>         1 Hess                    1 Spanish        
-#&gt; </span><span style='color: #555555;'> 2</span><span>         2 Linaza                  1 Spanish        
-#&gt; </span><span style='color: #555555;'> 3</span><span>         3 Vila                    1 Spanish        
-#&gt; </span><span style='color: #555555;'> 4</span><span>         4 SerraSole               1 Spanish        
-#&gt; </span><span style='color: #555555;'> 5</span><span>         5 Remedi                  1 Spanish        
-#&gt; </span><span style='color: #555555;'> 6</span><span>         6 Shiro                   1 Spanish        
-#&gt; </span><span style='color: #555555;'> 7</span><span>         7 ColMex                  1 Spanish        
-#&gt; </span><span style='color: #555555;'> 8</span><span>         8 Montes                  1 Spanish        
-#&gt; </span><span style='color: #555555;'> 9</span><span>         9 Marrero                 1 Spanish        
-#&gt; </span><span style='color: #555555;'>10</span><span>        10 Aguirre                 1 Spanish        
-#&gt; </span><span style='color: #555555;'># … with 279 more rows</span><span></div><div class='input'><span class='co'># }</span>
+<span class='fu'>get_corpora</span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Using current database version: '2020.1'.</span></div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 387 x 5</span><span>
+#&gt;    corpus_id corpus_name            collection_name data_source collection_id
+#&gt;        </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>                  </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>           </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>               </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span>
+#&gt; </span><span style='color: #555555;'> 1</span><span>         1 English-WolfHemp       Frogs           CHILDES                 1
+#&gt; </span><span style='color: #555555;'> 2</span><span>         2 Turkish-Aksu           Frogs           CHILDES                 1
+#&gt; </span><span style='color: #555555;'> 3</span><span>         3 ArabicDutch-AarssenBos Frogs           CHILDES                 1
+#&gt; </span><span style='color: #555555;'> 4</span><span>         4 DutchArabic-AarssenBos Frogs           CHILDES                 1
+#&gt; </span><span style='color: #555555;'> 5</span><span>         5 French-Duguine         Frogs           CHILDES                 1
+#&gt; </span><span style='color: #555555;'> 6</span><span>         6 French-Lyon            Frogs           CHILDES                 1
+#&gt; </span><span style='color: #555555;'> 7</span><span>         7 Arabic-AarssenBos      Frogs           CHILDES                 1
+#&gt; </span><span style='color: #555555;'> 8</span><span>         8 Italian-Roma           Frogs           CHILDES                 1
+#&gt; </span><span style='color: #555555;'> 9</span><span>         9 Spanish-Aguilar        Frogs           CHILDES                 1
+#&gt; </span><span style='color: #555555;'>10</span><span>        10 Croatian-TKH           Frogs           CHILDES                 1
+#&gt; </span><span style='color: #555555;'># … with 377 more rows</span><span></div><div class='input'><span class='co'># }</span>
 </div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -189,7 +189,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

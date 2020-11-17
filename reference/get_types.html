@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">childesr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
       </span>
     </div>
 
@@ -105,7 +105,7 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="http://github.com/langcog/childesr/">
+  <a href="https://github.com/langcog/childesr/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -124,7 +124,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Get types</h1>
-    <small class="dont-index">Source: <a href='http://github.com/langcog/childesr/blob/master/R/childesr.R'><code>R/childesr.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/langcog/childesr/blob/master/R/childesr.R'><code>R/childesr.R</code></a></small>
     <div class="hidden name"><code>get_types.Rd</code></div>
     </div>
 
@@ -132,20 +132,20 @@
     <p>Get types</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_types</span>(
-  collection = <span class='kw'>NULL</span>,
-  language = <span class='kw'>NULL</span>,
-  corpus = <span class='kw'>NULL</span>,
-  role = <span class='kw'>NULL</span>,
-  role_exclude = <span class='kw'>NULL</span>,
-  age = <span class='kw'>NULL</span>,
-  sex = <span class='kw'>NULL</span>,
-  target_child = <span class='kw'>NULL</span>,
-  type = <span class='kw'>NULL</span>,
-  connection = <span class='kw'>NULL</span>,
-  db_version = <span class='st'>"current"</span>,
-  db_args = <span class='kw'>NULL</span>
-)</pre>
+    <pre class="usage"><span class='fu'>get_types</span><span class='op'>(</span>
+  collection <span class='op'>=</span> <span class='cn'>NULL</span>,
+  language <span class='op'>=</span> <span class='cn'>NULL</span>,
+  corpus <span class='op'>=</span> <span class='cn'>NULL</span>,
+  role <span class='op'>=</span> <span class='cn'>NULL</span>,
+  role_exclude <span class='op'>=</span> <span class='cn'>NULL</span>,
+  age <span class='op'>=</span> <span class='cn'>NULL</span>,
+  sex <span class='op'>=</span> <span class='cn'>NULL</span>,
+  target_child <span class='op'>=</span> <span class='cn'>NULL</span>,
+  type <span class='op'>=</span> <span class='cn'>NULL</span>,
+  connection <span class='op'>=</span> <span class='cn'>NULL</span>,
+  db_version <span class='op'>=</span> <span class='st'>"current"</span>,
+  db_args <span class='op'>=</span> <span class='cn'>NULL</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -172,11 +172,11 @@
     </tr>
     <tr>
       <th>age</th>
-      <td><p>A numeric vector of an single age value or a min age value
-(inclusive) and max age value (exclusive) in months. For a single age
-value, participants are returned for which that age is within their age
-range; for two ages, participants are returned for whose age overlaps with
-the interval between those two ages.</p></td>
+      <td><p>A numeric vector of an single age value or a min age value and max
+age value (inclusive) in months. For a single age value, participants are
+returned for which that age is within their age range; for two ages,
+participants are returned for whose age overlaps with the interval between
+those two ages.</p></td>
     </tr>
     <tr>
       <th>sex</th>
@@ -213,24 +213,23 @@ number of wildcard characters, `_` matches exactly one wildcard character)</p></
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
-<span class='fu'>get_types</span>()
-</div><div class='output co'>#&gt; <span class='message'>Using current database version: '2018.1'.</span></div><div class='output co'>#&gt; <span class='message'>Getting data from 4853 children in 287 corpora...</span></div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 15,374,221 x 14</span><span>
-#&gt;       id gloss count speaker_role target_child_na… target_child_age
-#&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>        </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>                       </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #555555;'> 1</span><span>     1 había     1 Adult        </span><span style='color: #BB0000;'>NA</span><span>                             </span><span style='color: #BB0000;'>NA</span><span>
-#&gt; </span><span style='color: #555555;'> 2</span><span>     2 una       2 Adult        </span><span style='color: #BB0000;'>NA</span><span>                             </span><span style='color: #BB0000;'>NA</span><span>
-#&gt; </span><span style='color: #555555;'> 3</span><span>     3 vez       1 Adult        </span><span style='color: #BB0000;'>NA</span><span>                             </span><span style='color: #BB0000;'>NA</span><span>
-#&gt; </span><span style='color: #555555;'> 4</span><span>     4 niña      1 Adult        </span><span style='color: #BB0000;'>NA</span><span>                             </span><span style='color: #BB0000;'>NA</span><span>
-#&gt; </span><span style='color: #555555;'> 5</span><span>     5 que       1 Adult        </span><span style='color: #BB0000;'>NA</span><span>                             </span><span style='color: #BB0000;'>NA</span><span>
-#&gt; </span><span style='color: #555555;'> 6</span><span>     6 le        1 Adult        </span><span style='color: #BB0000;'>NA</span><span>                             </span><span style='color: #BB0000;'>NA</span><span>
-#&gt; </span><span style='color: #555555;'> 7</span><span>     7 tenía     1 Adult        </span><span style='color: #BB0000;'>NA</span><span>                             </span><span style='color: #BB0000;'>NA</span><span>
-#&gt; </span><span style='color: #555555;'> 8</span><span>     8 mucho     1 Adult        </span><span style='color: #BB0000;'>NA</span><span>                             </span><span style='color: #BB0000;'>NA</span><span>
-#&gt; </span><span style='color: #555555;'> 9</span><span>     9 miedo     1 Adult        </span><span style='color: #BB0000;'>NA</span><span>                             </span><span style='color: #BB0000;'>NA</span><span>
-#&gt; </span><span style='color: #555555;'>10</span><span>    10 a         1 Adult        </span><span style='color: #BB0000;'>NA</span><span>                             </span><span style='color: #BB0000;'>NA</span><span>
-#&gt; </span><span style='color: #555555;'># … with 15,374,211 more rows, and 8 more variables: target_child_sex </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span style='color: #555555;'>,</span><span>
-#&gt; </span><span style='color: #555555;'>#   corpus_id </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span style='color: #555555;'>, speaker_id </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span style='color: #555555;'>, target_child_id </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span style='color: #555555;'>,</span><span>
-#&gt; </span><span style='color: #555555;'>#   transcript_id </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span style='color: #555555;'>, collection_id </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span style='color: #555555;'>, collection_name </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span style='color: #555555;'>,</span><span>
-#&gt; </span><span style='color: #555555;'>#   language </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span></div><div class='input'><span class='co'># }</span>
+<span class='fu'>get_types</span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Using current database version: '2020.1'.</span></div><div class='output co'>#&gt; <span class='message'>Getting data from 7085 children in 375 corpora...</span></div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 17,897,045 x 14</span><span>
+#&gt;       id gloss count speaker_role language target_child_na… target_child_age
+#&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>        </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>                       </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
+#&gt; </span><span style='color: #555555;'> 1</span><span>     1 mhm       1 Target_Child eng      Nathan                       78.0
+#&gt; </span><span style='color: #555555;'> 2</span><span>     2 oh        1 Target_Child eng      Nathan                       78.0
+#&gt; </span><span style='color: #555555;'> 3</span><span>     3 I've      1 Target_Child eng      Nathan                       78.0
+#&gt; </span><span style='color: #555555;'> 4</span><span>     4 seen      1 Target_Child eng      Nathan                       78.0
+#&gt; </span><span style='color: #555555;'> 5</span><span>     5 a         3 Target_Child eng      Nathan                       78.0
+#&gt; </span><span style='color: #555555;'> 6</span><span>     6 movie     1 Target_Child eng      Nathan                       78.0
+#&gt; </span><span style='color: #555555;'> 7</span><span>     7 of        2 Target_Child eng      Nathan                       78.0
+#&gt; </span><span style='color: #555555;'> 8</span><span>     8 that      1 Target_Child eng      Nathan                       78.0
+#&gt; </span><span style='color: #555555;'> 9</span><span>     9 yeah      3 Target_Child eng      Nathan                       78.0
+#&gt; </span><span style='color: #555555;'>10</span><span>    10 one       1 Target_Child eng      Nathan                       78.0
+#&gt; </span><span style='color: #555555;'># … with 17,897,035 more rows, and 7 more variables: target_child_sex </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span style='color: #555555;'>,</span><span>
+#&gt; </span><span style='color: #555555;'>#   collection_name </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span style='color: #555555;'>, collection_id </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span style='color: #555555;'>, corpus_id </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span style='color: #555555;'>,</span><span>
+#&gt; </span><span style='color: #555555;'>#   speaker_id </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span style='color: #555555;'>, target_child_id </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span style='color: #555555;'>, transcript_id </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span></div><div class='input'><span class='co'># }</span>
 </div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -247,7 +246,7 @@ number of wildcard characters, `_` matches exactly one wildcard character)</p></
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

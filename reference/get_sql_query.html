@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get database version — get_database_version • childesr</title>
+<title>Run a SQL Query script on the CHILDES database — get_sql_query • childesr</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Get database version — get_database_version" />
-<meta property="og:description" content="Get database version" />
+<meta property="og:title" content="Run a SQL Query script on the CHILDES database — get_sql_query" />
+<meta property="og:description" content="Run a SQL Query script on the CHILDES database" />
 
 
 
@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">childesr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
       </span>
     </div>
 
@@ -105,7 +105,7 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="http://github.com/langcog/childesr/">
+  <a href="https://github.com/langcog/childesr/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -123,20 +123,29 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Get database version</h1>
-    <small class="dont-index">Source: <a href='http://github.com/langcog/childesr/blob/master/R/childesr.R'><code>R/childesr.R</code></a></small>
-    <div class="hidden name"><code>get_database_version.Rd</code></div>
+    <h1>Run a SQL Query script on the CHILDES database</h1>
+    <small class="dont-index">Source: <a href='https://github.com/langcog/childesr/blob/master/R/childesr.R'><code>R/childesr.R</code></a></small>
+    <div class="hidden name"><code>get_sql_query.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Get database version</p>
+    <p>Run a SQL Query script on the CHILDES database</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_database_version</span>(connection = <span class='kw'>NULL</span>, db_version = <span class='st'>"current"</span>, db_args = <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>get_sql_query</span><span class='op'>(</span>
+  <span class='va'>sql_query_string</span>,
+  connection <span class='op'>=</span> <span class='cn'>NULL</span>,
+  db_version <span class='op'>=</span> <span class='st'>"current"</span>,
+  db_args <span class='op'>=</span> <span class='cn'>NULL</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>sql_query_string</th>
+      <td><p>A valid sql query string character</p></td>
+    </tr>
     <tr>
       <th>connection</th>
       <td><p>A connection to the CHILDES database</p></td>
@@ -153,13 +162,26 @@
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>The database version as a string</p>
+    <p>The database after calling the supplied SQL query</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
-<span class='fu'>get_database_version</span>()
-</div><div class='output co'>#&gt; <span class='message'>Using current database version: '2018.1'.</span></div><div class='output co'>#&gt; [1] "2018.1"</div><div class='input'><span class='co'># }</span>
-</div></pre>
+<span class='fu'>get_sql_query</span><span class='op'>(</span><span class='st'>"SELECT * FROM collection"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Using current database version: '2020.1'.</span></div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 33 x 3</span><span>
+#&gt;       id name           data_source
+#&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>          </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>      
+#&gt; </span><span style='color: #555555;'> 1</span><span>     1 Frogs          CHILDES    
+#&gt; </span><span style='color: #555555;'> 2</span><span>     2 Eng-NA         CHILDES    
+#&gt; </span><span style='color: #555555;'> 3</span><span>     3 Scandinavian   CHILDES    
+#&gt; </span><span style='color: #555555;'> 4</span><span>     4 Spanish        CHILDES    
+#&gt; </span><span style='color: #555555;'> 5</span><span>     5 French         CHILDES    
+#&gt; </span><span style='color: #555555;'> 6</span><span>     6 DutchAfrikaans CHILDES    
+#&gt; </span><span style='color: #555555;'> 7</span><span>     7 Chinese        CHILDES    
+#&gt; </span><span style='color: #555555;'> 8</span><span>     8 Other          CHILDES    
+#&gt; </span><span style='color: #555555;'> 9</span><span>     9 Japanese       CHILDES    
+#&gt; </span><span style='color: #555555;'>10</span><span>    10 Romance        CHILDES    
+#&gt; </span><span style='color: #555555;'># … with 23 more rows</span><span></div><div class='input'><span class='co'># }</span>
+</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -175,7 +197,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">childesr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
       </span>
     </div>
 
@@ -105,7 +105,7 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="http://github.com/langcog/childesr/">
+  <a href="https://github.com/langcog/childesr/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -124,7 +124,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Get the utterances surrounding a token(s)</h1>
-    <small class="dont-index">Source: <a href='http://github.com/langcog/childesr/blob/master/R/childesr.R'><code>R/childesr.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/langcog/childesr/blob/master/R/childesr.R'><code>R/childesr.R</code></a></small>
     <div class="hidden name"><code>get_contexts.Rd</code></div>
     </div>
 
@@ -132,22 +132,22 @@
     <p>Get the utterances surrounding a token(s)</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_contexts</span>(
-  collection = <span class='kw'>NULL</span>,
-  language = <span class='kw'>NULL</span>,
-  corpus = <span class='kw'>NULL</span>,
-  role = <span class='kw'>NULL</span>,
-  role_exclude = <span class='kw'>NULL</span>,
-  age = <span class='kw'>NULL</span>,
-  sex = <span class='kw'>NULL</span>,
-  target_child = <span class='kw'>NULL</span>,
-  <span class='kw'>token</span>,
-  window = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>0</span>),
-  remove_duplicates = <span class='fl'>TRUE</span>,
-  connection = <span class='kw'>NULL</span>,
-  db_version = <span class='st'>"current"</span>,
-  db_args = <span class='kw'>NULL</span>
-)</pre>
+    <pre class="usage"><span class='fu'>get_contexts</span><span class='op'>(</span>
+  collection <span class='op'>=</span> <span class='cn'>NULL</span>,
+  language <span class='op'>=</span> <span class='cn'>NULL</span>,
+  corpus <span class='op'>=</span> <span class='cn'>NULL</span>,
+  role <span class='op'>=</span> <span class='cn'>NULL</span>,
+  role_exclude <span class='op'>=</span> <span class='cn'>NULL</span>,
+  age <span class='op'>=</span> <span class='cn'>NULL</span>,
+  sex <span class='op'>=</span> <span class='cn'>NULL</span>,
+  target_child <span class='op'>=</span> <span class='cn'>NULL</span>,
+  <span class='va'>token</span>,
+  window <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>0</span><span class='op'>)</span>,
+  remove_duplicates <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  connection <span class='op'>=</span> <span class='cn'>NULL</span>,
+  db_version <span class='op'>=</span> <span class='st'>"current"</span>,
+  db_args <span class='op'>=</span> <span class='cn'>NULL</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -174,11 +174,11 @@
     </tr>
     <tr>
       <th>age</th>
-      <td><p>A numeric vector of an single age value or a min age value
-(inclusive) and max age value (exclusive) in months. For a single age
-value, participants are returned for which that age is within their age
-range; for two ages, participants are returned for whose age overlaps with
-the interval between those two ages.</p></td>
+      <td><p>A numeric vector of an single age value or a min age value and max
+age value (inclusive) in months. For a single age value, participants are
+returned for which that age is within their age range; for two ages,
+participants are returned for whose age overlaps with the interval between
+those two ages.</p></td>
     </tr>
     <tr>
       <th>sex</th>
@@ -224,31 +224,28 @@ utterances from the results</p></td>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
-<span class='fu'>get_contexts</span>(target_child = <span class='st'>"Shem"</span>, token = <span class='st'>"dog"</span>)
-</div><div class='output co'>#&gt; <span class='message'>Using current database version: '2018.1'.</span></div><div class='output co'>#&gt; <span class='message'>Getting data from 1 child in 1 corpus ...</span></div><div class='output co'>#&gt; <span class='warning'>Warning: `filter_()` is deprecated as of dplyr 0.7.0.</span>
-#&gt; <span class='warning'>Please use `filter()` instead.</span>
-#&gt; <span class='warning'>See vignette('programming') for more help</span>
-#&gt; <span class='warning'><span style='color: #555555;'>This warning is displayed once every 8 hours.</span><span></span>
-#&gt; <span class='warning'></span><span style='color: #555555;'>Call `lifecycle::last_warnings()` to see where this warning was generated.</span><span></span></div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble: 199 x 25</span><span>
-#&gt;    utterance_id speaker_id utterance_order transcript_id corpus_id gloss
-#&gt;           </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span>      </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span>           </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span>         </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>
-#&gt; </span><span style='color: #555555;'> 1</span><span>       </span><span style='text-decoration: underline;'>776</span><span>315       </span><span style='text-decoration: underline;'>2</span><span>454              13          </span><span style='text-decoration: underline;'>2</span><span>765        29 dog  
-#&gt; </span><span style='color: #555555;'> 2</span><span>       </span><span style='text-decoration: underline;'>776</span><span>323       </span><span style='text-decoration: underline;'>2</span><span>455              14          </span><span style='text-decoration: underline;'>2</span><span>765        29 that…
-#&gt; </span><span style='color: #555555;'> 3</span><span>       </span><span style='text-decoration: underline;'>776</span><span>344       </span><span style='text-decoration: underline;'>2</span><span>455              16          </span><span style='text-decoration: underline;'>2</span><span>765        29 what…
-#&gt; </span><span style='color: #555555;'> 4</span><span>       </span><span style='text-decoration: underline;'>776</span><span>378       </span><span style='text-decoration: underline;'>2</span><span>455              20          </span><span style='text-decoration: underline;'>2</span><span>765        29 is t…
-#&gt; </span><span style='color: #555555;'> 5</span><span>       </span><span style='text-decoration: underline;'>776</span><span>404       </span><span style='text-decoration: underline;'>2</span><span>455              22          </span><span style='text-decoration: underline;'>2</span><span>765        29 when…
-#&gt; </span><span style='color: #555555;'> 6</span><span>       </span><span style='text-decoration: underline;'>780</span><span>058       </span><span style='text-decoration: underline;'>2</span><span>455             156          </span><span style='text-decoration: underline;'>2</span><span>770        29 this…
-#&gt; </span><span style='color: #555555;'> 7</span><span>       </span><span style='text-decoration: underline;'>780</span><span>102       </span><span style='text-decoration: underline;'>2</span><span>454             160          </span><span style='text-decoration: underline;'>2</span><span>770        29 fire…
-#&gt; </span><span style='color: #555555;'> 8</span><span>       </span><span style='text-decoration: underline;'>780</span><span>590       </span><span style='text-decoration: underline;'>2</span><span>455             185          </span><span style='text-decoration: underline;'>2</span><span>766        29 now …
-#&gt; </span><span style='color: #555555;'> 9</span><span>       </span><span style='text-decoration: underline;'>780</span><span>627       </span><span style='text-decoration: underline;'>2</span><span>454             187          </span><span style='text-decoration: underline;'>2</span><span>766        29 what…
-#&gt; </span><span style='color: #555555;'>10</span><span>       </span><span style='text-decoration: underline;'>780</span><span>644       </span><span style='text-decoration: underline;'>2</span><span>455             188          </span><span style='text-decoration: underline;'>2</span><span>766        29 he w…
-#&gt; </span><span style='color: #555555;'># … with 189 more rows, and 19 more variables: num_tokens </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span style='color: #555555;'>, stem </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span style='color: #555555;'>,</span><span>
+<span class='fu'>get_contexts</span><span class='op'>(</span>target_child <span class='op'>=</span> <span class='st'>"Shem"</span>, token <span class='op'>=</span> <span class='st'>"dog"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Using current database version: '2020.1'.</span></div><div class='output co'>#&gt; <span class='message'>Getting data from 1 child in 1 corpus ...</span></div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 199 x 27</span><span>
+#&gt;    utterance_id gloss stem  actual_phonology model_phonology type  language
+#&gt;           </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>            </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>           </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>   
+#&gt; </span><span style='color: #555555;'> 1</span><span>       </span><span style='text-decoration: underline;'>345</span><span>795 dog   dog   </span><span style='color: #555555;'>""</span><span>               </span><span style='color: #555555;'>""</span><span>              decl… eng     
+#&gt; </span><span style='color: #555555;'> 2</span><span>       </span><span style='text-decoration: underline;'>345</span><span>796 that… that… </span><span style='color: #555555;'>""</span><span>               </span><span style='color: #555555;'>""</span><span>              ques… eng     
+#&gt; </span><span style='color: #555555;'> 3</span><span>       </span><span style='text-decoration: underline;'>345</span><span>798 what… what… </span><span style='color: #555555;'>""</span><span>               </span><span style='color: #555555;'>""</span><span>              ques… eng     
+#&gt; </span><span style='color: #555555;'> 4</span><span>       </span><span style='text-decoration: underline;'>345</span><span>802 is t… be t… </span><span style='color: #555555;'>""</span><span>               </span><span style='color: #555555;'>""</span><span>              ques… eng     
+#&gt; </span><span style='color: #555555;'> 5</span><span>       </span><span style='text-decoration: underline;'>345</span><span>804 when… when… </span><span style='color: #555555;'>""</span><span>               </span><span style='color: #555555;'>""</span><span>              ques… eng     
+#&gt; </span><span style='color: #555555;'> 6</span><span>       </span><span style='text-decoration: underline;'>347</span><span>468 now … now … </span><span style='color: #555555;'>""</span><span>               </span><span style='color: #555555;'>""</span><span>              decl… eng     
+#&gt; </span><span style='color: #555555;'> 7</span><span>       </span><span style='text-decoration: underline;'>347</span><span>491 what… what… </span><span style='color: #555555;'>""</span><span>               </span><span style='color: #555555;'>""</span><span>              ques… eng     
+#&gt; </span><span style='color: #555555;'> 8</span><span>       </span><span style='text-decoration: underline;'>347</span><span>507 he w… he g… </span><span style='color: #555555;'>""</span><span>               </span><span style='color: #555555;'>""</span><span>              ques… eng     
+#&gt; </span><span style='color: #555555;'> 9</span><span>       </span><span style='text-decoration: underline;'>347</span><span>701 ther… ther… </span><span style='color: #555555;'>""</span><span>               </span><span style='color: #555555;'>""</span><span>              ques… eng     
+#&gt; </span><span style='color: #555555;'>10</span><span>       </span><span style='text-decoration: underline;'>348</span><span>053 this… this… </span><span style='color: #555555;'>""</span><span>               </span><span style='color: #555555;'>""</span><span>              ques… eng     
+#&gt; </span><span style='color: #555555;'># … with 189 more rows, and 20 more variables: num_morphemes </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span style='color: #555555;'>,</span><span>
+#&gt; </span><span style='color: #555555;'>#   num_tokens </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span style='color: #555555;'>, utterance_order </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span style='color: #555555;'>, corpus_name </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span style='color: #555555;'>,</span><span>
 #&gt; </span><span style='color: #555555;'>#   part_of_speech </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span style='color: #555555;'>, speaker_code </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span style='color: #555555;'>, speaker_name </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span style='color: #555555;'>,</span><span>
-#&gt; </span><span style='color: #555555;'>#   speaker_role </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span style='color: #555555;'>, target_child_id </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span style='color: #555555;'>, target_child_age </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>,</span><span>
-#&gt; </span><span style='color: #555555;'>#   target_child_name </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span style='color: #555555;'>, target_child_sex </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span style='color: #555555;'>, type </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span style='color: #555555;'>,</span><span>
-#&gt; </span><span style='color: #555555;'>#   media_end </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, media_start </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, media_unit </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span style='color: #555555;'>, collection_id </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span style='color: #555555;'>,</span><span>
-#&gt; </span><span style='color: #555555;'>#   collection_name </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span style='color: #555555;'>, num_morphemes </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span style='color: #555555;'>, language </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span style='color: #555555;'>,</span><span>
-#&gt; </span><span style='color: #555555;'>#   corpus_name </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span></div><div class='input'><span class='co'># }</span>
+#&gt; </span><span style='color: #555555;'>#   speaker_role </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span style='color: #555555;'>, target_child_name </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span style='color: #555555;'>, target_child_age </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>,</span><span>
+#&gt; </span><span style='color: #555555;'>#   target_child_sex </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span style='color: #555555;'>, media_start </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, media_end </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>,</span><span>
+#&gt; </span><span style='color: #555555;'>#   media_unit </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span style='color: #555555;'>, collection_name </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span style='color: #555555;'>, collection_id </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span style='color: #555555;'>,</span><span>
+#&gt; </span><span style='color: #555555;'>#   corpus_id </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span style='color: #555555;'>, speaker_id </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span style='color: #555555;'>, target_child_id </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span style='color: #555555;'>,</span><span>
+#&gt; </span><span style='color: #555555;'>#   transcript_id </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span></div><div class='input'><span class='co'># }</span>
 </div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -265,7 +262,7 @@ utterances from the results</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
