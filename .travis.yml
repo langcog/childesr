@@ -8,7 +8,7 @@ r_packages:
   - pkgdown
 after_success:
   - chmod +x ./build_docs.sh
-  - ./build_docs.sh
+  - travis_wait 30 ./build_docs.sh
 deploy:
   provider: pages
   skip-cleanup: true
