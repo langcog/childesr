@@ -1,5 +1,6 @@
 language: r
 cache: packages
+use_devtools: true
 apt_packages:
   - libharfbuzz-dev
   - libfribidi-dev
@@ -7,7 +8,7 @@ r_packages:
   - devtools
   - pkgdown
 install:
-  - R -e 'remotes::install_deps(dep = T)'
+  - R -e 'devtools::install_deps(dep = T)'
 script:
   - R CMD build .
   - travis_wait 50 R CMD check *tar.gz --as-cran
