@@ -1,6 +1,7 @@
 language: r
 before_install:
   - Rscript -e 'install.packages(c("devtools"));if (!all(c("devtools") %in% installed.packages())) { q(status = 1, save = "no")}'
+  - Rscript -e 'install.packages(c("pkgdown"));if (!all(c("pkgdown") %in% installed.packages())) { q(status = 1, save = "no")}'
 cache: packages
 use_devtools: true
 apt_packages:
