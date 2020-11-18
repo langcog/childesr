@@ -1,5 +1,8 @@
 language: r
+before_install:
+  - Rscript -e 'install.packages(c("devtools"));if (!all(c("devtools") %in% installed.packages())) { q(status = 1, save = "no")}'
 cache: packages
+use_devtools: true
 apt_packages:
   - libharfbuzz-dev
   - libfribidi-dev
@@ -7,10 +10,10 @@ r_packages:
   - devtools
   - pkgdown
 install:
-  - R -e 'remotes::install_deps(dep = T)'
+  - R -e 'devtools::install_deps(dep = T)'
 script:
   - R CMD build .
-  - travis_wait 30 R CMD check *tar.gz --as-cran
+  - travis_wait 50 R CMD check *tar.gz --as-cran
 after_success:
   - chmod +x ./build_docs.sh
   - travis_wait 30 ./build_docs.sh
