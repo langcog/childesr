@@ -701,16 +701,26 @@ get_contexts <- function(collection = NULL, language = NULL, corpus = NULL,
     dplyr::select(transcript_id, utterance_order) %>%
     dplyr::collect()
 
-  contexts <- purrr::map2_df(utterance_orders$transcript_id,
-                             utterance_orders$utterance_order,
-                             function(tid, index) {
-    start <- index - window[1]
-    end <- index + window[2]
-    utterances %>%
-      dplyr::filter(transcript_id == tid, utterance_order >= start,
-                    utterance_order <= end) %>%
-      dplyr::collect()
-  })
+
+  # Create new observartions corresponding to utterance order window range.
+  # E.g. if a given utterance order is 120, and window is c(2, 3), this will
+  # Create a new tibble with additional rows for utterance orders 118, 119,
+  #120, 121 and 122.
+  utterance_orders <-
+    tibble(
+      transcript_id = rep(
+        utterance_orders$transcript_id,
+        each = sum(window) + 1
+      ),
+      utterance_order =
+        utterance_orders[
+          rep(1:nrow(utterance_orders),
+              each=sum(window) + 1),
+          ]$utterance_order-(-window[1]:window[2])
+    )
+
+  contexts <-  utterance_orders %>%
+    left_join(utterances, copy = TRUE)
 
   if (remove_duplicates) {
     contexts %<>% dplyr::distinct(transcript_id, utterance_id, .keep_all = TRUE)
