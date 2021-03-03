@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">childesr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1.9000</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -106,7 +106,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/langcog/childesr/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -203,22 +203,22 @@ those two ages.</p></td>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
 <span class='fu'>get_participants</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Using current database version: '2020.1'.</span></div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 24,255 x 18</span><span>
-#&gt;       id code  name  role  corpus_name min_age max_age language group sex  
-#&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>         </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>
-#&gt; </span><span style='color: #555555;'> 1</span><span>     1 CHI   John  Targ… English-Wo…    78.0    102. eng      </span><span style='color: #BB0000;'>NA</span><span>    male 
-#&gt; </span><span style='color: #555555;'> 2</span><span>     2 CHI   Rach… Targ… English-Wo…    80.0    101. eng      </span><span style='color: #BB0000;'>NA</span><span>    fema…
-#&gt; </span><span style='color: #555555;'> 3</span><span>     3 CHI   Marg… Targ… English-Wo…    80.0    105. eng      </span><span style='color: #BB0000;'>NA</span><span>    fema…
-#&gt; </span><span style='color: #555555;'> 4</span><span>     4 CHI   Erin  Targ… English-Wo…    79.0    103. eng      </span><span style='color: #BB0000;'>NA</span><span>    fema…
-#&gt; </span><span style='color: #555555;'> 5</span><span>     5 CHI   Chri… Targ… English-Wo…    77.0    105. eng      </span><span style='color: #BB0000;'>NA</span><span>    fema…
-#&gt; </span><span style='color: #555555;'> 6</span><span>     7 INV   Nina  Inve… English-Wo…    </span><span style='color: #BB0000;'>NA</span><span>       </span><span style='color: #BB0000;'>NA</span><span>  eng      </span><span style='color: #BB0000;'>NA</span><span>    </span><span style='color: #BB0000;'>NA</span><span>   
-#&gt; </span><span style='color: #555555;'> 7</span><span>     8 MOT   </span><span style='color: #BB0000;'>NA</span><span>    Moth… English-Wo…    </span><span style='color: #BB0000;'>NA</span><span>       </span><span style='color: #BB0000;'>NA</span><span>  eng      </span><span style='color: #BB0000;'>NA</span><span>    fema…
-#&gt; </span><span style='color: #555555;'> 8</span><span>     9 INV   Nina  Inve… English-Wo…    </span><span style='color: #BB0000;'>NA</span><span>       </span><span style='color: #BB0000;'>NA</span><span>  eng      </span><span style='color: #BB0000;'>NA</span><span>    </span><span style='color: #BB0000;'>NA</span><span>   
-#&gt; </span><span style='color: #555555;'> 9</span><span>    10 INV   Nina  Inve… English-Wo…    </span><span style='color: #BB0000;'>NA</span><span>       </span><span style='color: #BB0000;'>NA</span><span>  eng      </span><span style='color: #BB0000;'>NA</span><span>    </span><span style='color: #BB0000;'>NA</span><span>   
-#&gt; </span><span style='color: #555555;'>10</span><span>    11 CHI   Joan… Targ… English-Wo…    79.0    104. eng      </span><span style='color: #BB0000;'>NA</span><span>    fema…
-#&gt; </span><span style='color: #555555;'># … with 24,245 more rows, and 8 more variables: ses </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span style='color: #555555;'>, education </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span style='color: #555555;'>,</span><span>
-#&gt; </span><span style='color: #555555;'>#   custom </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span style='color: #555555;'>, collection_name </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span style='color: #555555;'>, collection_id </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span style='color: #555555;'>, corpus_id </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span style='color: #555555;'>,</span><span>
-#&gt; </span><span style='color: #555555;'>#   target_child_id </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span style='color: #555555;'>, target_child_name </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span></div><div class='input'><span class='co'># }</span>
+</div><div class='output co'>#&gt; <span class='message'>Using current database version: '2020.1'.</span></div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 24,255 x 18</span><span>
+#&gt;       id code  name    role    corpus_name  min_age max_age language group sex  
+#&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>          </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>   </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>
+#&gt; </span><span style='color: #BCBCBC;'> 1</span><span>     1 CHI   John    Target… English-Wol…    78.0    102. eng      </span><span style='color: #BB0000;'>NA</span><span>    male 
+#&gt; </span><span style='color: #BCBCBC;'> 2</span><span>     2 CHI   Rachel  Target… English-Wol…    80.0    101. eng      </span><span style='color: #BB0000;'>NA</span><span>    fema…
+#&gt; </span><span style='color: #BCBCBC;'> 3</span><span>     3 CHI   Margar… Target… English-Wol…    80.0    105. eng      </span><span style='color: #BB0000;'>NA</span><span>    fema…
+#&gt; </span><span style='color: #BCBCBC;'> 4</span><span>     4 CHI   Erin    Target… English-Wol…    79.0    103. eng      </span><span style='color: #BB0000;'>NA</span><span>    fema…
+#&gt; </span><span style='color: #BCBCBC;'> 5</span><span>     5 CHI   Christ… Target… English-Wol…    77.0    105. eng      </span><span style='color: #BB0000;'>NA</span><span>    fema…
+#&gt; </span><span style='color: #BCBCBC;'> 6</span><span>     7 INV   Nina    Invest… English-Wol…    </span><span style='color: #BB0000;'>NA</span><span>       </span><span style='color: #BB0000;'>NA</span><span>  eng      </span><span style='color: #BB0000;'>NA</span><span>    </span><span style='color: #BB0000;'>NA</span><span>   
+#&gt; </span><span style='color: #BCBCBC;'> 7</span><span>     8 MOT   </span><span style='color: #BB0000;'>NA</span><span>      Mother  English-Wol…    </span><span style='color: #BB0000;'>NA</span><span>       </span><span style='color: #BB0000;'>NA</span><span>  eng      </span><span style='color: #BB0000;'>NA</span><span>    fema…
+#&gt; </span><span style='color: #BCBCBC;'> 8</span><span>     9 INV   Nina    Invest… English-Wol…    </span><span style='color: #BB0000;'>NA</span><span>       </span><span style='color: #BB0000;'>NA</span><span>  eng      </span><span style='color: #BB0000;'>NA</span><span>    </span><span style='color: #BB0000;'>NA</span><span>   
+#&gt; </span><span style='color: #BCBCBC;'> 9</span><span>    10 INV   Nina    Invest… English-Wol…    </span><span style='color: #BB0000;'>NA</span><span>       </span><span style='color: #BB0000;'>NA</span><span>  eng      </span><span style='color: #BB0000;'>NA</span><span>    </span><span style='color: #BB0000;'>NA</span><span>   
+#&gt; </span><span style='color: #BCBCBC;'>10</span><span>    11 CHI   Joanna  Target… English-Wol…    79.0    104. eng      </span><span style='color: #BB0000;'>NA</span><span>    fema…
+#&gt; </span><span style='color: #949494;'># … with 24,245 more rows, and 8 more variables: ses &lt;chr&gt;, education &lt;chr&gt;,</span><span>
+#&gt; </span><span style='color: #949494;'>#   custom &lt;chr&gt;, collection_name &lt;chr&gt;, collection_id &lt;int&gt;, corpus_id &lt;int&gt;,</span><span>
+#&gt; </span><span style='color: #949494;'>#   target_child_id &lt;int&gt;, target_child_name &lt;chr&gt;</span><span></div><div class='input'><span class='co'># }</span>
 </div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

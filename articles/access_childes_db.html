@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">childesr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1.9000</span>
       </span>
     </div>
 
@@ -39,7 +39,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -65,7 +65,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/langcog/childesr/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -79,14 +79,13 @@
 
       
 
-      </header><link href="access_childes_db_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet">
-<script src="access_childes_db_files/anchor-sections-1.0/anchor-sections.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Accessing <code>childes-db</code>
 </h1>
             
-            <h4 class="date">2020-11-19</h4>
+            <h4 class="date">2021-03-03</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/langcog/childesr/blob/master/vignettes/access_childes_db.Rmd"><code>vignettes/access_childes_db.Rmd</code></a></small>
       <div class="hidden name"><code>access_childes_db.Rmd</code></div>
@@ -125,14 +124,14 @@
 <code class="sourceCode R"><span class="va">d_transcripts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_transcripts.html">get_transcripts</a></span><span class="op">(</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">d_transcripts</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 6 x 13
-##   transcript_id corpus_name language date  filename target_child_na…
-##           &lt;int&gt; &lt;chr&gt;       &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt;           
-## 1             1 English-Wo… eng      1989… Frogs/E… John            
-## 2             2 English-Wo… eng      1989… Frogs/E… Rachel          
-## 3             3 English-Wo… eng      1989… Frogs/E… Christina       
-## 4             4 English-Wo… eng      &lt;NA&gt;  Frogs/E… Margaret        
-## 5             5 English-Wo… eng      1989… Frogs/E… Erin            
-## 6             6 English-Wo… eng      1989… Frogs/E… Andrew          
+##   transcript_id corpus_name   language date    filename         target_child_na…
+##           &lt;int&gt; &lt;chr&gt;         &lt;chr&gt;    &lt;chr&gt;   &lt;chr&gt;            &lt;chr&gt;           
+## 1             1 English-Wolf… eng      1989-0… Frogs/English-W… John            
+## 2             2 English-Wolf… eng      1989-0… Frogs/English-W… Rachel          
+## 3             3 English-Wolf… eng      1989-0… Frogs/English-W… Christina       
+## 4             4 English-Wolf… eng      &lt;NA&gt;    Frogs/English-W… Margaret        
+## 5             5 English-Wolf… eng      1989-0… Frogs/English-W… Erin            
+## 6             6 English-Wolf… eng      1989-0… Frogs/English-W… Andrew          
 ## # … with 7 more variables: target_child_age &lt;dbl&gt;, target_child_sex &lt;chr&gt;,
 ## #   collection_name &lt;chr&gt;, pid &lt;chr&gt;, collection_id &lt;int&gt;, corpus_id &lt;int&gt;,
 ## #   target_child_id &lt;int&gt;</code></pre>
@@ -141,14 +140,14 @@
 <code class="sourceCode R"><span class="va">d_eng_na</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_transcripts.html">get_transcripts</a></span><span class="op">(</span>collection <span class="op">=</span> <span class="st">"Eng-NA"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">d_eng_na</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 6 x 13
-##   transcript_id corpus_name language date  filename target_child_na…
-##           &lt;int&gt; &lt;chr&gt;       &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt;           
-## 1          3260 Garvey      eng      &lt;NA&gt;  Eng-NA/… &lt;NA&gt;            
-## 2          3261 Garvey      eng      &lt;NA&gt;  Eng-NA/… &lt;NA&gt;            
-## 3          3262 Garvey      eng      &lt;NA&gt;  Eng-NA/… &lt;NA&gt;            
-## 4          3263 Garvey      eng      &lt;NA&gt;  Eng-NA/… &lt;NA&gt;            
-## 5          3264 Garvey      eng      &lt;NA&gt;  Eng-NA/… &lt;NA&gt;            
-## 6          3265 Garvey      eng      &lt;NA&gt;  Eng-NA/… &lt;NA&gt;            
+##   transcript_id corpus_name language date  filename             target_child_na…
+##           &lt;int&gt; &lt;chr&gt;       &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;                &lt;chr&gt;           
+## 1          3260 Garvey      eng      &lt;NA&gt;  Eng-NA/Garvey/amyan… &lt;NA&gt;            
+## 2          3261 Garvey      eng      &lt;NA&gt;  Eng-NA/Garvey/amywe… &lt;NA&gt;            
+## 3          3262 Garvey      eng      &lt;NA&gt;  Eng-NA/Garvey/ariga… &lt;NA&gt;            
+## 4          3263 Garvey      eng      &lt;NA&gt;  Eng-NA/Garvey/arike… &lt;NA&gt;            
+## 5          3264 Garvey      eng      &lt;NA&gt;  Eng-NA/Garvey/bende… &lt;NA&gt;            
+## 6          3265 Garvey      eng      &lt;NA&gt;  Eng-NA/Garvey/bevfl… &lt;NA&gt;            
 ## # … with 7 more variables: target_child_age &lt;dbl&gt;, target_child_sex &lt;chr&gt;,
 ## #   collection_name &lt;chr&gt;, pid &lt;chr&gt;, collection_id &lt;int&gt;, corpus_id &lt;int&gt;,
 ## #   target_child_id &lt;int&gt;</code></pre>
