@@ -64,7 +64,8 @@ resolve_connection <- function(connection, db_version = NULL, db_args = NULL) {
 #' get_db_info()
 #' }
 get_db_info <- function() {
-  jsonlite::fromJSON("https://childes-db.stanford.edu/childes-db.json")
+  tryCatch({jsonlite::fromJSON("https://childes-db.stanford.edu/childes-db.json")},
+           error = function(e){message("Could not connect to childes-db.stanford.edu")})
 }
 
 #' Connect to CHILDES
@@ -84,15 +85,20 @@ connect_to_childes <- function(db_version = "current", db_args = NULL) {
   db_info <- get_db_info()
 
   if (is.null(db_args)) db_args <- db_info
-
-  con <- DBI::dbConnect(
-    RMySQL::MySQL(),
-    host = db_args$host,
-    dbname = translate_version(db_version, db_args, db_info),
-    user = db_args$user,
-    password = db_args$password
-  )
-  DBI::dbGetQuery(con, "SET NAMES utf8")
+#add a trycatch here?
+  tryCatch(
+    expr = {
+      con <- DBI::dbConnect(
+        RMySQL::MySQL(),
+        host = db_args$host,
+        dbname = translate_version(db_version, db_args, db_info),
+        user = db_args$user,
+        password = db_args$password
+      )
+      DBI::dbGetQuery(con, "SET NAMES utf8")},
+  error = function(e){
+    message("Could not connect to database. Please check your connection or try again.")
+  })
   return(con)
 }
 
@@ -102,6 +108,7 @@ connect_to_childes <- function(db_version = "current", db_args = NULL) {
 #'
 #' @return Logical indicating whether a connection was successfully formed
 #' @export
+#'
 check_connection <- function(db_version = "current", db_args = NULL) {
   con <- tryCatch(connect_to_childes(db_version, db_args),
                   error = function(e) NULL)
