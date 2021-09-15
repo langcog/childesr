@@ -5,3 +5,4 @@ build_docs.sh
 build_docs.R
 docs/
 cran-comments.md
+^CRAN-RELEASE$

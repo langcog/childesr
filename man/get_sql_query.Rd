@@ -27,7 +27,7 @@ The database after calling the supplied SQL query
 Run a SQL Query script on the CHILDES database
 }
 \examples{
-\donttest{
+\dontrun{
 get_sql_query("SELECT * FROM collection")
 }
 }

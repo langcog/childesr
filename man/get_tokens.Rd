@@ -70,7 +70,7 @@ A `tbl` of Token data, filtered down by supplied arguments. If
 Get tokens
 }
 \examples{
-\donttest{
+\dontrun{
 get_tokens(token = "dog")
 }
 }

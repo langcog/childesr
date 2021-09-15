@@ -60,11 +60,17 @@ resolve_connection <- function(connection, db_version = NULL, db_args = NULL) {
 #' @export
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' get_db_info()
 #' }
 get_db_info <- function() {
-  jsonlite::fromJSON("https://childes-db.stanford.edu/childes-db.json")
+  tryCatch(jsonlite::fromJSON("https://childes-db.stanford.edu/childes-db.json"),
+           error = function(e) message(strwrap(
+             prefix = " ", initial = "",
+             "Could not retrieve childes-db connection information. Please check your
+             internet connection. If this error persists please contact
+             childes-db-contact@stanford.edu"
+           )))
 }
 
 #' Connect to CHILDES
@@ -75,41 +81,34 @@ get_db_info <- function() {
 #' @export
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' con <- connect_to_childes(db_version = "current", db_args = NULL)
 #' DBI::dbDisconnect(con)
 #' }
 connect_to_childes <- function(db_version = "current", db_args = NULL) {
 
+  # get info from hosted json, NULL if connection error
   db_info <- get_db_info()
 
+  # if db_info was not found, return NULL
+  if (is.null(db_info)) return()
+
+  # if db_args is unspecified, use db_info
   if (is.null(db_args)) db_args <- db_info
 
-  con <- DBI::dbConnect(
-    RMySQL::MySQL(),
-    host = db_args$host,
-    dbname = translate_version(db_version, db_args, db_info),
-    user = db_args$user,
-    password = db_args$password
-  )
-  DBI::dbGetQuery(con, "SET NAMES utf8")
-  return(con)
-}
-
-#' Check if connecting to childes db is possible
-#'
-#' @inheritParams connect_to_childes
-#'
-#' @return Logical indicating whether a connection was successfully formed
-#' @export
-check_connection <- function(db_version = "current", db_args = NULL) {
-  con <- tryCatch(connect_to_childes(db_version, db_args),
-                  error = function(e) NULL)
-  if (!is.null(con)) {
-    DBI::dbDisconnect(con)
-    return(TRUE)
-  }
-  return(FALSE)
+  tryCatch(
+    expr = {
+      con <- DBI::dbConnect(
+        RMySQL::MySQL(),
+        host = db_args$host,
+        dbname = translate_version(db_version, db_args, db_info),
+        user = db_args$user,
+        password = db_args$password
+      )
+      DBI::dbGetQuery(con, "SET NAMES utf8")
+      return(con)
+    },
+    error = function(e) message("Could not connect to childes-db"))
 }
 
 #' Clear all MySQL connections
@@ -141,13 +140,15 @@ get_table <- function(connection, name) {
 #' @export
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' get_collections()
 #' }
 get_collections <- function(connection = NULL, db_version = "current",
                             db_args = NULL) {
 
   con <- resolve_connection(connection, db_version, db_args)
+  if (is.null(con)) return()
+
   collections <- dplyr::tbl(con, "collection") %>%
     dplyr::rename(collection_id = id) %>%
     dplyr::rename(collection_name = name)
@@ -169,13 +170,15 @@ get_collections <- function(connection = NULL, db_version = "current",
 #' @export
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' get_corpora()
 #' }
 get_corpora <- function(connection = NULL, db_version = "current",
                         db_args = NULL) {
 
   con <- resolve_connection(connection, db_version, db_args)
+  if (is.null(con)) return()
+
   corpora <- dplyr::tbl(con, "corpus") %>%
     dplyr::rename(corpus_id = id) %>%
     dplyr::rename(corpus_name = name)
@@ -201,7 +204,7 @@ get_corpora <- function(connection = NULL, db_version = "current",
 #' @export
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' get_transcripts()
 #' }
 get_transcripts <- function(collection = NULL, corpus = NULL,
@@ -209,6 +212,7 @@ get_transcripts <- function(collection = NULL, corpus = NULL,
                             db_version = "current", db_args = NULL) {
 
   con <- resolve_connection(connection, db_version, db_args)
+  if (is.null(con)) return()
 
   transcripts <- get_table(con, "transcript") %>%
     dplyr::rename(transcript_id = id)
@@ -252,7 +256,7 @@ get_transcripts <- function(collection = NULL, corpus = NULL,
 #' @export
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' get_participants()
 #' }
 get_participants <- function(collection = NULL, corpus = NULL,
@@ -262,6 +266,8 @@ get_participants <- function(collection = NULL, corpus = NULL,
                              db_args = NULL) {
 
   con <- resolve_connection(connection, db_version, db_args)
+  if (is.null(con)) return()
+
   participants <- get_table(con, "participant")
 
   if (!is.null(collection)) {
@@ -340,7 +346,7 @@ get_participants <- function(collection = NULL, corpus = NULL,
 #' @export
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' get_speaker_statistics()
 #' }
 get_speaker_statistics <- function(collection = NULL, corpus = NULL,
@@ -350,6 +356,8 @@ get_speaker_statistics <- function(collection = NULL, corpus = NULL,
                                    db_args = NULL) {
 
   con <- resolve_connection(connection, db_version, db_args)
+  if (is.null(con)) return()
+
   transcripts <- get_transcripts(collection, corpus, target_child, con)
   speaker_statistics <- get_table(con, "transcript_by_speaker")
 
@@ -525,7 +533,7 @@ get_content <- function(content_type, collection = NULL, language = NULL,
 #' @export
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' get_tokens(token = "dog")
 #' }
 get_tokens <- function(collection = NULL, language = NULL, corpus = NULL,
@@ -539,6 +547,8 @@ get_tokens <- function(collection = NULL, language = NULL, corpus = NULL,
          "argument 'token'. Caution: this may result in a long-running query.")
 
   con <- resolve_connection(connection, db_version, db_args)
+  if (is.null(con)) return()
+
   tokens <- get_content(content_type = "token",
                         collection = collection,
                         language = language,
@@ -580,7 +590,7 @@ get_tokens <- function(collection = NULL, language = NULL, corpus = NULL,
 #' @export
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' get_types()
 #' }
 get_types <- function(collection = NULL, language = NULL, corpus = NULL,
@@ -589,6 +599,8 @@ get_types <- function(collection = NULL, language = NULL, corpus = NULL,
                       db_version = "current", db_args = NULL) {
 
   con <- resolve_connection(connection, db_version, db_args)
+  if (is.null(con)) return()
+
   types <- get_content(content_type = "token_frequency",
                        collection = collection,
                        language = language,
@@ -619,7 +631,7 @@ get_types <- function(collection = NULL, language = NULL, corpus = NULL,
 #' @export
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' get_utterances(target_child = "Shem")
 #' }
 get_utterances <- function(collection = NULL, language = NULL, corpus = NULL,
@@ -628,6 +640,8 @@ get_utterances <- function(collection = NULL, language = NULL, corpus = NULL,
                            db_version = "current", db_args = NULL) {
 
   con <- resolve_connection(connection, db_version, db_args)
+  if (is.null(con)) return()
+
   utterances <- get_content(content_type = "utterance",
                             collection = collection,
                             language = language,
@@ -659,7 +673,7 @@ get_utterances <- function(collection = NULL, language = NULL, corpus = NULL,
 #' @export
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' get_contexts(target_child = "Shem", token = "dog")
 #' }
 get_contexts <- function(collection = NULL, language = NULL, corpus = NULL,
@@ -670,6 +684,7 @@ get_contexts <- function(collection = NULL, language = NULL, corpus = NULL,
                         db_args = NULL) {
 
   con <- resolve_connection(connection, db_version, db_args)
+  if (is.null(con)) return()
 
   token_utterances <- get_tokens(collection = collection,
                                  language = language,
@@ -733,13 +748,14 @@ get_contexts <- function(collection = NULL, language = NULL, corpus = NULL,
 #' @export
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' get_sql_query("SELECT * FROM collection")
 #' }
 
 get_sql_query <- function(sql_query_string, connection = NULL,
                           db_version = "current", db_args = NULL) {
   con <- resolve_connection(connection, db_version, db_args)
+  if (is.null(con)) return()
 
   returned_sql_query <- dplyr::tbl(con, dplyr::sql(sql_query_string)) %>%
     dplyr::collect()

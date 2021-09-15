@@ -21,7 +21,7 @@ A `tbl` of Collection data. If `connection` is supplied, the result
 Get collections
 }
 \examples{
-\donttest{
+\dontrun{
 get_collections()
 }
 }
