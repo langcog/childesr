@@ -1,3 +1,6 @@
+# childesr 0.2.2
+- add checks for database connection errors
+
 # childesr 0.2.1
 - fix age filtering in get_participants()
 - add support for SQL Query strings

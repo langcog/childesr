@@ -35,7 +35,8 @@ library(dplyr)
 ```
 
 ```{r, echo=FALSE, message=FALSE}
-can_connect <- check_connection()
+con <- connect_to_childes()
+can_connect <- !is.null(con)
 knitr::opts_chunk$set(echo = TRUE, message = FALSE, eval = can_connect)
 ```
 

@@ -65,7 +65,7 @@ A 'tbl' of Utterance data, filtered down by supplied arguments.
 Get the utterances surrounding a token(s)
 }
 \examples{
-\donttest{
+\dontrun{
 get_contexts(target_child = "Shem", token = "dog")
 }
 }

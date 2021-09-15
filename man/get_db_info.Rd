@@ -14,7 +14,7 @@ List of database info: host name, current version, supported
 Get information on database connection options
 }
 \examples{
-\donttest{
+\dontrun{
 get_db_info()
 }
 }
