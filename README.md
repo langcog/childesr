@@ -11,9 +11,9 @@ devtools::install_github("langcog/childesr")
 
 ### Tutorial
 
-To get a hands on walk-through on how to use `childesr` to access `childes-db`, check out this [tutorial](http://childes-db.stanford.edu/api.html). 
+To get a hands on walk-through on how to use `childesr` to access `childes-db`, check out this [tutorial](https://langcog.github.io/childes-db-website/api.html).
 
 ### Other relevant GitHub repositories
 
-- Website frontend: http://github.com/langcog/childes-db-website 
-- Interactive data visualizations: https://github.com/langcog/childes-db-shiny 
+- Website frontend: http://github.com/langcog/childes-db-website
+- Interactive data visualizations: https://github.com/langcog/childes-db-shiny
