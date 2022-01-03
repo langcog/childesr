@@ -64,7 +64,7 @@ resolve_connection <- function(connection, db_version = NULL, db_args = NULL) {
 #' get_db_info()
 #' }
 get_db_info <- function() {
-  tryCatch(jsonlite::fromJSON("https://childes-db.stanford.edu/childes-db.json"),
+  tryCatch(jsonlite::fromJSON("https://langcog.github.io/childes-db-website/childes-db.json"),
            error = function(e) message(strwrap(
              prefix = " ", initial = "",
              "Could not retrieve childes-db connection information. Please check your
@@ -764,4 +764,3 @@ get_sql_query <- function(sql_query_string, connection = NULL,
   }
   return(returned_sql_query)
 }
-
