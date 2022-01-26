@@ -3,7 +3,7 @@ Type: Package
 Title: Accessing the 'CHILDES' Database
 Description: Tools for connecting to 'CHILDES', an open repository for
     transcripts of parent-child interaction. For more information on the 
-    underlying data, see <https://childes-db.stanford.edu>.
+    underlying data, see <https://langcog.github.io/childes-db-website/>.
 Version: 0.2.3
 Authors@R: c(
     person("Mika", "Braginsky", email = "mika.br@gmail.com", role = c("aut", "cre")),
