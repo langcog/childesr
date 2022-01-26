@@ -725,7 +725,7 @@ get_contexts <- function(collection = NULL, language = NULL, corpus = NULL,
       dplyr::filter(transcript_id == tid, utterance_order >= start,
                     utterance_order <= end) %>%
       dplyr::collect()
-  })
+  }, .id = "context_id")
 
   if (remove_duplicates) {
     contexts %<>% dplyr::distinct(transcript_id, utterance_id, .keep_all = TRUE)
