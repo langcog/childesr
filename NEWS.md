@@ -1,3 +1,6 @@
+# childesr 0.2.3
+- update url for database connection
+
 # childesr 0.2.2
 - add checks for database connection errors
 
