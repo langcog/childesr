@@ -108,7 +108,7 @@ connect_to_childes <- function(db_version = "current", db_args = NULL) {
       DBI::dbGetQuery(con, "SET NAMES utf8")
       return(con)
     },
-    error = function(e) message("Could not connect to childes-db"))
+    error = function(e) message("Could not connect to childes-db:\n", e))
 }
 
 #' Clear all MySQL connections
