@@ -1,3 +1,7 @@
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/langcog/childesr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/langcog/childesr/actions/workflows/R-CMD-check.yaml)
+<!-- badges: end -->
+
 # An R interface to childes-db
 
 The `childesr` package allows you to access data in the childes-db from R. This removes the need to write complex SQL queries in order to get the information you want from the database. This vignette shows some examples of how to use the data loading functions and what the resulting data look like.

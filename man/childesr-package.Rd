@@ -12,6 +12,7 @@ Tools for connecting to 'CHILDES', an open repository for transcripts of parent-
 Useful links:
 \itemize{
   \item \url{https://github.com/langcog/childesr}
+  \item \url{https://langcog.github.io/childesr/}
   \item Report bugs at \url{https://github.com/langcog/childesr/issues}
 }
 
