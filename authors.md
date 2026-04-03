@@ -17,7 +17,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/langcog/childesr/blob/master/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/langcog/childesr/blob/main/DESCRIPTION)
 
 Braginsky M, Sanchez A, Yurovsky D (2026). *childesr: Accessing the
 'CHILDES' Database*. R package version 0.2.3.9000,
