@@ -26,10 +26,11 @@ Imports:
     jsonlite (>= 1.7),
     magrittr (>= 2.0),
     purrr (>= 0.3),
+    rlang,
     RMySQL (>= 0.10.21)
 Suggests:
     knitr,
     rmarkdown,
     curl
-RoxygenNote: 7.1.1
+RoxygenNote: 7.3.3
 VignetteBuilder: knitr

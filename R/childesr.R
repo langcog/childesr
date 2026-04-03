@@ -1,13 +1,9 @@
-#' @importFrom magrittr "%>%"
-#' @importFrom magrittr "%<>%"
-NULL
-
-utils::globalVariables(c("collection_id", "collection_name", "corpus_id",
-                         "corpus_name", "gloss", "id", "max_age", "min_age",
-                         "name", "speaker_role", "target_child_id",
-                         "target_child_name", "target_child_age",
-                         "utterance_id", "transcript_id", "utterance_order",
-                         "replacement"))
+# utils::globalVariables(c("collection_id", "collection_name", "corpus_id",
+#                          "corpus_name", "gloss", "id", "max_age", "min_age",
+#                          "name", "speaker_role", "target_child_id",
+#                          "target_child_name", "target_child_age",
+#                          "utterance_id", "transcript_id", "utterance_order",
+#                          "replacement"))
 
 avg_month <- 365.2425 / 12
 
@@ -149,9 +145,9 @@ get_collections <- function(connection = NULL, db_version = "current",
   con <- resolve_connection(connection, db_version, db_args)
   if (is.null(con)) return()
 
-  collections <- dplyr::tbl(con, "collection") %>%
-    dplyr::rename(collection_id = id) %>%
-    dplyr::rename(collection_name = name)
+  collections <- dplyr::tbl(con, "collection") |>
+    dplyr::rename(collection_id = "id") |>
+    dplyr::rename(collection_name = "name")
 
   if (is.null(connection)) {
     collections %<>% dplyr::collect()
@@ -179,9 +175,9 @@ get_corpora <- function(connection = NULL, db_version = "current",
   con <- resolve_connection(connection, db_version, db_args)
   if (is.null(con)) return()
 
-  corpora <- dplyr::tbl(con, "corpus") %>%
-    dplyr::rename(corpus_id = id) %>%
-    dplyr::rename(corpus_name = name)
+  corpora <- dplyr::tbl(con, "corpus") |>
+    dplyr::rename(corpus_id = "id") |>
+    dplyr::rename(corpus_name = "name")
 
   if (is.null(connection)) {
     corpora %<>% dplyr::collect()
@@ -214,21 +210,21 @@ get_transcripts <- function(collection = NULL, corpus = NULL,
   con <- resolve_connection(connection, db_version, db_args)
   if (is.null(con)) return()
 
-  transcripts <- get_table(con, "transcript") %>%
-    dplyr::rename(transcript_id = id)
+  transcripts <- get_table(con, "transcript") |>
+    dplyr::rename(transcript_id = "id")
 
   if (!is.null(collection)) {
-    transcripts %<>% dplyr::filter(collection_name %in% collection)
+    transcripts %<>% dplyr::filter(.data$collection_name %in% collection)
   }
   if (!is.null(corpus)) {
-    transcripts %<>% dplyr::filter(corpus_name %in% corpus)
+    transcripts %<>% dplyr::filter(.data$corpus_name %in% corpus)
   }
   if (!is.null(target_child)) {
-    transcripts %<>% dplyr::filter(target_child_name %in% target_child)
+    transcripts %<>% dplyr::filter(.data$target_child_name %in% target_child)
   }
 
   transcripts %<>%
-    dplyr::mutate(target_child_age = target_child_age / avg_month)
+    dplyr::mutate(target_child_age = .data$target_child_age / avg_month)
 
   if (is.null(connection)) {
     transcripts %<>% dplyr::collect()
@@ -271,22 +267,22 @@ get_participants <- function(collection = NULL, corpus = NULL,
   participants <- get_table(con, "participant")
 
   if (!is.null(collection)) {
-    participants %<>% dplyr::filter(collection_name %in% collection)
+    participants %<>% dplyr::filter(.data$collection_name %in% collection)
   }
 
   if (!is.null(corpus)) {
-    participants %<>% dplyr::filter(corpus_name %in% corpus)
+    participants %<>% dplyr::filter(.data$corpus_name %in% corpus)
   }
 
   if (!is.null(age)) {
     days <- age * avg_month
     if (length(age) == 1) {
-      participants %<>% dplyr::filter(max_age >= days & min_age <= days)
+      participants %<>% dplyr::filter(.data$max_age >= days & .data$min_age <= days)
     } else if (length(age) == 2) {
       days_1 <- days[1]
       days_2 <- days[2]
-      participants %<>% dplyr::filter((max_age >= days_1 & min_age <= days_2) |
-                                        (min_age <= days_2 & max_age >= days_1))
+      participants %<>% dplyr::filter((.data$max_age >= days_1 & .data$min_age <= days_2) |
+                                        (.data$min_age <= days_2 & .data$max_age >= days_1))
     } else {
       stop("`age` argument must be of length 1 or 2")
     }
@@ -294,40 +290,42 @@ get_participants <- function(collection = NULL, corpus = NULL,
 
   if (!is.null(sex)) {
     sex_filter <- sex
-    participants %<>% dplyr::filter(sex %in% sex_filter)
+    participants %<>% dplyr::filter(.data$sex %in% sex_filter)
   }
 
   if (!is.null(target_child)) {
-    child_id <- participants %>%
-      dplyr::filter(name == target_child) %>%
-      dplyr::pull(target_child_id) %>%
+    child_id <- participants |>
+      dplyr::filter(.data$name == target_child) |>
+      dplyr::pull(.data$target_child_id) |>
       unique()
     if (length(child_id) != 1) {
       stop("Duplicate or missing child")
     } else {
-      participants %<>% dplyr::filter(target_child_id == child_id)
+      participants %<>% dplyr::filter(.data$target_child_id == child_id)
     }
   }
 
   if (!is.null(role)) {
     role_filter <- role
-    participants %<>% dplyr::filter(role %in% role_filter)
+    participants %<>% dplyr::filter(.data$role %in% role_filter)
   }
 
   if (!is.null(role_exclude)) {
-    participants %<>% dplyr::filter(!(role %in% role_exclude))
+    participants %<>% dplyr::filter(!(.data$role %in% role_exclude))
   }
 
-  target_children <- get_transcripts(collection, corpus, target_child, con) %>%
-    dplyr::distinct(target_child_id, target_child_name) %>%
-    dplyr::select(target_child_id, target_child_name)
+  target_children <- get_transcripts(collection, corpus, target_child, con) |>
+    dplyr::select("target_child_id", "target_child_name") |>
+    dplyr::distinct()
+    # dplyr::distinct(.data$target_child_id, .data$target_child_name) |>
+    # dplyr::select("target_child_id", "target_child_name")
 
   # TODO remove after https://github.com/langcog/childes-db/issues/30 resolved
   participants %<>%
     dplyr::left_join(target_children, by = "target_child_id")
 
-  participants %<>% dplyr::mutate(max_age = max_age / avg_month)
-  participants %<>% dplyr::mutate(min_age = min_age / avg_month)
+  participants %<>% dplyr::mutate(max_age = .data$max_age / avg_month)
+  participants %<>% dplyr::mutate(min_age = .data$min_age / avg_month)
 
   if (is.null(connection)) {
     participants %<>% dplyr::collect()
@@ -362,20 +360,22 @@ get_speaker_statistics <- function(collection = NULL, corpus = NULL,
   speaker_statistics <- get_table(con, "transcript_by_speaker")
 
   if (!is.null(collection)) {
-    collection_filter <- transcripts %>%
-      dplyr::distinct(collection_id, target_child_id) %>%
-      dplyr::pull(target_child_id)
+    collection_filter <- transcripts |>
+      dplyr::select("collection_id", "target_child_id") |>
+      dplyr::distinct() |>
+      dplyr::pull(.data$target_child_id)
 
     speaker_statistics %<>%
-      dplyr::filter(target_child_id %in% collection_filter)
+      dplyr::filter(.data$target_child_id %in% collection_filter)
   }
 
   if (!is.null(corpus)) {
-    corpus_filter <- transcripts %>%
-      dplyr::distinct(corpus_id, target_child_id) %>%
-      dplyr::pull(target_child_id)
+    corpus_filter <- transcripts |>
+      dplyr::select("corpus_id", "target_child_id") |>
+      dplyr::distinct() |>
+      dplyr::pull(.data$target_child_id)
 
-    speaker_statistics %<>% dplyr::filter(target_child_id %in% corpus_filter)
+    speaker_statistics %<>% dplyr::filter(.data$target_child_id %in% corpus_filter)
   }
 
   if (!is.null(age)) {
@@ -384,30 +384,30 @@ get_speaker_statistics <- function(collection = NULL, corpus = NULL,
     if (length(age) == 1) days <- c(days, days + avg_month)
     days_1 <- days[1]
     days_2 <- days[2]
-    speaker_statistics %<>% dplyr::filter(target_child_age >= days_1,
-                                          target_child_age <= days_2)
+    speaker_statistics %<>% dplyr::filter(.data$target_child_age >= days_1,
+                                          .data$target_child_age <= days_2)
   }
 
   if (!is.null(sex)) {
     sex_filter <- sex
-    speaker_statistics %<>% dplyr::filter(sex %in% sex_filter)
+    speaker_statistics %<>% dplyr::filter(.data$sex %in% sex_filter)
   }
 
   if (!is.null(target_child)) {
-    speaker_statistics %<>% dplyr::filter(target_child_name %in% target_child)
+    speaker_statistics %<>% dplyr::filter(.data$target_child_name %in% target_child)
   }
 
   if (!is.null(role)) {
     role_filter <- role
-    speaker_statistics %<>% dplyr::filter(speaker_role %in% role_filter)
+    speaker_statistics %<>% dplyr::filter(.data$speaker_role %in% role_filter)
   }
 
   if (!is.null(role_exclude)) {
-    speaker_statistics %<>% dplyr::filter(!(speaker_role %in% role_exclude))
+    speaker_statistics %<>% dplyr::filter(!(.data$speaker_role %in% role_exclude))
   }
 
   speaker_statistics %<>%
-    dplyr::mutate(target_child_age = target_child_age / avg_month)
+    dplyr::mutate(target_child_age = .data$target_child_age / avg_month)
 
   if (is.null(connection)) {
     suppressWarnings(speaker_statistics %<>% dplyr::collect())
@@ -435,12 +435,14 @@ get_content <- function(content_type, collection = NULL, language = NULL,
 
   transcripts <- get_transcripts(collection, corpus, target_child, connection)
 
-  corpora <- transcripts %>%
-    dplyr::distinct(corpus_id) %>%
+  corpora <- transcripts |>
+    dplyr::select("corpus_id") |>
+    dplyr::distinct() |>
     dplyr::collect()
-  child_id <- transcripts %>%
-    dplyr::distinct(target_child_id) %>%
-    dplyr::pull(target_child_id)
+  child_id <- transcripts |>
+    dplyr::select("target_child_id") |>
+    dplyr::distinct() |>
+    dplyr::pull(.data$target_child_id)
 
   num_children <- length(child_id)
   num_corpora <- nrow(corpora)
@@ -461,12 +463,12 @@ get_content <- function(content_type, collection = NULL, language = NULL,
 
   if (!is.null(stem)) {
     stem_filter <- stem
-    content %<>% dplyr::filter(stem %in% stem_filter)
+    content %<>% dplyr::filter(.data$stem %in% stem_filter)
   }
 
   if (!is.null(part_of_speech)) {
     part_of_speech_filter <- part_of_speech
-    content %<>% dplyr::filter(part_of_speech %in% part_of_speech_filter)
+    content %<>% dplyr::filter(.data$part_of_speech %in% part_of_speech_filter)
   }
 
   if (!num_corpora) {
@@ -477,11 +479,11 @@ get_content <- function(content_type, collection = NULL, language = NULL,
   }
 
   if (!is.null(collection) | !is.null(corpus)) {
-    content %<>% dplyr::filter(corpus_id %in% corpus_filter)
+    content %<>% dplyr::filter(.data$corpus_id %in% corpus_filter)
   }
 
   if (!is.null(target_child)) {
-    content %<>% dplyr::filter(target_child_id %in% child_id)
+    content %<>% dplyr::filter(.data$target_child_id %in% child_id)
   }
 
   if (!is.null(age)) {
@@ -490,30 +492,30 @@ get_content <- function(content_type, collection = NULL, language = NULL,
     if (length(age) == 1) days <- c(days, days + avg_month)
     days_1 <- days[1]
     days_2 <- days[2]
-    content %<>% dplyr::filter(target_child_age >= days_1,
-                               target_child_age <= days_2)
+    content %<>% dplyr::filter(.data$target_child_age >= days_1,
+                               .data$target_child_age <= days_2)
   }
 
   if (!is.null(sex)) {
     sex_filter <- sex
-    content %<>% dplyr::filter(sex %in% sex_filter)
+    content %<>% dplyr::filter(.data$sex %in% sex_filter)
   }
 
   if (!is.null(role)) {
-    content %<>% dplyr::filter(speaker_role %in% role)
+    content %<>% dplyr::filter(.data$speaker_role %in% role)
   }
 
   if (!is.null(role_exclude)) {
-    content %<>% dplyr::filter(!(speaker_role %in% role_exclude))
+    content %<>% dplyr::filter(!(.data$speaker_role %in% role_exclude))
   }
 
   if (!is.null(language)) {
     language_filter <- language
-    content %<>% dplyr::filter(language %in% language_filter)
+    content %<>% dplyr::filter(.data$language %in% language_filter)
   }
 
   content %<>%
-    dplyr::mutate(target_child_age = target_child_age / avg_month)
+    dplyr::mutate(target_child_age = .data$target_child_age / avg_month)
 
   return(content)
 }
@@ -565,8 +567,8 @@ get_tokens <- function(collection = NULL, language = NULL, corpus = NULL,
 
   if (replace) {
     tokens %<>%
-      dplyr::mutate(gloss = if (replacement == "") gloss else replacement) %>%
-      dplyr::select(-replacement)
+      dplyr::mutate(gloss = if (.data$replacement == "") .data$gloss else .data$replacement) |>
+      dplyr::select(-"replacement")
   }
 
   if (is.null(connection)) {
@@ -695,8 +697,8 @@ get_contexts <- function(collection = NULL, language = NULL, corpus = NULL,
                                  sex = sex,
                                  target_child = target_child,
                                  token = token,
-                                 connection = con) %>%
-    dplyr::pull(utterance_id)
+                                 connection = con) |>
+    dplyr::pull(.data$utterance_id)
 
   suppressMessages(
     utterances <- get_utterances(collection = collection,
@@ -707,13 +709,13 @@ get_contexts <- function(collection = NULL, language = NULL, corpus = NULL,
                                  age = age,
                                  sex = sex,
                                  target_child = target_child,
-                                 connection = con) %>%
-      dplyr::rename(utterance_id = id)
+                                 connection = con) |>
+      dplyr::rename(utterance_id = "id")
   )
 
-  utterance_orders <- utterances %>%
-    dplyr::filter(utterance_id %in% token_utterances) %>%
-    dplyr::select(transcript_id, utterance_order) %>%
+  utterance_orders <- utterances |>
+    dplyr::filter(.data$utterance_id %in% token_utterances) |>
+    dplyr::select("transcript_id", "utterance_order") |>
     dplyr::collect()
 
   contexts <- purrr::map2_df(utterance_orders$transcript_id,
@@ -721,14 +723,14 @@ get_contexts <- function(collection = NULL, language = NULL, corpus = NULL,
                              function(tid, index) {
     start <- index - window[1]
     end <- index + window[2]
-    utterances %>%
-      dplyr::filter(transcript_id == tid, utterance_order >= start,
-                    utterance_order <= end) %>%
+    utterances |>
+      dplyr::filter(.data$transcript_id == tid, .data$utterance_order >= start,
+                    .data$utterance_order <= end) |>
       dplyr::collect()
   })
 
   if (remove_duplicates) {
-    contexts %<>% dplyr::distinct(transcript_id, utterance_id, .keep_all = TRUE)
+    contexts %<>% dplyr::distinct(.data$transcript_id, .data$utterance_id, .keep_all = TRUE)
   }
 
   if (is.null(connection)) {
@@ -757,7 +759,7 @@ get_sql_query <- function(sql_query_string, connection = NULL,
   con <- resolve_connection(connection, db_version, db_args)
   if (is.null(con)) return()
 
-  returned_sql_query <- dplyr::tbl(con, dplyr::sql(sql_query_string)) %>%
+  returned_sql_query <- dplyr::tbl(con, dbplyr::sql(sql_query_string)) |>
     dplyr::collect()
   if (is.null(connection)) {
     DBI::dbDisconnect(con)
