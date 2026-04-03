@@ -90,7 +90,8 @@ connect_to_childes <- function(db_version = "current", db_args = NULL) {
         host = db_args$host,
         dbname = translate_version(db_version, db_args, db_info),
         user = db_args$user,
-        password = db_args$password
+        password = db_args$password,
+        default.file = cnf_path
       )
       DBI::dbGetQuery(con, "SET NAMES utf8")
       return(con)
