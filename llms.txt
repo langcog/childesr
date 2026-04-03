@@ -1,0 +1,66 @@
+# An R interface to childes-db
+
+The `childesr` package allows you to access data in the childes-db from
+R. This removes the need to write complex SQL queries in order to get
+the information you want from the database. This vignette shows some
+examples of how to use the data loading functions and what the resulting
+data look like.
+
+### Install `childesr` from this GitHub repository:
+
+    # install.packages("devtools")
+    devtools::install_github("langcog/childesr")
+
+### Tutorial
+
+To get a hands on walk-through on how to use `childesr` to access
+`childes-db`, check out this
+[tutorial](https://langcog.github.io/childes-db-website/api.html).
+
+### Other relevant GitHub repositories
+
+- Website frontend: <http://github.com/langcog/childes-db-website>
+- Interactive data visualizations:
+  <https://github.com/langcog/childes-db-shiny>
+
+# Package index
+
+## All functions
+
+- [`clear_connections()`](https://langcog.github.io/childesr/reference/clear_connections.md)
+  : Clear all MySQL connections
+- [`connect_to_childes()`](https://langcog.github.io/childesr/reference/connect_to_childes.md)
+  : Connect to CHILDES
+- [`get_collections()`](https://langcog.github.io/childesr/reference/get_collections.md)
+  : Get collections
+- [`get_content()`](https://langcog.github.io/childesr/reference/get_content.md)
+  : Get content
+- [`get_contexts()`](https://langcog.github.io/childesr/reference/get_contexts.md)
+  : Get the utterances surrounding a token(s)
+- [`get_corpora()`](https://langcog.github.io/childesr/reference/get_corpora.md)
+  : Get corpora
+- [`get_db_info()`](https://langcog.github.io/childesr/reference/get_db_info.md)
+  : Get information on database connection options
+- [`get_participants()`](https://langcog.github.io/childesr/reference/get_participants.md)
+  : Get participants
+- [`get_speaker_statistics()`](https://langcog.github.io/childesr/reference/get_speaker_statistics.md)
+  : Get speaker statistics
+- [`get_sql_query()`](https://langcog.github.io/childesr/reference/get_sql_query.md)
+  : Run a SQL Query script on the CHILDES database
+- [`get_table()`](https://langcog.github.io/childesr/reference/get_table.md)
+  : Get table
+- [`get_tokens()`](https://langcog.github.io/childesr/reference/get_tokens.md)
+  : Get tokens
+- [`get_transcripts()`](https://langcog.github.io/childesr/reference/get_transcripts.md)
+  : Get transcripts
+- [`get_types()`](https://langcog.github.io/childesr/reference/get_types.md)
+  : Get types
+- [`get_utterances()`](https://langcog.github.io/childesr/reference/get_utterances.md)
+  : Get utterances
+
+# Articles
+
+### All vignettes
+
+- [Accessing
+  \`childes-db\`](https://langcog.github.io/childesr/articles/access_childes_db.md):
