@@ -13,7 +13,7 @@ Authors@R: c(
     person("Stephan", "Meylan", email = "meylan.stephan@gmail.com", role = c("ctb")),
     person("Jessica", "Mankewitz", email="jmankewitz@gmail.com", role=c("ctb"))
     )
-Depends: R (>= 4.5)
+Depends: R (>= 4.4)
 License: GPL-3
 URL: https://github.com/langcog/childesr, https://langcog.github.io/childesr/
 BugReports: https://github.com/langcog/childesr/issues
