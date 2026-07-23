@@ -17,11 +17,11 @@ get_content(
   token = NULL,
   stem = NULL,
   part_of_speech = NULL,
-  connection
+  tag
 )
 }
 \arguments{
-\item{content_type}{One of "token" or "utterance"}
+\item{content_type}{One of "token", "utterance" or "token_frequency"}
 
 \item{collection}{A character vector of one or more names of collections}
 
@@ -51,8 +51,13 @@ character)}
 
 \item{part_of_speech}{A character vector of one or more parts of speech}
 
-\item{connection}{A connection to the CHILDES database}
+\item{tag}{Redivis dataset version tag (e.g. "v4.0")}
 }
 \description{
-Get content
+Internal engine for the content getters (`get_tokens`, `get_types`,
+`get_utterances`). Filters are translated into a BigQuery Standard SQL
+query that runs server-side on Redivis, so that only the matching rows of
+the (very large) content tables are transferred. String comparisons are
+case-insensitive, mirroring the collation of the retired MySQL server.
 }
+\keyword{internal}

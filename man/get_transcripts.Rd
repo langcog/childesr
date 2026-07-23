@@ -20,16 +20,15 @@ get_transcripts(
 
 \item{target_child}{A character vector of one or more names of children}
 
-\item{connection}{A connection to the CHILDES database}
+\item{connection}{Deprecated, ignored (childesr now reads from the
+childes-db dataset on Redivis)}
 
 \item{db_version}{String of the name of database version to use}
 
-\item{db_args}{List with host, user, and password defined}
+\item{db_args}{Deprecated, ignored}
 }
 \value{
-A `tbl` of Transcript data, filtered down by supplied arguments. If
-  `connection` is supplied, the result remains a remote query, otherwise it
-  is retrieved into a local tibble.
+A `tbl` of Transcript data, filtered down by supplied arguments
 }
 \description{
 Get transcripts

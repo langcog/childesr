@@ -1,100 +1,65 @@
 avg_month <- 365.2425 / 12
 
-#' Get table
-#'
-#' @param connection A connection to the CHILDES database
-#' @param name String of a table name
-#'
-#' @return A `tbl`
-get_table <- function(connection, name) {
-  dplyr::tbl(connection, name)
+# canonical column orders, matching the MySQL childes-db table layouts that
+# previous versions of childesr returned (Redivis does not guarantee column
+# order); columns not present in a given dataset version are skipped, columns
+# not listed are kept at the end
+column_orders <- list(
+  collection = c(
+    "id", "name", "data_source"),
+  corpus = c(
+    "id", "name", "collection_name", "data_source", "collection_id"),
+  transcript = c(
+    "id", "corpus_name", "language", "date", "filename", "target_child_name",
+    "target_child_age", "target_child_sex", "collection_name", "pid",
+    "collection_id", "corpus_id", "target_child_id"),
+  participant = c(
+    "id", "code", "name", "role", "corpus_name", "min_age", "max_age",
+    "language", "group", "sex", "ses", "education", "custom",
+    "collection_name", "collection_id", "corpus_id", "target_child_id"),
+  transcript_by_speaker = c(
+    "id", "speaker_role", "language", "target_child_name", "target_child_age",
+    "target_child_sex", "num_utterances", "mlu_w", "mlu_m", "mtld", "hdd",
+    "num_types", "num_tokens", "num_morphemes", "collection_name",
+    "collection_id", "corpus_id", "speaker_id", "target_child_id",
+    "transcript_id"),
+  token = c(
+    "id", "gloss", "language", "token_order", "replacement", "prefix",
+    "part_of_speech", "stem", "actual_phonology", "model_phonology", "suffix",
+    "num_morphemes", "english", "clitic", "utterance_type", "corpus_name",
+    "speaker_code", "speaker_name", "speaker_role", "target_child_name",
+    "target_child_age", "target_child_sex", "collection_name",
+    "collection_id", "corpus_id", "speaker_id", "target_child_id",
+    "transcript_id", "utterance_id"),
+  token_frequency = c(
+    "id", "gloss", "count", "speaker_role", "language", "target_child_name",
+    "target_child_age", "target_child_sex", "collection_name",
+    "collection_id", "corpus_id", "speaker_id", "target_child_id",
+    "transcript_id"),
+  utterance = c(
+    "id", "gloss", "stem", "actual_phonology", "model_phonology", "type",
+    "language", "num_morphemes", "num_tokens", "utterance_order",
+    "corpus_name", "part_of_speech", "speaker_code", "speaker_name",
+    "speaker_role", "target_child_name", "target_child_age",
+    "target_child_sex", "media_start", "media_end", "media_unit",
+    "collection_name", "collection_id", "corpus_id", "speaker_id",
+    "target_child_id", "transcript_id")
+)
+
+order_columns <- function(tbl, name) {
+  dplyr::select(tbl, dplyr::any_of(column_orders[[name]]), dplyr::everything())
 }
 
-#' Get collections
-#'
-#' @inheritParams connect_to_childes
-#' @param connection A connection to the CHILDES database
-#'
-#' @return A `tbl` of Collection data. If `connection` is supplied, the result
-#'   remains a remote query, otherwise it is retrieved into a local tibble.
-#' @export
-#'
-#' @examples
-#' \dontrun{
-#' get_collections()
-#' }
-get_collections <- function(connection = NULL, db_version = "current",
-                            db_args = NULL) {
+# internal engine for get_transcripts, shared by the other getters
+get_transcripts_table <- function(collection = NULL, corpus = NULL,
+                                  target_child = NULL, tag) {
 
-  con <- resolve_connection(connection, db_version, db_args)
-  if (is.null(con)) return()
+  transcripts <- childes_table("transcript", tag)
+  if (is.null(transcripts)) return(NULL)
 
-  collections <- dplyr::tbl(con, "collection") |>
-    dplyr::rename(collection_id = "id") |>
-    dplyr::rename(collection_name = "name")
-
-  if (is.null(connection)) {
-    collections %<>% dplyr::collect()
-    DBI::dbDisconnect(con)
-  }
-
-  return(collections)
-}
-
-#' Get corpora
-#'
-#' @inheritParams get_collections
-#'
-#' @return A `tbl` of Corpus data. If `connection` is supplied, the result
-#'   remains a remote query, otherwise it is retrieved into a local tibble.
-#' @export
-#'
-#' @examples
-#' \dontrun{
-#' get_corpora()
-#' }
-get_corpora <- function(connection = NULL, db_version = "current",
-                        db_args = NULL) {
-
-  con <- resolve_connection(connection, db_version, db_args)
-  if (is.null(con)) return()
-
-  corpora <- dplyr::tbl(con, "corpus") |>
-    dplyr::rename(corpus_id = "id") |>
-    dplyr::rename(corpus_name = "name")
-
-  if (is.null(connection)) {
-    corpora %<>% dplyr::collect()
-    DBI::dbDisconnect(con)
-  }
-
-  return(corpora)
-}
-
-#' Get transcripts
-#'
-#' @param collection A character vector of one or more names of collections
-#' @param corpus A character vector of one or more names of corpora
-#' @param target_child A character vector of one or more names of children
-#' @inheritParams get_collections
-#'
-#' @return A `tbl` of Transcript data, filtered down by supplied arguments. If
-#'   `connection` is supplied, the result remains a remote query, otherwise it
-#'   is retrieved into a local tibble.
-#' @export
-#'
-#' @examples
-#' \dontrun{
-#' get_transcripts()
-#' }
-get_transcripts <- function(collection = NULL, corpus = NULL,
-                            target_child = NULL, connection = NULL,
-                            db_version = "current", db_args = NULL) {
-
-  con <- resolve_connection(connection, db_version, db_args)
-  if (is.null(con)) return()
-
-  transcripts <- get_table(con, "transcript") |>
+  transcripts <- transcripts |>
+    order_columns("transcript") |>
+    dplyr::mutate(date = as.character(.data$date)) |>
     dplyr::rename(transcript_id = "id")
 
   if (!is.null(collection)) {
@@ -110,12 +75,88 @@ get_transcripts <- function(collection = NULL, corpus = NULL,
   transcripts %<>%
     dplyr::mutate(target_child_age = .data$target_child_age / avg_month)
 
-  if (is.null(connection)) {
-    transcripts %<>% dplyr::collect()
-    DBI::dbDisconnect(con)
-  }
-  return(transcripts)
+  transcripts
+}
 
+#' Get collections
+#'
+#' @inheritParams connect_to_childes
+#' @param connection Deprecated, ignored (childesr now reads from the
+#'   childes-db dataset on Redivis)
+#'
+#' @return A `tbl` of Collection data
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' get_collections()
+#' }
+get_collections <- function(connection = NULL, db_version = "current",
+                            db_args = NULL) {
+
+  check_connection(connection)
+  ver <- resolve_version(db_version, db_args)
+
+  collections <- childes_table("collection", ver$tag)
+  if (is.null(collections)) return(invisible(NULL))
+
+  collections |>
+    order_columns("collection") |>
+    dplyr::rename(collection_id = "id") |>
+    dplyr::rename(collection_name = "name")
+}
+
+#' Get corpora
+#'
+#' @inheritParams get_collections
+#'
+#' @return A `tbl` of Corpus data
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' get_corpora()
+#' }
+get_corpora <- function(connection = NULL, db_version = "current",
+                        db_args = NULL) {
+
+  check_connection(connection)
+  ver <- resolve_version(db_version, db_args)
+
+  corpora <- childes_table("corpus", ver$tag)
+  if (is.null(corpora)) return(invisible(NULL))
+
+  corpora |>
+    order_columns("corpus") |>
+    dplyr::rename(corpus_id = "id") |>
+    dplyr::rename(corpus_name = "name")
+}
+
+#' Get transcripts
+#'
+#' @param collection A character vector of one or more names of collections
+#' @param corpus A character vector of one or more names of corpora
+#' @param target_child A character vector of one or more names of children
+#' @inheritParams get_collections
+#'
+#' @return A `tbl` of Transcript data, filtered down by supplied arguments
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' get_transcripts()
+#' }
+get_transcripts <- function(collection = NULL, corpus = NULL,
+                            target_child = NULL, connection = NULL,
+                            db_version = "current", db_args = NULL) {
+
+  check_connection(connection)
+  ver <- resolve_version(db_version, db_args)
+
+  transcripts <- get_transcripts_table(collection, corpus, target_child,
+                                       ver$tag)
+  if (is.null(transcripts)) return(invisible(NULL))
+  transcripts
 }
 
 #' Get participants
@@ -130,9 +171,7 @@ get_transcripts <- function(collection = NULL, corpus = NULL,
 #'   those two ages.
 #' @param sex A character vector of values "male" and/or "female"
 #'
-#' @return A `tbl` of Participant data, filtered down by supplied arguments. If
-#'   `connection` is supplied, the result remains a remote query, otherwise it
-#'   is retrieved into a local tibble.
+#' @return A `tbl` of Participant data, filtered down by supplied arguments
 #' @export
 #'
 #' @examples
@@ -145,10 +184,12 @@ get_participants <- function(collection = NULL, corpus = NULL,
                              connection = NULL, db_version = "current",
                              db_args = NULL) {
 
-  con <- resolve_connection(connection, db_version, db_args)
-  if (is.null(con)) return()
+  check_connection(connection)
+  ver <- resolve_version(db_version, db_args)
 
-  participants <- get_table(con, "participant")
+  participants <- childes_table("participant", ver$tag)
+  if (is.null(participants)) return(invisible(NULL))
+  participants %<>% order_columns("participant")
 
   if (!is.null(collection)) {
     participants %<>% dplyr::filter(.data$collection_name %in% collection)
@@ -198,11 +239,13 @@ get_participants <- function(collection = NULL, corpus = NULL,
     participants %<>% dplyr::filter(!(.data$role %in% role_exclude))
   }
 
-  target_children <- get_transcripts(collection, corpus, target_child, con) |>
+  transcripts <- get_transcripts_table(collection, corpus, target_child,
+                                       ver$tag)
+  if (is.null(transcripts)) return(invisible(NULL))
+
+  target_children <- transcripts |>
     dplyr::select("target_child_id", "target_child_name") |>
     dplyr::distinct()
-    # dplyr::distinct(.data$target_child_id, .data$target_child_name) |>
-    # dplyr::select("target_child_id", "target_child_name")
 
   # TODO remove after https://github.com/langcog/childes-db/issues/30 resolved
   participants %<>%
@@ -211,20 +254,13 @@ get_participants <- function(collection = NULL, corpus = NULL,
   participants %<>% dplyr::mutate(max_age = .data$max_age / avg_month)
   participants %<>% dplyr::mutate(min_age = .data$min_age / avg_month)
 
-  if (is.null(connection)) {
-    participants %<>% dplyr::collect()
-    DBI::dbDisconnect(con)
-  }
-
-  return(participants)
-
+  participants
 }
+
 #' Get speaker statistics
 #'
 #' @inheritParams get_participants
-#' @return A `tbl` of Speaker statistics, filtered down by supplied arguments.
-#'   If `connection` is supplied, the result remains a remote query, otherwise
-#'   it is retrieved into a local tibble.
+#' @return A `tbl` of Speaker statistics, filtered down by supplied arguments
 #' @export
 #'
 #' @examples
@@ -237,11 +273,16 @@ get_speaker_statistics <- function(collection = NULL, corpus = NULL,
                                    connection = NULL, db_version = "current",
                                    db_args = NULL) {
 
-  con <- resolve_connection(connection, db_version, db_args)
-  if (is.null(con)) return()
+  check_connection(connection)
+  ver <- resolve_version(db_version, db_args)
 
-  transcripts <- get_transcripts(collection, corpus, target_child, con)
-  speaker_statistics <- get_table(con, "transcript_by_speaker")
+  transcripts <- get_transcripts_table(collection, corpus, target_child,
+                                       ver$tag)
+  if (is.null(transcripts)) return(invisible(NULL))
+
+  speaker_statistics <- childes_table("transcript_by_speaker", ver$tag)
+  if (is.null(speaker_statistics)) return(invisible(NULL))
+  speaker_statistics %<>% order_columns("transcript_by_speaker")
 
   if (!is.null(collection)) {
     collection_filter <- transcripts |>
@@ -293,36 +334,39 @@ get_speaker_statistics <- function(collection = NULL, corpus = NULL,
   speaker_statistics %<>%
     dplyr::mutate(target_child_age = .data$target_child_age / avg_month)
 
-  if (is.null(connection)) {
-    suppressWarnings(speaker_statistics %<>% dplyr::collect())
-    DBI::dbDisconnect(con)
-  }
-
-  return(speaker_statistics)
+  speaker_statistics
 }
 
 #' Get content
 #'
+#' Internal engine for the content getters (`get_tokens`, `get_types`,
+#' `get_utterances`). Filters are translated into a BigQuery Standard SQL
+#' query that runs server-side on Redivis, so that only the matching rows of
+#' the (very large) content tables are transferred. String comparisons are
+#' case-insensitive, mirroring the collation of the retired MySQL server.
+#'
 #' @inheritParams get_participants
-#' @param content_type One of "token" or "utterance"
+#' @param content_type One of "token", "utterance" or "token_frequency"
 #' @param token A character vector of one or more token patterns (`\%` matches
 #'   any number of wildcard characters, `_` matches exactly one wildcard
 #'   character)
 #' @param stem A character vector of one or more stems
 #' @param part_of_speech A character vector of one or more parts of speech
 #' @param language A character vector of one or more languages
+#' @param tag Redivis dataset version tag (e.g. "v4.0")
+#' @keywords internal
 get_content <- function(content_type, collection = NULL, language = NULL,
                         corpus = NULL, role = NULL, role_exclude = NULL,
                         age = NULL, sex = NULL, target_child = NULL,
                         token = NULL, stem = NULL, part_of_speech = NULL,
-                        connection) {
+                        tag) {
 
-  transcripts <- get_transcripts(collection, corpus, target_child, connection)
+  transcripts <- get_transcripts_table(collection, corpus, target_child, tag)
+  if (is.null(transcripts)) return(NULL)
 
   corpora <- transcripts |>
     dplyr::select("corpus_id") |>
-    dplyr::distinct() |>
-    dplyr::collect()
+    dplyr::distinct()
   child_id <- transcripts |>
     dplyr::select("target_child_id") |>
     dplyr::distinct() |>
@@ -335,24 +379,32 @@ get_content <- function(content_type, collection = NULL, language = NULL,
           ifelse(num_children == 1, " child", " children"), " in ",
           num_corpora, ifelse(num_corpora == 1, " corpus ", " corpora"), "...")
 
-  content <- dplyr::tbl(connection, content_type)
+  # build up WHERE clauses corresponding to the supplied filters
+  wheres <- character()
+
+  # case-insensitive IN (...) condition, like MySQL's default collation
+  sql_in <- function(column, values, negate = FALSE) {
+    sprintf("LOWER(%s) %sIN (%s)", column, if (negate) "NOT " else "",
+            paste(quote_sql(tolower(values)), collapse = ", "))
+  }
+  sql_id_in <- function(column, ids) {
+    ids <- ifelse(is.na(ids), "NULL", as.character(ids))
+    sprintf("%s IN (%s)", column, paste(ids, collapse = ", "))
+  }
 
   if (content_type %in% c("token", "token_frequency") && !is.null(token) &&
       !identical("*", token)) {
-
-    token_string <- paste0("gloss %like% '", token, "'", collapse = " | ")
-    token_expr <- parse(text = token_string)[[1]]
-    content %<>% dplyr::filter(!!token_expr)
+    wheres <- c(wheres, paste0(
+      "(", paste(sprintf("LOWER(gloss) LIKE %s", quote_sql(tolower(token))),
+                 collapse = " OR "), ")"))
   }
 
   if (!is.null(stem)) {
-    stem_filter <- stem
-    content %<>% dplyr::filter(.data$stem %in% stem_filter)
+    wheres <- c(wheres, sql_in("stem", stem))
   }
 
   if (!is.null(part_of_speech)) {
-    part_of_speech_filter <- part_of_speech
-    content %<>% dplyr::filter(.data$part_of_speech %in% part_of_speech_filter)
+    wheres <- c(wheres, sql_in("part_of_speech", part_of_speech))
   }
 
   if (!num_corpora) {
@@ -363,59 +415,61 @@ get_content <- function(content_type, collection = NULL, language = NULL,
   }
 
   if (!is.null(collection) | !is.null(corpus)) {
-    content %<>% dplyr::filter(.data$corpus_id %in% corpus_filter)
+    wheres <- c(wheres, sql_id_in("corpus_id", corpus_filter))
   }
 
   if (!is.null(target_child)) {
-    content %<>% dplyr::filter(.data$target_child_id %in% child_id)
+    wheres <- c(wheres, sql_id_in("target_child_id", child_id))
   }
 
   if (!is.null(age)) {
     if (!(length(age) %in% 1:2)) stop("`age` argument must be of length 1 or 2")
     days <- age * avg_month
     if (length(age) == 1) days <- c(days, days + avg_month)
-    days_1 <- days[1]
-    days_2 <- days[2]
-    content %<>% dplyr::filter(.data$target_child_age >= days_1,
-                               .data$target_child_age <= days_2)
+    wheres <- c(wheres, sprintf(
+      "target_child_age >= %.10f AND target_child_age <= %.10f",
+      days[1], days[2]))
   }
 
   if (!is.null(sex)) {
-    sex_filter <- sex
-    content %<>% dplyr::filter(.data$sex %in% sex_filter)
+    wheres <- c(wheres, sql_in("sex", sex))
   }
 
   if (!is.null(role)) {
-    content %<>% dplyr::filter(.data$speaker_role %in% role)
+    wheres <- c(wheres, sql_in("speaker_role", role))
   }
 
   if (!is.null(role_exclude)) {
-    content %<>% dplyr::filter(!(.data$speaker_role %in% role_exclude))
+    wheres <- c(wheres, sql_in("speaker_role", role_exclude, negate = TRUE))
   }
 
   if (!is.null(language)) {
-    language_filter <- language
-    content %<>% dplyr::filter(.data$language %in% language_filter)
+    wheres <- c(wheres, sql_in("language", language))
   }
 
-  content %<>%
-    dplyr::mutate(target_child_age = .data$target_child_age / avg_month)
+  sql <- paste0("SELECT * FROM ", content_type,
+                if (length(wheres) > 0) {
+                  paste0(" WHERE ", paste(wheres, collapse = " AND "))
+                })
 
-  return(content)
+  content <- childes_query(sql, tag)
+  if (is.null(content)) return(NULL)
+
+  content |>
+    order_columns(content_type) |>
+    dplyr::mutate(target_child_age = .data$target_child_age / avg_month)
 }
 
 
 #' Get tokens
 #'
-#' @inheritParams connect_to_childes
+#' @inheritParams get_collections
 #' @inheritParams get_content
 #' @param replace A boolean indicating whether to replace "gloss" with
 #'   "replacement" (i.e. phonologically assimilated form), when available
 #'   (defaults to \code{TRUE})
 #'
-#' @return A `tbl` of Token data, filtered down by supplied arguments. If
-#'   `connection` is supplied, the result remains a remote query, otherwise it
-#'   is retrieved into a local tibble.
+#' @return A `tbl` of Token data, filtered down by supplied arguments
 #' @export
 #'
 #' @examples
@@ -432,8 +486,8 @@ get_tokens <- function(collection = NULL, language = NULL, corpus = NULL,
     stop("Argument 'token' is missing. To fetch all tokens, supply '*' for ",
          "argument 'token'. Caution: this may result in a long-running query.")
 
-  con <- resolve_connection(connection, db_version, db_args)
-  if (is.null(con)) return()
+  check_connection(connection)
+  ver <- resolve_version(db_version, db_args)
 
   tokens <- get_content(content_type = "token",
                         collection = collection,
@@ -447,32 +501,32 @@ get_tokens <- function(collection = NULL, language = NULL, corpus = NULL,
                         token = token,
                         stem = stem,
                         part_of_speech = part_of_speech,
-                        connection = con)
+                        tag = ver$tag)
+  if (is.null(tokens)) return(invisible(NULL))
 
   if (replace) {
+    # NB: `replacement` is retained, matching the behavior of the MySQL-backed
+    # childesr 0.2.3.9000 (whose select(-"replacement") result was discarded
+    # due to %<>%/|> operator precedence); gloss is swapped for replacement
+    # whenever a replacement is present
     tokens %<>%
-      dplyr::mutate(gloss = if (.data$replacement == "") .data$gloss else .data$replacement) |>
-      dplyr::select(-"replacement")
+      dplyr::mutate(gloss = dplyr::if_else(
+        !is.na(.data$replacement) & .data$replacement == "",
+        .data$gloss, .data$replacement))
   }
 
-  if (is.null(connection)) {
-    tokens %<>% dplyr::collect()
-    DBI::dbDisconnect(con)
-  }
-  return(tokens)
+  tokens
 }
 
 
 #' Get types
 #'
-#' @inheritParams connect_to_childes
+#' @inheritParams get_collections
 #' @inheritParams get_content
 #' @param type A character vector of one or more type patterns (`%` matches any
 #'   number of wildcard characters, `_` matches exactly one wildcard character)
 #'
-#' @return A `tbl` of Type data, filtered down by supplied arguments. If
-#'   `connection` is supplied, the result remains a remote query, otherwise it
-#'   is retrieved into a local tibble.
+#' @return A `tbl` of Type data, filtered down by supplied arguments
 #' @export
 #'
 #' @examples
@@ -484,8 +538,8 @@ get_types <- function(collection = NULL, language = NULL, corpus = NULL,
                       target_child = NULL, type = NULL, connection = NULL,
                       db_version = "current", db_args = NULL) {
 
-  con <- resolve_connection(connection, db_version, db_args)
-  if (is.null(con)) return()
+  check_connection(connection)
+  ver <- resolve_version(db_version, db_args)
 
   types <- get_content(content_type = "token_frequency",
                        collection = collection,
@@ -497,13 +551,9 @@ get_types <- function(collection = NULL, language = NULL, corpus = NULL,
                        sex = sex,
                        target_child = target_child,
                        token = type,
-                       connection = con)
-
-  if (is.null(connection)) {
-    types %<>% dplyr::collect()
-    DBI::dbDisconnect(con)
-  }
-  return(types)
+                       tag = ver$tag)
+  if (is.null(types)) return(invisible(NULL))
+  types
 }
 
 #' Get utterances
@@ -511,9 +561,7 @@ get_types <- function(collection = NULL, language = NULL, corpus = NULL,
 #' @inheritParams get_participants
 #' @param language A character vector of one or more languages
 #'
-#' @return A `tbl` of Utterance data, filtered down by supplied arguments. If
-#'   `connection` is supplied, the result remains a remote query, otherwise it
-#'   is retrieved into a local tibble.
+#' @return A `tbl` of Utterance data, filtered down by supplied arguments
 #' @export
 #'
 #' @examples
@@ -525,8 +573,8 @@ get_utterances <- function(collection = NULL, language = NULL, corpus = NULL,
                            sex = NULL, target_child = NULL, connection = NULL,
                            db_version = "current", db_args = NULL) {
 
-  con <- resolve_connection(connection, db_version, db_args)
-  if (is.null(con)) return()
+  check_connection(connection)
+  ver <- resolve_version(db_version, db_args)
 
   utterances <- get_content(content_type = "utterance",
                             collection = collection,
@@ -537,13 +585,9 @@ get_utterances <- function(collection = NULL, language = NULL, corpus = NULL,
                             age = age,
                             sex = sex,
                             target_child = target_child,
-                            connection = con)
-
-  if (is.null(connection)) {
-    utterances %<>% dplyr::collect()
-    DBI::dbDisconnect(con)
-  }
-  return(utterances)
+                            tag = ver$tag)
+  if (is.null(utterances)) return(invisible(NULL))
+  utterances
 }
 
 #' Get the utterances surrounding a token(s)
@@ -569,68 +613,85 @@ get_contexts <- function(collection = NULL, language = NULL, corpus = NULL,
                         connection = NULL, db_version = "current",
                         db_args = NULL) {
 
-  con <- resolve_connection(connection, db_version, db_args)
-  if (is.null(con)) return()
+  check_connection(connection)
+  ver <- resolve_version(db_version, db_args)
 
-  token_utterances <- get_tokens(collection = collection,
-                                 language = language,
-                                 corpus = corpus,
-                                 role = role,
-                                 role_exclude = role_exclude,
-                                 age = age,
-                                 sex = sex,
-                                 target_child = target_child,
-                                 token = token,
-                                 connection = con) |>
-    dplyr::pull(.data$utterance_id)
+  tokens <- get_content(content_type = "token",
+                        collection = collection,
+                        language = language,
+                        corpus = corpus,
+                        role = role,
+                        role_exclude = role_exclude,
+                        age = age,
+                        sex = sex,
+                        target_child = target_child,
+                        token = token,
+                        tag = ver$tag)
+  if (is.null(tokens)) return(invisible(NULL))
+  token_utterances <- unique(tokens$utterance_id)
 
   suppressMessages(
-    utterances <- get_utterances(collection = collection,
-                                 language = language,
-                                 corpus = corpus,
-                                 role = role,
-                                 role_exclude = role_exclude,
-                                 age = age,
-                                 sex = sex,
-                                 target_child = target_child,
-                                 connection = con) |>
-      dplyr::rename(utterance_id = "id")
+    utterances <- get_content(content_type = "utterance",
+                              collection = collection,
+                              language = language,
+                              corpus = corpus,
+                              role = role,
+                              role_exclude = role_exclude,
+                              age = age,
+                              sex = sex,
+                              target_child = target_child,
+                              tag = ver$tag)
   )
+  if (is.null(utterances)) return(invisible(NULL))
+  utterances %<>% dplyr::rename(utterance_id = "id")
 
   utterance_orders <- utterances |>
     dplyr::filter(.data$utterance_id %in% token_utterances) |>
-    dplyr::select("transcript_id", "utterance_order") |>
-    dplyr::collect()
+    dplyr::select("transcript_id", "utterance_order")
 
-  contexts <- purrr::map2_df(utterance_orders$transcript_id,
-                             utterance_orders$utterance_order,
-                             function(tid, index) {
-    start <- index - window[1]
-    end <- index + window[2]
-    utterances |>
-      dplyr::filter(.data$transcript_id == tid, .data$utterance_order >= start,
-                    .data$utterance_order <= end) |>
-      dplyr::collect()
-  })
+  # each matched utterance contributes the utterances in its window
+  # [utterance_order - window[1], utterance_order + window[2]]; since
+  # utterance_order is an integer this is equivalent to joining on the
+  # expanded set of (transcript_id, utterance_order) pairs, which needs only
+  # the two content queries above rather than one query per matched token
+  targets <- purrr::map2(
+    utterance_orders$transcript_id, utterance_orders$utterance_order,
+    function(tid, index) dplyr::tibble(
+      transcript_id = tid,
+      utterance_order = rlang::seq2(index - window[1], index + window[2]))) |>
+    purrr::list_rbind()
+  if (nrow(targets) == 0) {
+    targets <- utterance_orders[0, c("transcript_id", "utterance_order")]
+  }
+
+  contexts <- dplyr::inner_join(utterances, targets,
+                                by = c("transcript_id", "utterance_order"),
+                                relationship = "many-to-many")
 
   if (remove_duplicates) {
-    contexts %<>% dplyr::distinct(.data$transcript_id, .data$utterance_id, .keep_all = TRUE)
+    contexts %<>% dplyr::distinct(.data$transcript_id, .data$utterance_id,
+                                  .keep_all = TRUE)
   }
 
-  if (is.null(connection)) {
-    DBI::dbDisconnect(con)
-  }
-  return(contexts)
+  contexts
 }
 
 
 #' Run a SQL Query script on the CHILDES database
 #'
-#' @inheritParams connect_to_childes
-#' @param sql_query_string A valid sql query string character
-#' @param connection A connection to the CHILDES database
+#' As of childesr 0.3, queries run against the childes-db dataset on Redivis,
+#' whose query engine uses BigQuery Standard SQL rather than MySQL SQL.
+#' Standard SQL queries against the childes-db tables (`collection`,
+#' `corpus`, `transcript`, `participant`, `transcript_by_speaker`,
+#' `utterance`, `token`, `token_frequency`) work unchanged; queries using
+#' MySQL-specific syntax may need to be updated (see
+#' \url{https://cloud.google.com/bigquery/docs/reference/standard-sql/}).
 #'
-#' @return The database after calling the supplied SQL query
+#' @inheritParams get_collections
+#' @param sql_query_string A valid BigQuery Standard SQL query string
+#'
+#' @return The result of running the supplied SQL query on the childes-db
+#'   dataset
 #' @export
 #'
 #' @examples
@@ -639,13 +700,11 @@ get_contexts <- function(collection = NULL, language = NULL, corpus = NULL,
 #' }
 get_sql_query <- function(sql_query_string, connection = NULL,
                           db_version = "current", db_args = NULL) {
-  con <- resolve_connection(connection, db_version, db_args)
-  if (is.null(con)) return()
 
-  returned_sql_query <- dplyr::tbl(con, dbplyr::sql(sql_query_string)) |>
-    dplyr::collect()
-  if (is.null(connection)) {
-    DBI::dbDisconnect(con)
-  }
-  return(returned_sql_query)
+  check_connection(connection)
+  ver <- resolve_version(db_version, db_args)
+
+  result <- childes_query(sql_query_string, ver$tag)
+  if (is.null(result)) return(invisible(NULL))
+  result
 }
