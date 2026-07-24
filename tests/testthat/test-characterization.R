@@ -1,10 +1,10 @@
 # Characterization tests: every get_* call must reproduce the output of the
 # MySQL-backed childesr 0.2.3.9000 run against db_version "2021.1", which is
-# released on Redivis as childes_db v4.0. Row order is not guaranteed by
+# released on Redivis as childes_db v1.3. Row order is not guaranteed by
 # either backend, so comparisons sort rows (see helper-fixtures.R).
 
 DB <- "2021.1"
-DB_TAG <- "v4.0"
+DB_TAG <- "v1.3"
 
 test_that("get_collections matches legacy output", {
   skip_if_no_redivis()
@@ -144,17 +144,22 @@ test_that("get_contexts matches legacy output", {
 test_that("get_sql_query matches legacy output", {
   skip_if_no_redivis()
   skip_if_version_unreleased(DB_TAG)
+  # DELIBERATE DIALECT CHANGE in 0.3: get_sql_query passes queries through
+  # to BigQuery Standard SQL, where string comparison is case-sensitive
+  # (MySQL's default collation was case-insensitive). The legacy fixture
+  # query `gloss = 'dog'` is therefore translated to `LOWER(gloss) = 'dog'`;
+  # the returned data must still match the legacy output exactly.
   expect_matches_fixture(
     get_sql_query(paste(
       "SELECT corpus_name, COUNT(id) AS count FROM token",
-      "WHERE collection_name = 'Eng-NA' AND gloss = 'dog'",
+      "WHERE collection_name = 'Eng-NA' AND LOWER(gloss) = 'dog'",
       "GROUP BY corpus_name"), db_version = DB),
     "sql_dog_counts")
 })
 
 test_that("get_collections on a pinned older version matches legacy output", {
   skip_if_no_redivis()
-  skip_if_version_unreleased("v3.0")
+  skip_if_version_unreleased("v1.2")
   expect_matches_fixture(get_collections(db_version = "2020.1"),
                          "collections_2020")
 })

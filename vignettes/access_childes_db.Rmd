@@ -1,11 +1,11 @@
 ---
-title: "Accessing `childes-db`"
+title: "Accessing childes-db"
 date: "`r Sys.Date()`"
 output:
   rmarkdown::html_vignette:
     toc: true
 vignette: >
-  %\VignetteIndexEntry{Accessing Childes-db}
+  %\VignetteIndexEntry{Accessing childes-db}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

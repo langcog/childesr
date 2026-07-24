@@ -2,7 +2,7 @@
 # golden fixtures generated from the MySQL-backed childesr 0.2.3.9000 pinned
 # to db_version "2021.1" (see data-raw/make_fixtures.R). The same database
 # states are released on Redivis as childes_db versions:
-# 2018.1 = v1.0, 2019.1 = v2.0, 2020.1 = v3.0, 2021.1 = v4.0.
+# 2018.1 = v1.0, 2019.1 = v1.1, 2020.1 = v1.2, 2021.1 = v1.3.
 
 skip_if_no_redivis <- function() {
   # network tests never run on CRAN; locally/CI they need the redivis client

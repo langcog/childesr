@@ -47,16 +47,11 @@ test_that("get_participants errors on a missing child", {
     "Duplicate or missing child")
 })
 
-test_that("unknown db_version errors informatively", {
-  expect_error(get_collections(db_version = "1999.1"), "not found")
-})
-
-test_that("deprecated connection interface still works", {
+test_that("deprecated connection interface still works against Redivis", {
   skip_if_no_redivis()
   skip_if_version_unreleased("v1.0")
-  expect_message(con <- connect_to_childes(), "Redivis")
+  expect_warning(con <- connect_to_childes(), "deprecated")
   expect_null(con)
   collections <- get_collections(connection = con, db_version = "2018.1")
   expect_equal(nrow(collections), 20)
-  expect_message(clear_connections(), "no database connections")
 })

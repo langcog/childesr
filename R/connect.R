@@ -14,8 +14,8 @@ childes_organization <- "datapages"
 # when the hosted childes-db.json does not (yet) contain redivis_* fields
 childes_redivis_fallback <- list(
   redivis_current = "2021.1",
-  redivis_versions = c("2018.1" = "v1.0", "2019.1" = "v2.0",
-                       "2020.1" = "v3.0", "2021.1" = "v4.0")
+  redivis_versions = c("2018.1" = "v1.0", "2019.1" = "v1.1",
+                       "2020.1" = "v1.2", "2021.1" = "v1.3")
 )
 
 #' Get information on database connection options
@@ -105,8 +105,10 @@ childes_dataset <- function(tag) {
 
 # CRAN policy requires graceful failure on unavailable internet resources:
 # transient errors are retried with backoff, then produce a message and
-# NULL -- never an error
-childes_try <- function(expr, tries = 3) {
+# NULL -- never an error (the retry count is an option so tests can
+# simulate an outage without waiting out the backoff)
+childes_try <- function(expr,
+                        tries = getOption("childesr.request_tries", 3)) {
   expr <- substitute(expr)
   env <- parent.frame()
   for (i in seq_len(tries)) {
@@ -173,12 +175,13 @@ check_connection <- function(connection) {
 #' As of childesr 0.3, data are retrieved
 #' from the versioned childes-db dataset on Redivis rather than a MySQL
 #' database, so no connection object is needed. `connect_to_childes()` is
-#' deprecated: it messages and returns `NULL`, which can still be passed as
+#' deprecated: it warns and returns `NULL`, which can still be passed as
 #' the `connection` argument of the `get_` functions (where it is ignored).
 #'
 #' @param db_version String of the name of database version to use
 #' @param db_args Deprecated, ignored
 #' @return NULL
+#' @keywords internal
 #' @export
 #'
 #' @examples
@@ -186,9 +189,10 @@ check_connection <- function(connection) {
 #' con <- connect_to_childes(db_version = "current")
 #' }
 connect_to_childes <- function(db_version = "current", db_args = NULL) {
-  message("As of childesr 0.3, data come from the childes-db dataset on ",
-          "Redivis and no connection object is needed: call the `get_` ",
-          "functions directly. `connect_to_childes()` returns NULL.")
+  .Deprecated(msg = paste(
+    "connect_to_childes() is deprecated: as of childesr 0.3, data come from",
+    "the childes-db dataset on Redivis and no connection object is needed;",
+    "call the `get_` functions directly."))
   invisible(NULL)
 }
 
@@ -198,10 +202,13 @@ connect_to_childes <- function(db_version = "current", db_args = NULL) {
 #' dataset on Redivis rather than a MySQL database, so there are no
 #' connections to clear. This function only clears the session's table cache.
 #'
+#' @keywords internal
 #' @export
 clear_connections <- function() {
+  .Deprecated(msg = paste(
+    "clear_connections() is deprecated: childesr now reads from Redivis and",
+    "there are no database connections to clear (the session's table cache",
+    "was cleared)."))
   rm(list = ls(.childesr_env), envir = .childesr_env)
-  message("childesr now reads from Redivis; there are no database ",
-          "connections to clear (the session's table cache was cleared).")
   invisible(NULL)
 }

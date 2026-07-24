@@ -51,7 +51,7 @@ character)}
 
 \item{part_of_speech}{A character vector of one or more parts of speech}
 
-\item{tag}{Redivis dataset version tag (e.g. "v4.0")}
+\item{tag}{Redivis dataset version tag (e.g. "v1.3")}
 }
 \description{
 Internal engine for the content getters (`get_tokens`, `get_types`,

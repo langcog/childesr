@@ -284,11 +284,14 @@ get_speaker_statistics <- function(collection = NULL, corpus = NULL,
   if (is.null(speaker_statistics)) return(invisible(NULL))
   speaker_statistics %<>% order_columns("transcript_by_speaker")
 
+  # NB: NAs are dropped from the id filters to mirror the SQL semantics of
+  # the retired MySQL backend, where `IN (..., NULL)` never matches NULL
   if (!is.null(collection)) {
     collection_filter <- transcripts |>
       dplyr::select("collection_id", "target_child_id") |>
       dplyr::distinct() |>
       dplyr::pull(.data$target_child_id)
+    collection_filter <- collection_filter[!is.na(collection_filter)]
 
     speaker_statistics %<>%
       dplyr::filter(.data$target_child_id %in% collection_filter)
@@ -299,6 +302,7 @@ get_speaker_statistics <- function(collection = NULL, corpus = NULL,
       dplyr::select("corpus_id", "target_child_id") |>
       dplyr::distinct() |>
       dplyr::pull(.data$target_child_id)
+    corpus_filter <- corpus_filter[!is.na(corpus_filter)]
 
     speaker_statistics %<>% dplyr::filter(.data$target_child_id %in% corpus_filter)
   }
@@ -353,7 +357,7 @@ get_speaker_statistics <- function(collection = NULL, corpus = NULL,
 #' @param stem A character vector of one or more stems
 #' @param part_of_speech A character vector of one or more parts of speech
 #' @param language A character vector of one or more languages
-#' @param tag Redivis dataset version tag (e.g. "v4.0")
+#' @param tag Redivis dataset version tag (e.g. "v1.3")
 #' @keywords internal
 get_content <- function(content_type, collection = NULL, language = NULL,
                         corpus = NULL, role = NULL, role_exclude = NULL,
