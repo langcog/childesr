@@ -139,6 +139,16 @@ get_corpora <- function(connection = NULL, db_version = "current",
 #' @param target_child A character vector of one or more names of children
 #' @inheritParams get_collections
 #'
+#' @section Identifiers:
+#' Numeric ids in childes-db (`transcript_id`, `utterance_id`, token `id`,
+#' and so on) are internal to a database release: they are not stable across
+#' versions of childes-db and should never be used to link data across
+#' releases. The TalkBank persistent identifier (the `pid` column returned
+#' by `get_transcripts()`) is the stable, externally-facing identifier for a
+#' transcript; use it to match transcripts across database versions or with
+#' other TalkBank tools. For reproducible analyses, pin the database version
+#' with the `db_version` argument.
+#'
 #' @return A `tbl` of Transcript data, filtered down by supplied arguments
 #' @export
 #'
@@ -171,6 +181,7 @@ get_transcripts <- function(collection = NULL, corpus = NULL,
 #'   those two ages.
 #' @param sex A character vector of values "male" and/or "female"
 #'
+#' @inheritSection get_transcripts Identifiers
 #' @return A `tbl` of Participant data, filtered down by supplied arguments
 #' @export
 #'
@@ -260,6 +271,7 @@ get_participants <- function(collection = NULL, corpus = NULL,
 #' Get speaker statistics
 #'
 #' @inheritParams get_participants
+#' @inheritSection get_transcripts Identifiers
 #' @return A `tbl` of Speaker statistics, filtered down by supplied arguments
 #' @export
 #'
@@ -473,6 +485,7 @@ get_content <- function(content_type, collection = NULL, language = NULL,
 #'   "replacement" (i.e. phonologically assimilated form), when available
 #'   (defaults to \code{TRUE})
 #'
+#' @inheritSection get_transcripts Identifiers
 #' @return A `tbl` of Token data, filtered down by supplied arguments
 #' @export
 #'
@@ -530,6 +543,7 @@ get_tokens <- function(collection = NULL, language = NULL, corpus = NULL,
 #' @param type A character vector of one or more type patterns (`%` matches any
 #'   number of wildcard characters, `_` matches exactly one wildcard character)
 #'
+#' @inheritSection get_transcripts Identifiers
 #' @return A `tbl` of Type data, filtered down by supplied arguments
 #' @export
 #'
@@ -565,6 +579,7 @@ get_types <- function(collection = NULL, language = NULL, corpus = NULL,
 #' @inheritParams get_participants
 #' @param language A character vector of one or more languages
 #'
+#' @inheritSection get_transcripts Identifiers
 #' @return A `tbl` of Utterance data, filtered down by supplied arguments
 #' @export
 #'
@@ -603,6 +618,7 @@ get_utterances <- function(collection = NULL, language = NULL, corpus = NULL,
 #' @param remove_duplicates A boolean indicating whether to remove duplicate
 #'   utterances from the results
 #'
+#' @inheritSection get_transcripts Identifiers
 #' @return A 'tbl' of Utterance data, filtered down by supplied arguments.
 #' @export
 #'

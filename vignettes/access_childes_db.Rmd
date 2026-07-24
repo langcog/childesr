@@ -28,6 +28,10 @@ There are several different `get_` functions that you can use to extract differe
 
 **Technical note 2**: We have tried to optimize the time it takes to get data from the database. But if you try to query and get all of the tokens, it will take a long time.
 
+## Identifiers and reproducibility
+
+Numeric ids in these tables (`transcript_id`, `utterance_id`, token `id`, and so on) are internal to a given database release: they are not stable across versions of childes-db, and never will be. For reproducible analyses, always pin the database version with the `db_version` argument (e.g. `get_transcripts(db_version = "2021.1")`). To link transcripts across database versions — or to the wider set of TalkBank tools — use the TalkBank persistent identifier in the `pid` column returned by `get_transcripts()`.
+
 ```{r, warning=FALSE, message=FALSE}
 # load the library
 library(childesr)
