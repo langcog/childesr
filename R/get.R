@@ -522,14 +522,16 @@ get_tokens <- function(collection = NULL, language = NULL, corpus = NULL,
   if (is.null(tokens)) return(invisible(NULL))
 
   if (replace) {
-    # NB: `replacement` is retained, matching the behavior of the MySQL-backed
-    # childesr 0.2.3.9000 (whose select(-"replacement") result was discarded
-    # due to %<>%/|> operator precedence); gloss is swapped for replacement
-    # whenever a replacement is present
+    # gloss is swapped for replacement whenever a replacement is present,
+    # and the replacement column is dropped. (The MySQL-backed childesr
+    # 0.2.3.9000 intended the same but retained the column: its
+    # select(-"replacement") result was discarded due to %<>%/|> operator
+    # precedence. Fixed deliberately in 0.3.0.)
     tokens %<>%
       dplyr::mutate(gloss = dplyr::if_else(
         !is.na(.data$replacement) & .data$replacement == "",
         .data$gloss, .data$replacement))
+    tokens %<>% dplyr::select(-"replacement")
   }
 
   tokens

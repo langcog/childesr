@@ -89,11 +89,16 @@ test_that("get_speaker_statistics matches legacy output", {
 test_that("get_tokens matches legacy output", {
   skip_if_no_redivis()
   skip_if_version_unreleased(DB_TAG)
+  # DELIBERATE FIXTURE DEVIATION in 0.3: get_tokens(replace = TRUE) now
+  # correctly drops the `replacement` column. The MySQL-backed childesr
+  # 0.2.3.9000 that generated these fixtures intended the same, but a
+  # %<>%/|> operator-precedence bug discarded its select(-"replacement"),
+  # so replace = TRUE fixtures retain the column; compare minus it.
   expect_matches_fixture(
     get_tokens(corpus = "Brown", target_child = "Adam",
                role = "Target_Child", token = c("dog", "ball"),
                db_version = DB),
-    "tokens_adam_dogball")
+    "tokens_adam_dogball", minus_cols = "replacement")
   expect_matches_fixture(
     get_tokens(corpus = "Brown", target_child = "Adam",
                token = c("dog", "ball"), replace = FALSE, db_version = DB),
@@ -101,11 +106,11 @@ test_that("get_tokens matches legacy output", {
   expect_matches_fixture(
     get_tokens(corpus = "Brown", role = "Target_Child", stem = "run",
                token = "*", db_version = DB),
-    "tokens_brown_stem_run")
+    "tokens_brown_stem_run", minus_cols = "replacement")
   expect_matches_shape(
     get_tokens(corpus = "Brown", target_child = "Adam", token = "*",
                part_of_speech = "n", db_version = DB),
-    "tokens_adam_nouns_shape")
+    "tokens_adam_nouns_shape", minus_cols = "replacement")
 })
 
 test_that("get_types matches legacy output", {

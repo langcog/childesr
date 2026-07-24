@@ -35,7 +35,8 @@ test_that("get_tokens filters server-side and applies replacements", {
   expect_gt(nrow(tokens), 100)
   expect_true(all(tolower(tokens$gloss) %in% c("dog", "ball")))
   expect_true(all(tokens$target_child_name == "Adam"))
-  expect_true("replacement" %in% names(tokens))
+  # replace = TRUE drops the replacement column (fixed in 0.3.0)
+  expect_false("replacement" %in% names(tokens))
 })
 
 test_that("get_participants errors on a missing child", {

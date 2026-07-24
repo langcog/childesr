@@ -8,6 +8,8 @@
   `db_args` arguments are deprecated and ignored (no connection is needed)
 - `get_sql_query()` now runs BigQuery Standard SQL (Redivis's query engine)
   instead of MySQL SQL
+- `get_tokens(replace = TRUE)` now correctly drops the `replacement` column;
+  previously a bug kept it
 - dropped dependencies on DBI, dbplyr, and RMySQL; added a Suggests
   dependency on the redivis client (installable from
   https://langcog.r-universe.dev)

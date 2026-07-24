@@ -49,8 +49,13 @@ normalize <- function(x, col_order, sort_cols) {
   x
 }
 
-expect_matches_fixture <- function(actual, fixture_name) {
+# minus_cols: columns dropped from the fixture before comparing, for
+# deliberate deviations from legacy output (see comments at call sites)
+expect_matches_fixture <- function(actual, fixture_name, minus_cols = NULL) {
   expected <- load_fixture(fixture_name)
+  if (!is.null(minus_cols)) {
+    expected <- expected[setdiff(names(expected), minus_cols)]
+  }
 
   # same columns, in the same order
   expect_identical(names(actual), names(expected),
@@ -63,8 +68,13 @@ expect_matches_fixture <- function(actual, fixture_name) {
   expect_equal(act, exp, label = fixture_name, tolerance = 1e-8)
 }
 
-expect_matches_shape <- function(actual, fixture_name) {
+expect_matches_shape <- function(actual, fixture_name, minus_cols = NULL) {
   expected <- load_fixture(fixture_name)
+  if (!is.null(minus_cols)) {
+    keep <- setdiff(expected$names, minus_cols)
+    expected$n_distinct <- expected$n_distinct[keep]
+    expected$names <- keep
+  }
   expect_equal(nrow(actual), expected$nrow,
                label = paste0(fixture_name, " nrow"))
   expect_identical(names(actual), expected$names,
