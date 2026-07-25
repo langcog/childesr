@@ -36,10 +36,15 @@ instructions and return NULL.
 
 ## Test environments
 
-- local macOS install, R 4.5
+- local macOS install, R 4.5 (R CMD check --as-cran on the built tarball,
+  with no credentials and NOT_CRAN unset, simulating a CRAN machine)
 - GitHub Actions ubuntu-latest (CRAN simulation without credentials, and
   full network test suite with credentials)
 
 ## R CMD check results
 
 0 errors | 0 warnings | 0 notes
+
+(The local macOS run shows one NOTE, "Skipping checking HTML validation:
+'tidy' doesn't look like recent enough HTML Tidy" -- an artifact of the
+local environment's outdated HTML Tidy, not a package issue.)
