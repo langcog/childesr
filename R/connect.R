@@ -91,8 +91,8 @@ redivis_available <- function() {
   if (!requireNamespace("redivis", quietly = TRUE)) {
     message(
       "childesr needs the `redivis` package to access CHILDES data.\n",
-      "Install it with:\n",
-      '  install.packages("redivis", repos = c("https://langcog.r-universe.dev", "https://cloud.r-project.org"))')
+      "Install it from source with:\n",
+      '  install.packages("redivis", repos = "https://langcog.r-universe.dev", type = "source")')
     return(FALSE)
   }
   TRUE
