@@ -13,9 +13,10 @@ childes_organization <- "datapages"
 # fallback mapping from childes-db versions to Redivis dataset versions, used
 # when the hosted childes-db.json does not (yet) contain redivis_* fields
 childes_redivis_fallback <- list(
-  redivis_current = "2021.1",
+  redivis_current = "2026.1",
   redivis_versions = c("2018.1" = "v1.0", "2019.1" = "v1.1",
-                       "2020.1" = "v1.2", "2021.1" = "v1.3")
+                       "2020.1" = "v1.2", "2021.1" = "v1.3",
+                       "2026.1" = "v1.4")
 )
 
 #' Get information on database connection options

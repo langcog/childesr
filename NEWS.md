@@ -13,6 +13,13 @@
 - dropped dependencies on DBI, dbplyr, and RMySQL; added a Suggests
   dependency on the redivis client (installable from
   https://langcog.r-universe.dev)
+- the current database version is now childes-db 2026.1 (Redivis v1.4). It
+  adds a `token_morpheme` table (accessible via `get_sql_query()`; dedicated
+  getters may follow) and reworks morphological parsing, so morpheme-based
+  measures (e.g. `mlu_m`, `num_morphemes`) are not comparable with earlier
+  versions. As always, numeric ids are internal to a release -- pin
+  `db_version` for reproducible analyses and use `pid` to link transcripts
+  across versions
 
 # childesr 0.2.3
 - update url for database connection
