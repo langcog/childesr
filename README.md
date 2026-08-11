@@ -15,18 +15,19 @@ devtools::install_github("langcog/childesr")
 
 `childesr` reads data from the childes-db dataset on Redivis via the
 [`redivis`](https://apidocs.redivis.com/client-libraries/redivis-r) R client,
-which is not on CRAN. Install it **from source**:
+which is not on CRAN. Install it with:
 
 ```
-install.packages("redivis", repos = "https://langcog.r-universe.dev", type = "source")
+install.packages("redivis", repos = "https://langcog.r-universe.dev")
 ```
 
-(The r-universe *binary* macOS builds of redivis currently bake the build
-machine's home directory into the credential-cache path, which breaks OAuth
-token caching and causes repeated browser authentication prompts; see the
-upstream issue [link TBD].) Alternatively, authenticate with an API token,
-which bypasses the OAuth cache entirely: create a token under your workspace
-settings at [redivis.com](https://redivis.com) and set
+(A bug in redivis macOS binaries built before 2026-07-31 broke OAuth token
+caching, causing repeated browser authentication prompts; current r-universe
+binaries are fine. If you see repeated auth prompts, update the redivis
+package with the command above.) For headless or scripted use, you can
+instead authenticate with an API token, which bypasses the OAuth cache
+entirely: create a token under your workspace settings at
+[redivis.com](https://redivis.com) and set
 `Sys.setenv(REDIVIS_API_TOKEN = "...")` before use.
 
 ### Tutorial

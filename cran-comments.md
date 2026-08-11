@@ -34,6 +34,12 @@ points to https://langcog.r-universe.dev which serves it. Without it
 installed, functions produce an informative message with installation
 instructions and return NULL.
 
+## Maintainer
+
+The package maintainer has changed from Mika Braginsky
+(mika.br@gmail.com) to Michael C. Frank (mcfrank@stanford.edu), with the
+previous maintainer's agreement.
+
 ## Test environments
 
 - local macOS install, R 4.5 (R CMD check --as-cran on the built tarball,

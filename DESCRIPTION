@@ -6,7 +6,8 @@ Description: Tools for connecting to 'CHILDES', an open repository for
     underlying data, see <https://langcog.github.io/childes-db-website/>.
 Version: 0.3.0
 Authors@R: c(
-    person("Mika", "Braginsky", email = "mika.br@gmail.com", role = c("aut", "cre")),
+    person("Michael C.", "Frank", email = "mcfrank@stanford.edu", role = c("aut", "cre")),
+    person("Mika", "Braginsky", email = "mika.br@gmail.com", role = c("aut")),
     person("Alessandro", "Sanchez", email = "amsan7@gmail.com", role = c("aut", "ctb")),
     person("Daniel", "Yurovsky", email = "dyurovsky@gmail.com", role = c("aut")),
     person("Kyle", "MacDonald", email = "kylem412@gmail.com", role = c("ctb")),

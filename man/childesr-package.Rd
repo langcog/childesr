@@ -18,10 +18,11 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Mika Braginsky \email{mika.br@gmail.com}
+\strong{Maintainer}: Michael C. Frank \email{mcfrank@stanford.edu}
 
 Authors:
 \itemize{
+  \item Mika Braginsky \email{mika.br@gmail.com}
   \item Alessandro Sanchez \email{amsan7@gmail.com} [contributor]
   \item Daniel Yurovsky \email{dyurovsky@gmail.com}
 }
