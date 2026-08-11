@@ -1,11 +1,11 @@
 ---
-title: "Accessing `childes-db`"
+title: "Accessing childes-db"
 date: "`r Sys.Date()`"
 output:
   rmarkdown::html_vignette:
     toc: true
 vignette: >
-  %\VignetteIndexEntry{Accessing Childes-db}
+  %\VignetteIndexEntry{Accessing childes-db}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -24,9 +24,13 @@ There are several different `get_` functions that you can use to extract differe
   * `get_speaker_statistics()`
   * `get_sql_query()`
 
-**Technical note 1**: You do not have to explicitly establish a connection to the childes-db since the `childesr` functions will manage these connections. But if you would like to establish your own connection, you can do so with `connect_to_childes()` and pass it as an argument to any of the `get_` functions. If you do so, make sure to disconnect the connections you make by using `DBI::dbDisconnect()`, `childesr::clear_connections()`, or restarting your R session.
+**Technical note 1**: As of childesr 0.3, data are retrieved from the versioned [childes-db dataset on Redivis](https://redivis.com/datapages/datasets/childes_db) (using the [`redivis`](https://apidocs.redivis.com/client-libraries/redivis-r) R package) rather than from a MySQL server, so no database connection is needed. Install the redivis client **from source** with `install.packages("redivis", repos = "https://langcog.r-universe.dev", type = "source")` (the r-universe binary macOS builds currently bake the build machine's home directory into the credential-cache path, which breaks OAuth token caching and causes repeated browser authentication prompts; see the upstream issue [link TBD]). The dataset is public, so no Redivis account is required; alternatively, authenticate with an API token — created under your workspace settings at redivis.com and set via `Sys.setenv(REDIVIS_API_TOKEN = "...")` — which bypasses the OAuth cache entirely. The `connection` argument of the `get_` functions and the `connect_to_childes()` / `clear_connections()` functions are deprecated and retained only for backwards compatibility.
 
 **Technical note 2**: We have tried to optimize the time it takes to get data from the database. But if you try to query and get all of the tokens, it will take a long time.
+
+## Identifiers and reproducibility
+
+Numeric ids in these tables (`transcript_id`, `utterance_id`, token `id`, and so on) are internal to a given database release: they are not stable across versions of childes-db, and never will be. For reproducible analyses, always pin the database version with the `db_version` argument (e.g. `get_transcripts(db_version = "2021.1")`). To link transcripts across database versions — or to the wider set of TalkBank tools — use the TalkBank persistent identifier in the `pid` column returned by `get_transcripts()`.
 
 ```{r, warning=FALSE, message=FALSE}
 # load the library
@@ -35,9 +39,11 @@ library(dplyr)
 ```
 
 ```{r, echo=FALSE, message=FALSE}
-con <- connect_to_childes()
-can_connect <- !is.null(con)
-knitr::opts_chunk$set(echo = TRUE, message = FALSE, eval = can_connect)
+# only run data-fetching chunks when off CRAN and the redivis client is
+# available (CRAN machines should not make network requests)
+can_eval <- requireNamespace("redivis", quietly = TRUE) &&
+  identical(Sys.getenv("NOT_CRAN"), "true")
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, eval = can_eval)
 ```
 
 ## Get transcripts
@@ -196,7 +202,7 @@ mean(d_adam_stats$mlu_w)
 
 ### Get SQL Query
 
-The `get_sql_query()` function returns a table from a SQL query run on the specified database. For example, if you wanted to see the top 10 corpora in the `Eng-NA` collection with the highest count of token for "dog", you could run the following call.
+The `get_sql_query()` function returns a table from a SQL query run on the specified database version. As of childesr 0.3, queries run on Redivis's query engine, which uses [BigQuery Standard SQL](https://cloud.google.com/bigquery/docs/reference/standard-sql/) rather than MySQL's dialect. For example, if you wanted to see the top 10 corpora in the `Eng-NA` collection with the highest count of token for "dog", you could run the following call.
 
 ```{r}
 d_na_dog <- get_sql_query("SELECT corpus_name, COUNT(id) AS count FROM token WHERE collection_name = 'Eng-NA' AND gloss = 'dog' GROUP BY corpus_name")

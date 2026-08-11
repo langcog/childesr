@@ -13,6 +13,22 @@ The `childesr` package allows you to access data in the childes-db from R. This 
 devtools::install_github("langcog/childesr")
 ```
 
+`childesr` reads data from the childes-db dataset on Redivis via the
+[`redivis`](https://apidocs.redivis.com/client-libraries/redivis-r) R client,
+which is not on CRAN. Install it **from source**:
+
+```
+install.packages("redivis", repos = "https://langcog.r-universe.dev", type = "source")
+```
+
+(The r-universe *binary* macOS builds of redivis currently bake the build
+machine's home directory into the credential-cache path, which breaks OAuth
+token caching and causes repeated browser authentication prompts; see the
+upstream issue [link TBD].) Alternatively, authenticate with an API token,
+which bypasses the OAuth cache entirely: create a token under your workspace
+settings at [redivis.com](https://redivis.com) and set
+`Sys.setenv(REDIVIS_API_TOKEN = "...")` before use.
+
 ### Tutorial
 
 To get a hands on walk-through on how to use `childesr` to access `childes-db`, check out this [tutorial](https://langcog.github.io/childes-db-website/api.html).

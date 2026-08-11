@@ -2,10 +2,13 @@
 % Please edit documentation in R/connect.R
 \name{clear_connections}
 \alias{clear_connections}
-\title{Clear all MySQL connections}
+\title{Clear all connections}
 \usage{
 clear_connections()
 }
 \description{
-Clear all MySQL connections
+As of childesr 0.3, data are retrieved from the versioned childes-db
+dataset on Redivis rather than a MySQL database, so there are no
+connections to clear. This function only clears the session's table cache.
 }
+\keyword{internal}

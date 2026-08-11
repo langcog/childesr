@@ -12,3 +12,5 @@ cran-comments.md
 ^docs$
 ^pkgdown$
 ^\.github$
+^data-raw$
+^old_build$
