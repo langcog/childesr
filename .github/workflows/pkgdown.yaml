@@ -32,11 +32,24 @@ jobs:
           use-public-rspm: true
 
       - uses: r-lib/actions/setup-r-dependencies@v2
+        env:
+          # redivis (Suggests, from r-universe) pulls arrow transitively;
+          # avoid source builds of arrow when the runner image updates
+          LIBARROW_BINARY: "true"
+          NOT_CRAN: "true"
         with:
-          extra-packages: any::pkgdown, local::.
+          extra-packages: |
+            any::pkgdown
+            local::.
+            github::redivis/redivis-r
           needs: website
 
+      # the vignette's data chunks are gated on NOT_CRAN; give the site
+      # build the token so the rendered vignette shows real output
       - name: Build site
+        env:
+          NOT_CRAN: "true"
+          REDIVIS_API_TOKEN: ${{ secrets.REDIVIS_API_TOKEN }}
         run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)
         shell: Rscript {0}
 

@@ -14,3 +14,6 @@ cran-comments.md
 ^\.github$
 ^data-raw$
 ^old_build$
+^\.git$
+^childesr_.*\.tar\.gz$
+^.*\.Rcheck$

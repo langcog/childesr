@@ -18,7 +18,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Michael C. Frank \email{mcfrank@stanford.edu}
+\strong{Maintainer}: Michael C. Frank \email{mcfrank@stanford.edu} [copyright holder]
 
 Authors:
 \itemize{

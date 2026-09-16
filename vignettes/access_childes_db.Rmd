@@ -197,7 +197,7 @@ d_adam_stats <- get_speaker_statistics(corpus = "Brown",
                                        role = "target_child")
 
 # get the average mlu across all Adam's transcripts
-mean(d_adam_stats$mlu_w)
+if (!is.null(d_adam_stats)) mean(d_adam_stats$mlu_w)
 ```
 
 ### Get SQL Query
@@ -207,6 +207,7 @@ The `get_sql_query()` function returns a table from a SQL query run on the speci
 ```{r}
 d_na_dog <- get_sql_query("SELECT corpus_name, COUNT(id) AS count FROM token WHERE collection_name = 'Eng-NA' AND gloss = 'dog' GROUP BY corpus_name")
 
-dplyr::arrange(d_na_dog, desc(count))
+# (the getters return NULL, with a message, if the database is unreachable)
+if (!is.null(d_na_dog)) dplyr::arrange(d_na_dog, desc(count))
 
 ```
