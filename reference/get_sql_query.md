@@ -1,6 +1,12 @@
 # Run a SQL Query script on the CHILDES database
 
-Run a SQL Query script on the CHILDES database
+As of childesr 0.3, queries run against the childes-db dataset on
+Redivis, whose query engine uses BigQuery Standard SQL rather than MySQL
+SQL. Standard SQL queries against the childes-db tables (\`collection\`,
+\`corpus\`, \`transcript\`, \`participant\`, \`transcript_by_speaker\`,
+\`utterance\`, \`token\`, \`token_frequency\`) work unchanged; queries
+using MySQL-specific syntax may need to be updated (see
+<https://cloud.google.com/bigquery/docs/reference/standard-sql/>).
 
 ## Usage
 
@@ -17,11 +23,12 @@ get_sql_query(
 
 - sql_query_string:
 
-  A valid sql query string character
+  A valid BigQuery Standard SQL query string
 
 - connection:
 
-  A connection to the CHILDES database
+  Deprecated, ignored (childesr now reads from the childes-db dataset on
+  Redivis)
 
 - db_version:
 
@@ -29,11 +36,11 @@ get_sql_query(
 
 - db_args:
 
-  List with host, user, and password defined
+  Deprecated, ignored
 
 ## Value
 
-The database after calling the supplied SQL query
+The result of running the supplied SQL query on the childes-db dataset
 
 ## Examples
 

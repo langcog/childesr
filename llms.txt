@@ -11,6 +11,21 @@ data look like.
     # install.packages("devtools")
     devtools::install_github("langcog/childesr")
 
+`childesr` reads data from the childes-db dataset on Redivis via the
+[`redivis`](https://apidocs.redivis.com/client-libraries/redivis-r) R
+client, which is not on CRAN. Install it with:
+
+    install.packages("redivis", repos = "https://langcog.r-universe.dev")
+
+(A bug in redivis macOS binaries built before 2026-07-31 broke OAuth
+token caching, causing repeated browser authentication prompts; current
+r-universe binaries are fine. If you see repeated auth prompts, update
+the redivis package with the command above.) For headless or scripted
+use, you can instead authenticate with an API token, which bypasses the
+OAuth cache entirely: create a token under your workspace settings at
+[redivis.com](https://redivis.com) and set
+`Sys.setenv(REDIVIS_API_TOKEN = "...")` before use.
+
 ### Tutorial
 
 To get a hands on walk-through on how to use `childesr` to access
@@ -27,14 +42,8 @@ To get a hands on walk-through on how to use `childesr` to access
 
 ## All functions
 
-- [`clear_connections()`](https://langcog.github.io/childesr/reference/clear_connections.md)
-  : Clear all MySQL connections
-- [`connect_to_childes()`](https://langcog.github.io/childesr/reference/connect_to_childes.md)
-  : Connect to CHILDES
 - [`get_collections()`](https://langcog.github.io/childesr/reference/get_collections.md)
   : Get collections
-- [`get_content()`](https://langcog.github.io/childesr/reference/get_content.md)
-  : Get content
 - [`get_contexts()`](https://langcog.github.io/childesr/reference/get_contexts.md)
   : Get the utterances surrounding a token(s)
 - [`get_corpora()`](https://langcog.github.io/childesr/reference/get_corpora.md)
@@ -47,8 +56,6 @@ To get a hands on walk-through on how to use `childesr` to access
   : Get speaker statistics
 - [`get_sql_query()`](https://langcog.github.io/childesr/reference/get_sql_query.md)
   : Run a SQL Query script on the CHILDES database
-- [`get_table()`](https://langcog.github.io/childesr/reference/get_table.md)
-  : Get table
 - [`get_tokens()`](https://langcog.github.io/childesr/reference/get_tokens.md)
   : Get tokens
 - [`get_transcripts()`](https://langcog.github.io/childesr/reference/get_transcripts.md)
@@ -63,4 +70,4 @@ To get a hands on walk-through on how to use `childesr` to access
 ### All vignettes
 
 - [Accessing
-  \`childes-db\`](https://langcog.github.io/childesr/articles/access_childes_db.md):
+  childes-db](https://langcog.github.io/childesr/articles/access_childes_db.md):

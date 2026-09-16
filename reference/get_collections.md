@@ -12,7 +12,8 @@ get_collections(connection = NULL, db_version = "current", db_args = NULL)
 
 - connection:
 
-  A connection to the CHILDES database
+  Deprecated, ignored (childesr now reads from the childes-db dataset on
+  Redivis)
 
 - db_version:
 
@@ -20,12 +21,11 @@ get_collections(connection = NULL, db_version = "current", db_args = NULL)
 
 - db_args:
 
-  List with host, user, and password defined
+  Deprecated, ignored
 
 ## Value
 
-A \`tbl\` of Collection data. If \`connection\` is supplied, the result
-remains a remote query, otherwise it is retrieved into a local tibble.
+A \`tbl\` of Collection data
 
 ## Examples
 

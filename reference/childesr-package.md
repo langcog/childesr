@@ -16,9 +16,12 @@ Useful links:
 
 ## Author
 
-**Maintainer**: Mika Braginsky <mika.br@gmail.com>
+**Maintainer**: Michael C. Frank <mcfrank@stanford.edu> \[copyright
+holder\]
 
 Authors:
+
+- Mika Braginsky <mika.br@gmail.com>
 
 - Alessandro Sanchez <amsan7@gmail.com> \[contributor\]
 

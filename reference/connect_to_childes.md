@@ -1,6 +1,10 @@
 # Connect to CHILDES
 
-Connect to CHILDES
+As of childesr 0.3, data are retrieved from the versioned childes-db
+dataset on Redivis rather than a MySQL database, so no connection object
+is needed. \`connect_to_childes()\` is deprecated: it warns and returns
+\`NULL\`, which can still be passed as the \`connection\` argument of
+the \`get\_\` functions (where it is ignored).
 
 ## Usage
 
@@ -16,17 +20,12 @@ connect_to_childes(db_version = "current", db_args = NULL)
 
 - db_args:
 
-  List with host, user, and password defined
-
-## Value
-
-con A DBIConnection object for the CHILDES database
+  Deprecated, ignored
 
 ## Examples
 
 ``` r
 if (FALSE) { # \dontrun{
-con <- connect_to_childes(db_version = "current", db_args = NULL)
-DBI::dbDisconnect(con)
+con <- connect_to_childes(db_version = "current")
 } # }
 ```

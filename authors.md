@@ -2,7 +2,9 @@
 
 ## Authors
 
-- **Mika Braginsky**. Author, maintainer.
+- **Michael C. Frank**. Author, maintainer, copyright holder.
+
+- **Mika Braginsky**. Author.
 
 - **Alessandro Sanchez**. Author, contributor.
 
@@ -19,14 +21,14 @@
 Source:
 [`DESCRIPTION`](https://github.com/langcog/childesr/blob/main/DESCRIPTION)
 
-Braginsky M, Sanchez A, Yurovsky D (2026). *childesr: Accessing the
-'CHILDES' Database*. R package version 0.2.3.9000,
+Frank M, Braginsky M, Sanchez A, Yurovsky D (2026). *childesr: Accessing
+the 'CHILDES' Database*. R package version 0.3.0,
 <https://github.com/langcog/childesr>.
 
     @Manual{,
       title = {childesr: Accessing the 'CHILDES' Database},
-      author = {Mika Braginsky and Alessandro Sanchez and Daniel Yurovsky},
+      author = {Michael C. Frank and Mika Braginsky and Alessandro Sanchez and Daniel Yurovsky},
       year = {2026},
-      note = {R package version 0.2.3.9000},
+      note = {R package version 0.3.0},
       url = {https://github.com/langcog/childesr},
     }
